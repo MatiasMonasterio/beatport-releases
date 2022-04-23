@@ -1,1 +1,1 @@
-export { default as HelloWord } from "./HelloWord";
+export * from "./Navbar";
