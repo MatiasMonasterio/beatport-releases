@@ -15,14 +15,7 @@ export default function Navbar() {
       >
         <Container maxW="container.xl">
           <Flex justify="end">
-            <Flex
-              gap={2}
-              alignItems="center"
-              bg="gray.900"
-              w={190}
-              p={1}
-              borderRadius="full"
-            >
+            <Flex gap={2} alignItems="center" bg="gray.900" w={190} p={1} borderRadius="full">
               <Image
                 borderRadius="full"
                 boxSize="28px"

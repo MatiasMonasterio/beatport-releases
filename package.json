@@ -6,8 +6,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint src/*",
-    "lint:fix": "eslint eslint src/* --fix",
+    "lint": "eslint src/**/*.ts src/**/*.tsx",
+    "lint:fix": "eslint src/**/*.ts src/**/*.tsx --fix",
+    "prettier": "prettier --check src/**/*.ts src/**/*.tsx",
     "commit": "git cz"
   },
   "dependencies": {

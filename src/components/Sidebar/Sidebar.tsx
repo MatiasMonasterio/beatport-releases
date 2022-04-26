@@ -1,12 +1,5 @@
 import { NavLink } from "react-router-dom";
-import {
-  Container,
-  Heading,
-  UnorderedList,
-  ListItem,
-  Link,
-  Box,
-} from "@chakra-ui/react";
+import { Container, Heading, UnorderedList, ListItem, Link, Box } from "@chakra-ui/react";
 
 export default function Sidebar() {
   return (
