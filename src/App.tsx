@@ -1,10 +1,10 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import { HelloWord } from "components";
+import AppRouter from "routes";
 
 function App() {
   return (
     <ChakraProvider>
-      <HelloWord />
+      <AppRouter />
     </ChakraProvider>
   );
 }
