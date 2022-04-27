@@ -45,3 +45,29 @@ export const addArtistId = async (beatportId: string): Promise<Artist | null> =>
     return null;
   }
 };
+
+export const getArtistById = async (id: string): Promise<Artist | null> => {
+  try {
+    const resp: Response = await fetch(`${API_URL}/api/artists/${id}`);
+    const { artist, error }: ArtistResponse = await resp.json();
+    if (error) throw new Error(error);
+
+    return artist;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const deleteArtistsById = async (id: string): Promise<void> => {
+  try {
+    const endpoint = `${API_URL}/api/artists/${id}`;
+    const resp: Response = await fetch(endpoint, { method: "DELETE" });
+    await resp.json();
+
+    return;
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+};
