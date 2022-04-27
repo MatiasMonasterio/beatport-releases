@@ -1,7 +1,7 @@
 import { Artist } from "types";
 
 import { useState, useEffect } from "react";
-import { Heading, Grid, GridItem, Flex } from "@chakra-ui/react";
+import { Heading, Grid, GridItem, Flex, Container } from "@chakra-ui/react";
 
 import { ArtistCard, AddArtist } from "components";
 import { getArtists, addArtistId } from "services/artists";
@@ -21,7 +21,7 @@ export default function Artists() {
   }, []);
 
   return (
-    <>
+    <Container maxW="container.xl">
       <Flex justify="space-between" mt={24}>
         <Heading as="h2" size="lg" mb={10}>
           Artists
@@ -37,6 +37,6 @@ export default function Artists() {
           </GridItem>
         ))}
       </Grid>
-    </>
+    </Container>
   );
 }
