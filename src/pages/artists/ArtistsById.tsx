@@ -53,9 +53,7 @@ export default function ArtistById(): JSX.Element {
 
         <Flex direction="column" gap={2}>
           {artist.tracks?.length ? (
-            artist.tracks.map((track) => (
-              <TrackCard {...track} artistName={artist.name} key={track.name} />
-            ))
+            artist.tracks.map((track) => <TrackCard {...track} key={track.name} />)
           ) : (
             <Alert bg="rgba(254, 235, 200, 0.2)">no results</Alert>
           )}

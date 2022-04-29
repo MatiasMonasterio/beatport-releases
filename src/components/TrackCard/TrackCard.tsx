@@ -12,12 +12,8 @@ import BeatportButton from "./BeatportButton";
 import SpotifyButton from "./SpotifyButton";
 import LoadingBg from "./LoadingBg";
 
-interface Props extends Track {
-  artistName: string;
-}
-
-export default function TrackCard(props: Props): JSX.Element {
-  const { name, artwork, artists, label, genres, released, bpm, mix, artistName } = props;
+export default function TrackCard(props: Track): JSX.Element {
+  const { name, artwork, artists, label, genres, released, bpm, mix } = props;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { showYoutubeWidget, showBeatportWidget } = useWidget();
@@ -29,7 +25,7 @@ export default function TrackCard(props: Props): JSX.Element {
   const handleShowYoutubeWidget = async (): Promise<void> => {
     setIsLoading(true);
 
-    const videoId = await getYoutubeVideoId(`${name} ${artistName}`);
+    const videoId = await getYoutubeVideoId(`${name} ${artists[0].name}`);
     videoId && showYoutubeWidget(videoId);
 
     setIsLoading(false);
