@@ -1,4 +1,4 @@
-import type { Artist } from "types";
+import type { Artist, Track } from "types";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -69,5 +69,17 @@ export const deleteArtistsById = async (id: string): Promise<void> => {
   } catch (error) {
     console.error(error);
     return;
+  }
+};
+
+export const getArtistReleases = async (): Promise<Track[] | null> => {
+  try {
+    const resp = await fetch(`${API_URL}/api/artists/releases`);
+    const { releases }: { releases: Track[] } = await resp.json();
+
+    return releases;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };
