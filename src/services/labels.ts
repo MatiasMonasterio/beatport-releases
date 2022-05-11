@@ -74,3 +74,15 @@ export const getLabelReleases = async (): Promise<Track[]> => {
     return [];
   }
 };
+
+export const getLabelUpcomings = async (): Promise<Track[]> => {
+  try {
+    const resp: Response = await fetch(`${API_URL}/api/labels/upcoming`);
+    const { releases }: ReleasesResponse = await resp.json();
+
+    return releases;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
