@@ -63,6 +63,38 @@ export default function Sidebar() {
             </Link>
           </Heading>
         </ListItem>
+
+        <UnorderedList styleType="none" fontWeight="bold" color="gray.500">
+          <ListItem>
+            <Link
+              as={NavLink}
+              to="/labels/releases"
+              display="flex"
+              py={2}
+              gap={2}
+              alignItems="center"
+              textDecoration="none"
+              fontSize="sm"
+            >
+              Last Releases
+            </Link>
+          </ListItem>
+
+          <ListItem>
+            <Link
+              as={NavLink}
+              to="/labels/upcoming"
+              display="flex"
+              gap={2}
+              py={2}
+              alignItems="center"
+              textDecoration="none"
+              fontSize="sm"
+            >
+              Upcoming
+            </Link>
+          </ListItem>
+        </UnorderedList>
       </UnorderedList>
     </Container>
   );
