@@ -1,5 +1,6 @@
 import type { Label } from "types";
 
+import { Link } from "react-router-dom";
 import { LinkBox, LinkOverlay, Heading, Box, Text } from "@chakra-ui/react";
 
 export default function LabelCard({ name, artwork, tracks, id }: Label) {
@@ -14,7 +15,7 @@ export default function LabelCard({ name, artwork, tracks, id }: Label) {
       alignItems="end"
     >
       <Box p={4} backgroundColor="rgba(0,0,0,0.6)" w="100%">
-        <LinkOverlay href={`/labels/${id}`}>
+        <LinkOverlay as={Link} to={`/labels/${id}`}>
           <Heading as="h2" size="sm">
             {name}
           </Heading>
