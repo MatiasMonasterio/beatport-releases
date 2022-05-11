@@ -58,15 +58,7 @@ export default function Sidebar() {
 
         <ListItem mb={6}>
           <Heading size="md" mb={4}>
-            <Link as={NavLink} to="artists">
-              Artists
-            </Link>
-          </Heading>
-        </ListItem>
-
-        <ListItem mb={6}>
-          <Heading size="md" mb={4}>
-            <Link as={NavLink} to="artists">
+            <Link as={NavLink} to="labels">
               Labels
             </Link>
           </Heading>
