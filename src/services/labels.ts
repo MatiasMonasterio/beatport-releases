@@ -1,4 +1,4 @@
-import type { Label } from "types";
+import type { Label, Track } from "types";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -10,6 +10,10 @@ type LabelsResponse = {
 type LabelResponse = {
   label: Label;
   error?: string;
+};
+
+type ReleasesResponse = {
+  releases: Track[];
 };
 
 export const getLabels = async (): Promise<Label[] | null> => {
@@ -56,5 +60,17 @@ export const getLabelById = async (id: string): Promise<Label | null> => {
   } catch (error) {
     console.error(error);
     return null;
+  }
+};
+
+export const getLabelReleases = async (): Promise<Track[]> => {
+  try {
+    const resp: Response = await fetch(`${API_URL}/api/labels/releases`);
+    const { releases }: ReleasesResponse = await resp.json();
+
+    return releases;
+  } catch (error) {
+    console.error(error);
+    return [];
   }
 };
