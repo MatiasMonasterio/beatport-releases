@@ -6,3 +6,5 @@ export * from "./TrackCard";
 export * from "./DeleteArtist";
 export * from "./BeatportWidget";
 export * from "./YoutubeWidget";
+export * from "./AddLabel";
+export * from "./LabelCard";
