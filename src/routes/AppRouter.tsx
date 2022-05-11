@@ -7,6 +7,8 @@ import ArtistById from "pages/artists/ArtistsById";
 import ArtistReleases from "pages/artists/ArtistsReleases";
 import ArtistUpcomings from "pages/artists/ArtistUpcomings";
 
+import Labels from "pages/labels/Labels";
+
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -19,6 +21,10 @@ export default function AppRouter() {
             <Route path=":id" element={<ArtistById />} />
             <Route path="releases" element={<ArtistReleases />} />
             <Route path="upcoming" element={<ArtistUpcomings />} />
+          </Route>
+
+          <Route path="labels">
+            <Route path="" element={<Labels />} />
           </Route>
         </Routes>
       </DashboardLayout>
