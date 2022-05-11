@@ -7,6 +7,14 @@ export interface Artist {
   profile?: string;
 }
 
+export interface Label {
+  id: number;
+  name: string;
+  artwork: string;
+  tracks: Track[];
+  profile: string;
+}
+
 export interface Track {
   artists: Array<{ id: number; name: string; slug: string }>;
   bpm: number;
