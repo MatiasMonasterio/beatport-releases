@@ -90,7 +90,7 @@ export const getArtistReleases = async (): Promise<Track[] | null> => {
 
 export const getArtistUpcomings = async (): Promise<Track[] | null> => {
   try {
-    const resp: Response = await fetch(`http://localhost:3001/api/artists/upcoming`);
+    const resp: Response = await fetch(`${API_URL}/api/artists/upcoming`);
     const { releases }: ReleasesResponse = await resp.json();
 
     return releases;
