@@ -45,3 +45,16 @@ export const addLabelId = async (beatportId: string): Promise<Label | null> => {
     return null;
   }
 };
+
+export const getLabelById = async (id: string): Promise<Label | null> => {
+  try {
+    const resp: Response = await fetch(`${API_URL}/api/labels/${id}`);
+    const { label, error }: LabelResponse = await resp.json();
+    if (error) throw new Error(error);
+
+    return label;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
