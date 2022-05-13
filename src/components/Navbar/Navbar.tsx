@@ -1,17 +1,23 @@
 import { Box, Container, Image, Text, Flex } from "@chakra-ui/react";
 
-export default function Navbar() {
+interface Props {
+  isSolid: boolean;
+}
+
+export default function Navbar({ isSolid }: Props) {
   return (
-    <Box position="sticky" top={0}>
+    <Box position="sticky" top={0} zIndex={2}>
       <Box
         as="nav"
         position="absolute"
         w="100%"
         top={0}
-        bg="transparent"
-        py={6}
-        zIndex={10}
+        py={4}
+        zIndex={100}
         right={0}
+        borderBottom="1px solid"
+        borderColor={isSolid ? "gray.700" : "transparent"}
+        bgColor={isSolid ? "gray.800" : "transparent"}
       >
         <Container maxW="container.xl">
           <Flex justify="end">

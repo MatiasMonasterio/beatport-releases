@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Container, Heading, UnorderedList, ListItem, Link, Box } from "@chakra-ui/react";
+import { Container, UnorderedList, ListItem, Link, Box, VisuallyHidden } from "@chakra-ui/react";
 
 export default function Sidebar() {
   return (
@@ -20,25 +20,28 @@ export default function Sidebar() {
           <Link
             as={NavLink}
             to="/artists"
-            display="flex"
             py={2}
-            gap={2}
-            alignItems="center"
-            textDecoration="none"
-            fontSize="sm"
+            d="block"
+            fontSize="xl"
+            fontWeight="bold"
+            _hover={{
+              color: "#01FF95",
+            }}
           >
-            <Heading size="md" mb={2}>
-              Artists
-            </Heading>
+            Artists
           </Link>
 
-          <UnorderedList styleType="none" fontWeight="bold" color="gray.500">
+          <UnorderedList styleType="none" color="gray.500" ml={0}>
             <ListItem>
               <Link
                 as={NavLink}
                 to="/artists/releases"
                 display="flex"
+                _hover={{
+                  color: "#01FF95",
+                }}
                 py={2}
+                pl={2}
                 gap={2}
                 alignItems="center"
                 textDecoration="none"
@@ -53,8 +56,11 @@ export default function Sidebar() {
                 as={NavLink}
                 to="/artists/upcoming"
                 display="flex"
-                gap={2}
+                _hover={{
+                  color: "#01FF95",
+                }}
                 py={2}
+                pl={2}
                 alignItems="center"
                 textDecoration="none"
                 fontSize="sm"
@@ -65,22 +71,33 @@ export default function Sidebar() {
           </UnorderedList>
         </ListItem>
 
-        <ListItem mb={6}>
-          <Heading size="md" mb={4}>
-            <Link as={NavLink} to="labels">
-              Labels
-            </Link>
-          </Heading>
+        <ListItem py={2}>
+          <Link
+            as={NavLink}
+            to="labels"
+            d="block"
+            fontWeight="bold"
+            fontSize="xl"
+            w="100%"
+            _hover={{
+              color: "#01FF95",
+            }}
+          >
+            Labels
+          </Link>
         </ListItem>
 
-        <UnorderedList styleType="none" fontWeight="bold" color="gray.500">
+        <UnorderedList styleType="none" fontWeight="normal" color="gray.500" ml={0}>
           <ListItem>
             <Link
               as={NavLink}
               to="/labels/releases"
               display="flex"
+              _hover={{
+                color: "#01FF95",
+              }}
               py={2}
-              gap={2}
+              pl={2}
               alignItems="center"
               textDecoration="none"
               fontSize="sm"
@@ -94,8 +111,12 @@ export default function Sidebar() {
               as={NavLink}
               to="/labels/upcoming"
               display="flex"
+              _hover={{
+                color: "#01FF95",
+              }}
               gap={2}
               py={2}
+              pl={2}
               alignItems="center"
               textDecoration="none"
               fontSize="sm"
