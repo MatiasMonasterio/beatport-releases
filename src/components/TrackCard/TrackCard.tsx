@@ -63,7 +63,7 @@ export default function TrackCard(props: Track): JSX.Element {
         <GridItem py={2}>
           <Text>
             {name} {mix} [
-            <Link as={ReactLink} to={`/labels/${label.id}`}>
+            <Link as={ReactLink} to={`/label/${label.id}`}>
               {label.name}
             </Link>
             ]
@@ -71,7 +71,7 @@ export default function TrackCard(props: Track): JSX.Element {
 
           <HStack fontSize="sm" color="gray.400" spacing={1} mb={2}>
             {artists.map((artist) => (
-              <Link as={ReactLink} key={artist.id} to={`/artists/${artist.id}`}>
+              <Link as={ReactLink} key={artist.id} to={`/artist/${artist.id}`}>
                 {artist.name},
               </Link>
             ))}

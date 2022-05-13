@@ -5,7 +5,7 @@ import { Flex, Heading, Text, Box } from "@chakra-ui/react";
 
 export default function ArtistCard({ name, tracksCount, artwork, id }: Artist) {
   return (
-    <Link to={`/artists/${id}`}>
+    <Link to={`/artist/${id}`}>
       <Flex
         backgroundImage={artwork}
         backgroundRepeat="no-repeat"

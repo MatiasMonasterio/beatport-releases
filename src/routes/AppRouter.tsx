@@ -21,16 +21,22 @@ export default function AppRouter() {
 
           <Route path="artists">
             <Route path="" element={<Artists />} />
-            <Route path=":id" element={<ArtistById />} />
             <Route path="releases" element={<ArtistReleases />} />
             <Route path="upcoming" element={<ArtistUpcomings />} />
           </Route>
 
+          <Route path="artist">
+            <Route path=":id" element={<ArtistById />} />
+          </Route>
+
           <Route path="labels">
             <Route path="" element={<Labels />} />
-            <Route path=":id" element={<LabeltById />} />
             <Route path="releases" element={<LabelReleases />} />
             <Route path="upcoming" element={<LabelUpcomings />} />
+          </Route>
+
+          <Route path="label">
+            <Route path=":id" element={<LabeltById />} />
           </Route>
         </Routes>
       </DashboardLayout>

@@ -15,7 +15,7 @@ export default function LabelCard({ name, artwork, tracks, id }: Label) {
       alignItems="end"
     >
       <Box p={4} backgroundColor="rgba(0,0,0,0.6)" w="100%">
-        <LinkOverlay as={Link} to={`/labels/${id}`}>
+        <LinkOverlay as={Link} to={`/label/${id}`}>
           <Heading as="h2" size="sm">
             {name}
           </Heading>
