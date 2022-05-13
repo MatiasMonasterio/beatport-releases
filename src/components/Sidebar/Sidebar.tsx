@@ -4,7 +4,16 @@ import { Container, Heading, UnorderedList, ListItem, Link, Box } from "@chakra-
 export default function Sidebar() {
   return (
     <Container maxW="container.xl">
-      <Box pb={10}>Brand</Box>
+      <Link to="/" as={NavLink} display="inline-block" mb={6} w="100%" h="40px">
+        <Box
+          bgImage="/assets/images/logo.svg"
+          bgSize="cover"
+          bgPosition="center"
+          h="40px"
+          w="155px"
+        />
+        <VisuallyHidden>Beat Releases</VisuallyHidden>
+      </Link>
 
       <UnorderedList styleType="none" ml={0}>
         <ListItem mb={6}>
