@@ -3,9 +3,10 @@ import { SiSpotify } from "react-icons/si";
 
 interface Props {
   onClick: (() => void) | (() => Promise<void>);
+  disabled: boolean;
 }
 
-export default function SpotifyButton({ onClick }: Props): JSX.Element {
+export default function SpotifyButton({ onClick, disabled }: Props): JSX.Element {
   return (
     <Button
       p={0.5}
@@ -18,6 +19,7 @@ export default function SpotifyButton({ onClick }: Props): JSX.Element {
       _hover={{
         color: "white",
       }}
+      disabled={disabled}
       onClick={onClick}
     >
       <SiSpotify />

@@ -7,6 +7,7 @@ import { Box, Text, Image, Grid, GridItem, Link, HStack } from "@chakra-ui/react
 import { useWidget } from "context/widget";
 import { getYoutubeVideoId } from "services/widget";
 import { getDiffDays } from "utils";
+
 import YoutubeButton from "./YoutubeButton";
 import BeatportButton from "./BeatportButton";
 import SpotifyButton from "./SpotifyButton";
@@ -20,7 +21,14 @@ export default function TrackCard(props: Track): JSX.Element {
 
   const daysPassed: number = useMemo(() => {
     return getDiffDays(released);
-  }, [released]);
+  }, []);
+
+  const publishDate: string = useMemo(() => {
+    if (daysPassed === 0) return "Today";
+    if (daysPassed > 0) return `${daysPassed} days ago`;
+
+    return new Intl.DateTimeFormat("es-ES").format(new Date(released));
+  }, []);
 
   const handleShowYoutubeWidget = async (): Promise<void> => {
     setIsLoading(true);
@@ -31,11 +39,8 @@ export default function TrackCard(props: Track): JSX.Element {
     setIsLoading(false);
   };
 
-  const handleShowBeatport = async (): Promise<void> => {
-    setIsLoading(true);
-    console.log(props);
+  const handleShowBeatport = (): void => {
     showBeatportWidget(props);
-    setIsLoading(false);
   };
 
   return (
@@ -58,7 +63,7 @@ export default function TrackCard(props: Track): JSX.Element {
         <GridItem py={2}>
           <Text>
             {name} {mix} [
-            <Link as={ReactLink} to={`/label/${label.id}`}>
+            <Link as={ReactLink} to={`/labels/${label.id}`}>
               {label.name}
             </Link>
             ]
@@ -74,8 +79,8 @@ export default function TrackCard(props: Track): JSX.Element {
 
           <HStack spacing={1} alignItems="center">
             <BeatportButton onClick={handleShowBeatport} />
-            <SpotifyButton onClick={handleShowBeatport} />
-            <YoutubeButton onClick={handleShowYoutubeWidget} />
+            <SpotifyButton onClick={handleShowBeatport} disabled={daysPassed < 0} />
+            <YoutubeButton onClick={handleShowYoutubeWidget} disabled={daysPassed < 0} />
           </HStack>
         </GridItem>
 
@@ -90,7 +95,7 @@ export default function TrackCard(props: Track): JSX.Element {
         </GridItem>
 
         <GridItem py={2} fontSize="sm">
-          {daysPassed > 0 ? `${daysPassed} days ago` : "Today"}
+          {publishDate}
         </GridItem>
       </Grid>
     </Box>
