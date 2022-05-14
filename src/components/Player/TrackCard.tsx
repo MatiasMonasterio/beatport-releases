@@ -15,7 +15,7 @@ export default function TrackCard({ name, mix, artwork, label, artists }: Props)
           {name} {mix}
         </Text>
 
-        <Box>
+        <Box lineHeight={1}>
           {artists &&
             artists.map((artist) => (
               <Link
@@ -24,6 +24,7 @@ export default function TrackCard({ name, mix, artwork, label, artists }: Props)
                 to={`/artist/${artist.id}`}
                 fontSize="xs"
                 color="gray.400"
+                lineHeight={1}
                 _notLast={{
                   _after: { content: `", "` },
                 }}
@@ -39,6 +40,7 @@ export default function TrackCard({ name, mix, artwork, label, artists }: Props)
           fontSize="xs"
           color="gray.400"
           d="inline-block"
+          lineHeight={1}
         >
           {label?.name}
         </Link>
