@@ -34,15 +34,22 @@ export default function AudioPlayer({
   return (
     <>
       <Flex justifyContent="center" gap={2} mt="-0.8rem">
-        <Button variant="link" fontSize="2xl">
+        <Button variant="link" _hover={{ color: "white" }} fontSize="2xl">
           <BiSkipPrevious />
         </Button>
 
-        <Button variant="link" fontSize="5xl" onClick={handlePlayTrack} color="gray.200">
+        <Button
+          variant="link"
+          _hover={{ color: "white" }}
+          _active={{ transform: "scale(0.9)" }}
+          fontSize="5xl"
+          onClick={handlePlayTrack}
+          color="gray.200"
+        >
           {isPlaying ? <BiPause /> : <BiPlay />}
         </Button>
 
-        <Button variant="link" fontSize="2xl">
+        <Button variant="link" _hover={{ color: "white" }} fontSize="2xl">
           <BiSkipNext />
         </Button>
       </Flex>
