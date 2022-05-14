@@ -5,13 +5,7 @@ export default function Sidebar() {
   return (
     <Container maxW="container.xl">
       <Link to="/" as={NavLink} display="inline-block" mb={6} w="100%" h="40px">
-        <Box
-          bgImage="/assets/images/logo.svg"
-          bgSize="cover"
-          bgPosition="center"
-          h="40px"
-          w="155px"
-        />
+        <Box bgImage="/images/logo.svg" bgSize="cover" bgPosition="center" h="35px" w="140px" />
         <VisuallyHidden>Beat Releases</VisuallyHidden>
       </Link>
 
