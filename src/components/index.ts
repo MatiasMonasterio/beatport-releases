@@ -8,3 +8,4 @@ export * from "./BeatportWidget";
 export * from "./YoutubeWidget";
 export * from "./AddLabel";
 export * from "./LabelCard";
+export * from "./Player";
