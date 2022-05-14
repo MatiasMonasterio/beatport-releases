@@ -1,1 +1,1 @@
-export * from "./UseNavSolid";
+export * from "./useNavSolid";
