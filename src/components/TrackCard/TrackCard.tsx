@@ -5,7 +5,7 @@ import { Link as ReactLink } from "react-router-dom";
 import { Box, Text, Image, Grid, GridItem, Link, HStack, Button } from "@chakra-ui/react";
 
 import { useWidget } from "context/widget";
-import { usePlayer } from "context/player";
+import { usePlayerContext } from "context/player";
 import { getYoutubeVideoId } from "services/widget";
 import { getDiffDays } from "utils";
 
@@ -14,16 +14,25 @@ import BeatportButton from "./BeatportButton";
 import SpotifyButton from "./SpotifyButton";
 import LoadingBg from "./LoadingBg";
 
-export default function TrackCard(props: Track): JSX.Element {
-  const { id, name, artwork, artists, label, genres, released, bpm, mix } = props;
+interface Props {
+  track: Track;
+  handlePlayTrack: (track: Track) => void;
+}
+
+export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Element {
+  const { id, name, artwork, artists, label, genres, released, bpm, mix } = track;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { showYoutubeWidget } = useWidget();
-  const { playTrack, track: currentTrack } = usePlayer();
+  const { currentTrack } = usePlayerContext();
 
   const daysPassed: number = useMemo(() => {
     return getDiffDays(released);
   }, []);
+
+  const isSelect = useMemo(() => {
+    return currentTrack.id === id;
+  }, [currentTrack]);
 
   const publishDate: string = useMemo(() => {
     if (daysPassed === 0) return "Today";
@@ -43,13 +52,12 @@ export default function TrackCard(props: Track): JSX.Element {
   };
 
   const handleShowBeatport = (): void => {
-    playTrack(props);
+    handlePlayTrack(track);
   };
 
   return (
     <Box
       _hover={{ bgColor: "gray.700" }}
-      bg={currentTrack.id === id ? "rgba(0,0,0,0.12)" : ""}
       borderRadius="sm"
       overflow="hidden"
       transition="background-color 0.1s"
@@ -67,7 +75,7 @@ export default function TrackCard(props: Track): JSX.Element {
           </Button>
         </GridItem>
         <GridItem py={2}>
-          <Box color={currentTrack.id === id ? "#01FF95" : ""}>
+          <Box color={isSelect ? "#01FF95" : ""}>
             <Text as="span">
               {name} {mix}
             </Text>{" "}
