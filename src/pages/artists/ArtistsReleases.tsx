@@ -23,7 +23,7 @@ export default function ArtistsReleases(): JSX.Element {
 
       <Flex direction="column" gap={2}>
         {releases.map((release) => (
-          <TrackCard {...release} key={release.name} />
+          <TrackCard {...release} key={release.id} />
         ))}
       </Flex>
     </Container>

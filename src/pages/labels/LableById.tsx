@@ -47,7 +47,7 @@ export default function LabelById(): JSX.Element {
 
         <Flex direction="column" gap={2}>
           {label.tracks?.length ? (
-            label.tracks.map((track) => <TrackCard {...track} key={track.name} />)
+            label.tracks.map((track) => <TrackCard {...track} key={track.id} />)
           ) : (
             <Alert bg="rgba(254, 235, 200, 0.2)">no results</Alert>
           )}

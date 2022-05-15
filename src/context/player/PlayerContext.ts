@@ -2,6 +2,7 @@ import type { Track } from "types";
 import { createContext } from "react";
 
 const defaultValue: Track = {
+  id: 0,
   name: "",
   mix: "",
   preview: "",

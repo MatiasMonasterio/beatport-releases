@@ -15,7 +15,7 @@ import SpotifyButton from "./SpotifyButton";
 import LoadingBg from "./LoadingBg";
 
 export default function TrackCard(props: Track): JSX.Element {
-  const { name, artwork, artists, label, genres, released, bpm, mix } = props;
+  const { id, name, artwork, artists, label, genres, released, bpm, mix } = props;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { showYoutubeWidget } = useWidget();
@@ -49,7 +49,7 @@ export default function TrackCard(props: Track): JSX.Element {
   return (
     <Box
       _hover={{ bgColor: "gray.700" }}
-      bg={currentTrack.name === name ? "rgba(0,0,0,0.12)" : ""}
+      bg={currentTrack.id === id ? "rgba(0,0,0,0.12)" : ""}
       borderRadius="sm"
       overflow="hidden"
       transition="background-color 0.1s"
@@ -67,7 +67,7 @@ export default function TrackCard(props: Track): JSX.Element {
           </Button>
         </GridItem>
         <GridItem py={2}>
-          <Box color={currentTrack.name === name ? "#01FF95" : ""}>
+          <Box color={currentTrack.id === id ? "#01FF95" : ""}>
             <Text as="span">
               {name} {mix}
             </Text>{" "}
@@ -101,8 +101,8 @@ export default function TrackCard(props: Track): JSX.Element {
         </GridItem>
 
         <GridItem py={2} fontSize="sm">
-          {genres.map((genre, index) => (
-            <Text key={index}>{genre.name}</Text>
+          {genres.map((genre) => (
+            <Text key={genre.id}>{genre.name}</Text>
           ))}
         </GridItem>
 

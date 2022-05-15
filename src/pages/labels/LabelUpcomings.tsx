@@ -23,7 +23,7 @@ export default function LabelUpcomings(): JSX.Element {
 
       <Flex direction="column" gap={2}>
         {upcomings.map((upcoming) => (
-          <TrackCard {...upcoming} key={upcoming.name} />
+          <TrackCard {...upcoming} key={upcoming.id} />
         ))}
       </Flex>
     </Container>
