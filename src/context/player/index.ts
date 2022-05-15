@@ -1,2 +1,2 @@
 export * from "./PlayerProvider";
-export * from "./usePlayer";
+export * from "./usePlayerContext";

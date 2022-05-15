@@ -3,7 +3,7 @@ import type { PlayerContextProps } from "./PlayerContext";
 import { useContext } from "react";
 import { PlayerContext } from "./PlayerContext";
 
-export const usePlayer = (): PlayerContextProps => {
+export const usePlayerContext = (): PlayerContextProps => {
   const ctx = useContext(PlayerContext);
   return ctx;
 };
