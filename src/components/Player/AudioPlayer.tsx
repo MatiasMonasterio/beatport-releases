@@ -1,40 +1,47 @@
+import { useEffect } from "react";
+
 import { Text, Flex, Box, Button } from "@chakra-ui/react";
 import { BiPlay, BiPause, BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 
-import { usePlayerTimeline } from "hooks";
+import { usePlayerTimeline, usePlayer } from "hooks";
 
 interface Props {
-  duration: number;
-  currentTime: number;
-  isPlaying: boolean;
-  handlePlayTrack: () => void;
-  handleChangeCurrentTime: (newCurrentTime: number) => void;
+  source: string;
+  audioRef: React.RefObject<HTMLAudioElement>;
+  handleNextTrack: () => void;
+  hadnlePrevTrack: () => void;
 }
 
-export default function AudioPlayer({
-  duration,
-  currentTime,
-  isPlaying,
-  handlePlayTrack,
-  handleChangeCurrentTime,
-}: Props) {
+export default function AudioPlayer({ source, audioRef, handleNextTrack, hadnlePrevTrack }: Props) {
+  const { duration, currentTime, isPlaying } = usePlayer(audioRef);
   const playerTimelineArgs = { duration, currentTime };
   const { trackCurrentTime, trackDuration, progress } = usePlayerTimeline(playerTimelineArgs);
 
-  const handleCurrentTimeChange = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleInnerCurrentTimeChange = (e: React.MouseEvent<HTMLDivElement>) => {
     const playerLineElement = e.currentTarget.getBoundingClientRect();
     const clickPositionFromElement = e.clientX - playerLineElement.left;
 
     const newProgressValue = clickPositionFromElement / playerLineElement.width;
     const newCurrentTime = newProgressValue * duration;
 
-    handleChangeCurrentTime(newCurrentTime);
+    if (audioRef.current) audioRef.current.currentTime = newCurrentTime;
   };
+
+  const handlePlay = (): void => {
+    const isPaused = audioRef.current?.paused;
+
+    if (isPaused) audioRef.current?.play();
+    else audioRef.current?.pause();
+  };
+
+  useEffect(() => {
+    audioRef.current?.pause();
+  }, []);
 
   return (
     <>
       <Flex justifyContent="center" gap={2} mt="-0.8rem">
-        <Button variant="link" _hover={{ color: "white" }} fontSize="2xl">
+        <Button variant="link" _hover={{ color: "white" }} fontSize="2xl" onClick={hadnlePrevTrack}>
           <BiSkipPrevious />
         </Button>
 
@@ -43,13 +50,13 @@ export default function AudioPlayer({
           _hover={{ color: "white" }}
           _active={{ transform: "scale(0.9)" }}
           fontSize="5xl"
-          onClick={handlePlayTrack}
+          onClick={handlePlay}
           color="gray.200"
         >
           {isPlaying ? <BiPause /> : <BiPlay />}
         </Button>
 
-        <Button variant="link" _hover={{ color: "white" }} fontSize="2xl">
+        <Button variant="link" _hover={{ color: "white" }} fontSize="2xl" onClick={handleNextTrack}>
           <BiSkipNext />
         </Button>
       </Flex>
@@ -58,7 +65,7 @@ export default function AudioPlayer({
           {trackCurrentTime}
         </Text>
 
-        <Box w="100%" py={1} onClick={handleCurrentTimeChange} role="group">
+        <Box w="100%" py={1} onClick={handleInnerCurrentTimeChange} role="group">
           <Box
             h="3px"
             w="100%"
@@ -75,12 +82,13 @@ export default function AudioPlayer({
             }}
           />
         </Box>
-        <div onClick={handleCurrentTimeChange}></div>
 
         <Text as="span" fontSize="xs">
           {trackDuration}
         </Text>
       </Flex>
+
+      <audio autoPlay ref={audioRef} src={source} />
     </>
   );
 }
