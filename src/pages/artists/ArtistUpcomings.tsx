@@ -4,10 +4,16 @@ import { useState, useEffect } from "react";
 import { Heading, Flex, Container } from "@chakra-ui/react";
 
 import { TrackCard } from "components";
+import { usePlayerContext } from "context/player";
 import { getArtistUpcomings } from "services/artists";
 
 export default function ArtistsReleasesUpcoming(): JSX.Element {
   const [upcomings, setUpcomings] = useState<Track[]>([]);
+  const { loadPlayer } = usePlayerContext();
+
+  const handlePlayTrack = (track: Track): void => {
+    loadPlayer({ track, playlist: upcomings });
+  };
 
   useEffect(() => {
     getArtistUpcomings().then((upcomings) => {
@@ -23,7 +29,7 @@ export default function ArtistsReleasesUpcoming(): JSX.Element {
 
       <Flex direction="column" gap={2}>
         {upcomings.map((upcoming) => (
-          <TrackCard {...upcoming} key={upcoming.id} />
+          <TrackCard track={upcoming} key={upcoming.id} handlePlayTrack={handlePlayTrack} />
         ))}
       </Flex>
     </Container>

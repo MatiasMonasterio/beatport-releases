@@ -1,15 +1,21 @@
-import type { Label } from "types";
+import type { Label, Track } from "types";
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Alert } from "@chakra-ui/react";
 
 import { TrackCard } from "components";
+import { usePlayerContext } from "context/player";
 import { getLabelById } from "services/labels";
 
 export default function LabelById(): JSX.Element {
+  const { loadPlayer } = usePlayerContext();
   const { id } = useParams<{ id: string }>() as { id: string };
   const [label, setLabel] = useState<Label>({} as Label);
+
+  const handlePlayTrack = (track: Track): void => {
+    loadPlayer({ track, playlist: label.tracks });
+  };
 
   useEffect(() => {
     getLabelById(id).then((labelResp) => {
@@ -47,7 +53,9 @@ export default function LabelById(): JSX.Element {
 
         <Flex direction="column" gap={2}>
           {label.tracks?.length ? (
-            label.tracks.map((track) => <TrackCard {...track} key={track.id} />)
+            label.tracks.map((track) => (
+              <TrackCard track={track} key={track.id} handlePlayTrack={handlePlayTrack} />
+            ))
           ) : (
             <Alert bg="rgba(254, 235, 200, 0.2)">no results</Alert>
           )}

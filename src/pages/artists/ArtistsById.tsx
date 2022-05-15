@@ -1,18 +1,25 @@
-import type { Artist } from "types";
+import type { Artist, Track } from "types";
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Alert } from "@chakra-ui/react";
 
 import { TrackCard, DeleteArtist } from "components";
+import { usePlayerContext } from "context/player";
 import { getArtistById, deleteArtistsById } from "services/artists";
 
 export default function ArtistById(): JSX.Element {
+  const { loadPlayer } = usePlayerContext();
+
   const { id } = useParams<{ id: string }>() as { id: string };
   const [artist, setArtits] = useState<Artist>({} as Artist);
 
   const handleRemoveArtist = async (): Promise<void> => {
     await deleteArtistsById(id);
+  };
+
+  const handlePlayTrack = (track: Track): void => {
+    loadPlayer({ track, playlist: artist.tracks });
   };
 
   useEffect(() => {
@@ -53,7 +60,9 @@ export default function ArtistById(): JSX.Element {
 
         <Flex direction="column" gap={2}>
           {artist.tracks?.length ? (
-            artist.tracks.map((track) => <TrackCard {...track} key={track.id} />)
+            artist.tracks.map((track) => (
+              <TrackCard track={track} key={track.id} handlePlayTrack={handlePlayTrack} />
+            ))
           ) : (
             <Alert bg="rgba(254, 235, 200, 0.2)">no results</Alert>
           )}
