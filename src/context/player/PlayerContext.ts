@@ -17,11 +17,11 @@ const defaultValue: Track = {
 };
 
 export type PlayerContextProps = {
+  audioRef: React.RefObject<HTMLAudioElement>;
   currentTrack: Track;
-  audioPlayer: React.RefObject<HTMLAudioElement>;
-  loadPlayer: ({ track, playlist }: { track: Track; playlist: Track[] }) => void;
-  nextTrack: () => void;
-  prevTrack: () => void;
+  playlist: Track[];
+  isPlaying: boolean;
+  loadPlaylist: ({ track, playlist }: { track: Track; playlist: Track[] }) => void;
 };
 
 export const PlayerContext = createContext<PlayerContextProps>({
