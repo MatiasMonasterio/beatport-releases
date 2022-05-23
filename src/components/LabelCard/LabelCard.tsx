@@ -7,7 +7,7 @@ export default function LabelCard({ name, artwork, tracks, id }: Label) {
   return (
     <LinkBox
       as="article"
-      height={250}
+      height={{ base: 150, sm: 250 }}
       bgImg={artwork}
       bgSize="cover"
       bgPos="center"

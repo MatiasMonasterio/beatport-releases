@@ -62,10 +62,16 @@ export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Elemen
       overflow="hidden"
       transition="background-color 0.1s"
     >
-      <Grid templateColumns="90px 1fr 250px 100px 150px" gap={6}>
+      <Grid
+        templateColumns={{
+          base: "90px 1fr",
+          sm: "90px minmax(200px, 1fr) minmax(150px, 250px) minmax(30px, 100px) minmax(80px, 150px)",
+        }}
+        gap={6}
+      >
         <GridItem mb="auto" pos="relative">
           <Button variant="link" d="block">
-            <Image src={artwork} boxSize={24} onClick={handleShowBeatport} />
+            <Image src={artwork} boxSize={24} onClick={handleShowBeatport} loading="lazy" />
 
             {isLoading && (
               <Suspense fallback={null}>
@@ -74,7 +80,7 @@ export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Elemen
             )}
           </Button>
         </GridItem>
-        <GridItem py={2}>
+        <GridItem py={{ base: 0, sm: 2 }}>
           <Box color={isSelect ? "#01FF95" : ""}>
             <Text as="span">
               {name} {mix}
@@ -108,17 +114,17 @@ export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Elemen
           </HStack>
         </GridItem>
 
-        <GridItem py={2} fontSize="sm">
+        <GridItem py={{ base: 0, sm: 2 }} fontSize="sm" display={{ base: "none", sm: "block" }}>
           {genres.map((genre) => (
             <Text key={genre.id}>{genre.name}</Text>
           ))}
         </GridItem>
 
-        <GridItem fontSize="sm" py={2}>
+        <GridItem fontSize="sm" py={{ base: 0, sm: 2 }} display={{ base: "none", sm: "block" }}>
           {bpm}
         </GridItem>
 
-        <GridItem py={2} fontSize="sm">
+        <GridItem py={{ base: 0, sm: 2 }} fontSize="sm" display={{ base: "none", sm: "block" }}>
           {publishDate}
         </GridItem>
       </Grid>
