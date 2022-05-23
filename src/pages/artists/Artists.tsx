@@ -21,16 +21,22 @@ export default function Artists() {
   }, []);
 
   return (
-    <Container maxW="container.xl">
-      <Flex justify="space-between" mt={24}>
-        <Heading as="h2" size="lg" mb={10}>
+    <Container maxW="container.xl" mt={{ base: 16, sm: 20 }}>
+      <Flex justify="space-between">
+        <Heading as="h2" size="md" mb={8}>
           Artists
         </Heading>
 
         <AddArtist handleAddArtist={handleAddArtist} />
       </Flex>
 
-      <Grid templateColumns="1fr 1fr 1fr" gap={2}>
+      <Grid
+        templateColumns={{
+          base: "repeat(auto-fill, minmax(160px, 1fr))",
+          sm: "repeat(auto-fill, minmax(350px, 1fr))",
+        }}
+        gap={2}
+      >
         {artists.map((artist) => (
           <GridItem key={artist.id}>
             <ArtistCard {...artist} />

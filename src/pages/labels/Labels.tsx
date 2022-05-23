@@ -21,16 +21,21 @@ export default function Labels(): JSX.Element {
   }, []);
 
   return (
-    <Container maxW="container.xl">
-      <Flex justify="space-between" mt={24}>
-        <Heading as="h2" size="lg" mb={10}>
+    <Container maxW="container.xl" mt={{ base: 16, sm: 20 }}>
+      <Flex justify="space-between">
+        <Heading as="h2" size="md" mb={8}>
           Labels
         </Heading>
-
         <AddLabel handleAddLabel={handleAddLabel} />
       </Flex>
 
-      <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap={2}>
+      <Grid
+        templateColumns={{
+          base: "repeat(auto-fill, minmax(150px, 1fr))",
+          sm: "repeat(auto-fill, minmax(240px, 1fr))",
+        }}
+        gap={2}
+      >
         {labels.map((label) => (
           <GridItem key={label.id}>
             <LabelCard {...label} />

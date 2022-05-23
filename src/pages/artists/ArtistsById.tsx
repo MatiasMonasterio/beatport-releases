@@ -4,40 +4,36 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Alert } from "@chakra-ui/react";
 
-import { TrackCard, DeleteArtist } from "components";
-import { usePlayerContext } from "context/player";
+import { DeleteArtist, TrackList } from "components";
 import { getArtistById, deleteArtistsById } from "services/artists";
 
 export default function ArtistById(): JSX.Element {
-  const { loadPlayer } = usePlayerContext();
-
   const { id } = useParams<{ id: string }>() as { id: string };
   const [artist, setArtits] = useState<Artist>({} as Artist);
+
+  const sortTracks = (tracks: Track[]): void => {
+    setArtits(() => ({ ...artist, tracks: tracks }));
+  };
 
   const handleRemoveArtist = async (): Promise<void> => {
     await deleteArtistsById(id);
   };
 
-  const handlePlayTrack = (track: Track): void => {
-    loadPlayer({ track, playlist: artist.tracks });
-  };
-
   useEffect(() => {
     getArtistById(id).then((artistResp) => {
       artistResp && setArtits(artistResp);
-      console.log(artist);
     });
   }, []);
 
   return (
     <>
       <Box
-        mb={10}
+        mb={8}
         backgroundImage={artist.artwork}
         backgroundRepeat="no-repeat"
         backgroundSize="cover"
         backgroundPosition="center"
-        h={400}
+        h={{ base: 300, sm: 400 }}
       >
         <Flex h="100%" bg="rgba(0,0,0,0.6)" direction="column" justify="end" py={10}>
           <Container maxW="container.xl">
@@ -54,20 +50,20 @@ export default function ArtistById(): JSX.Element {
       </Box>
 
       <Container maxW="container.xl">
-        <Heading size="md" mb={6}>
-          Last Releases
+        <Heading as="h2" size="md" mb={4}>
+          Releases
         </Heading>
-
-        <Flex direction="column" gap={2}>
-          {artist.tracks?.length ? (
-            artist.tracks.map((track) => (
-              <TrackCard track={track} key={track.id} handlePlayTrack={handlePlayTrack} />
-            ))
-          ) : (
-            <Alert bg="rgba(254, 235, 200, 0.2)">no results</Alert>
-          )}
-        </Flex>
       </Container>
+
+      <Flex direction="column" gap={2}>
+        {artist.tracks?.length ? (
+          <TrackList tracks={artist.tracks} setTracks={sortTracks} />
+        ) : (
+          <Container maxW="container.xl">
+            <Alert bg="rgba(254, 235, 200, 0.2)">no results</Alert>
+          </Container>
+        )}
+      </Flex>
     </>
   );
 }

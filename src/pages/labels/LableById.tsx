@@ -4,17 +4,15 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Alert } from "@chakra-ui/react";
 
-import { TrackCard } from "components";
-import { usePlayerContext } from "context/player";
+import { TrackList } from "components";
 import { getLabelById } from "services/labels";
 
 export default function LabelById(): JSX.Element {
-  const { loadPlayer } = usePlayerContext();
   const { id } = useParams<{ id: string }>() as { id: string };
   const [label, setLabel] = useState<Label>({} as Label);
 
-  const handlePlayTrack = (track: Track): void => {
-    loadPlayer({ track, playlist: label.tracks });
+  const sortTracks = (tracks: Track[]): void => {
+    setLabel(() => ({ ...label, tracks: tracks }));
   };
 
   useEffect(() => {
@@ -31,7 +29,7 @@ export default function LabelById(): JSX.Element {
         backgroundRepeat="no-repeat"
         backgroundSize="cover"
         backgroundPosition="center"
-        h={400}
+        h={{ base: 300, sm: 400 }}
       >
         <Flex h="100%" bg="rgba(0,0,0,0.6)" direction="column" justify="end" py={10}>
           <Container maxW="container.xl">
@@ -47,20 +45,18 @@ export default function LabelById(): JSX.Element {
       </Box>
 
       <Container maxW="container.xl">
-        <Heading size="md" mb={6}>
+        <Heading as="h2" size="md" mb={4}>
           Last Releases
         </Heading>
-
-        <Flex direction="column" gap={2}>
-          {label.tracks?.length ? (
-            label.tracks.map((track) => (
-              <TrackCard track={track} key={track.id} handlePlayTrack={handlePlayTrack} />
-            ))
-          ) : (
-            <Alert bg="rgba(254, 235, 200, 0.2)">no results</Alert>
-          )}
-        </Flex>
       </Container>
+
+      {label.tracks?.length ? (
+        <TrackList tracks={label.tracks} setTracks={sortTracks} />
+      ) : (
+        <Container maxW="container.xl">
+          <Alert bg="rgba(254, 235, 200, 0.2)">no results</Alert>
+        </Container>
+      )}
     </>
   );
 }

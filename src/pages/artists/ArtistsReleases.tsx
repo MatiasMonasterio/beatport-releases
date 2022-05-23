@@ -1,19 +1,13 @@
 import type { Track } from "types";
 
 import { useEffect, useState } from "react";
-import { Heading, Flex, Container } from "@chakra-ui/react";
+import { Heading, Container } from "@chakra-ui/react";
 
-import { TrackCard } from "components";
-import { usePlayerContext } from "context/player";
+import { TrackList } from "components";
 import { getArtistReleases } from "services/artists";
 
 export default function ArtistsReleases(): JSX.Element {
-  const { loadPlayer } = usePlayerContext();
   const [releases, setReleases] = useState<Track[]>([]);
-
-  const handlePlayTrack = (track: Track): void => {
-    loadPlayer({ track, playlist: releases });
-  };
 
   useEffect(() => {
     getArtistReleases().then((releases) => {
@@ -22,16 +16,14 @@ export default function ArtistsReleases(): JSX.Element {
   }, []);
 
   return (
-    <Container maxW="container.xl" mt={24}>
-      <Heading as="h2" size="lg" mb={10}>
-        Last Releases
-      </Heading>
+    <>
+      <Container maxW="container.xl" mt={{ base: 16, sm: 20 }}>
+        <Heading as="h2" size="md" mb={4}>
+          Releases
+        </Heading>
+      </Container>
 
-      <Flex direction="column" gap={2}>
-        {releases.map((release) => (
-          <TrackCard track={release} handlePlayTrack={handlePlayTrack} key={release.id} />
-        ))}
-      </Flex>
-    </Container>
+      <TrackList tracks={releases} setTracks={setReleases} />
+    </>
   );
 }
