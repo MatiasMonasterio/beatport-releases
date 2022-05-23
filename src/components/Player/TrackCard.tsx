@@ -8,7 +8,7 @@ type Props = Omit<Track, "bpm" | "released" | "genres" | "remixers" | "preview">
 export default function TrackCard({ name, mix, artwork, label, artists }: Props): JSX.Element {
   return (
     <Flex gap={4}>
-      <Image src={artwork} h={16} />
+      <Image src={artwork} h={{ base: 14, sm: 16 }} w={{ base: 14, sm: 16 }} />
 
       <Box fontSize="sm">
         <Text fontWeight="bold">
