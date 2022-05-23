@@ -14,7 +14,8 @@ export default function DashboardLayout({ children }: Props) {
     <WidgetProvider>
       <PlayerProvider>
         <Grid
-          templateColumns="240px 1fr"
+          templateColumns={{ base: "1fr", sm: "240px 1fr" }}
+          templateRows="1fr"
           h="100vh"
           overflowY="hidden"
           bg="gray.800"
@@ -27,6 +28,7 @@ export default function DashboardLayout({ children }: Props) {
             borderRight="1px solid"
             borderColor="gray.700"
             gridArea="1 / 1 / 2 / 2"
+            display={{ base: "none", sm: "block" }}
           >
             <Sidebar />
           </GridItem>
@@ -37,19 +39,22 @@ export default function DashboardLayout({ children }: Props) {
             h="100%"
             position="relative"
             onScroll={handleScroll}
-            gridArea="1 / 2 / 2 / 3"
+            overflowX="hidden"
+            gridArea={{ base: "1", sm: "1 / 2 / 2 / 3" }}
             css={{
-              "&::-webkit-scrollbar": {
-                width: "10px",
-                borderLeft: "1px solid #2D3748",
-                backgroundColor: "#171923",
-              },
-              "&::-webkit-scrollbar-track": {
-                width: "10px",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                background: "#4A5568",
-                borderRadius: "10px",
+              "@media (min-width: 480px)": {
+                "&::-webkit-scrollbar": {
+                  width: "10px",
+                  borderLeft: "1px solid #2D3748",
+                  backgroundColor: "#171923",
+                },
+                "&::-webkit-scrollbar-track": {
+                  width: "10px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: "#4A5568",
+                  borderRadius: "10px",
+                },
               },
             }}
           >
