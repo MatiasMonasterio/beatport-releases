@@ -10,3 +10,4 @@ export * from "./AddLabel";
 export * from "./LabelCard";
 export * from "./Player";
 export * from "./TrackList";
+export * from "./MetaTags";

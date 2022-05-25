@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Alert } from "@chakra-ui/react";
 
-import { TrackList } from "components";
+import { MetaTags, TrackList } from "components";
 import { getLabelById } from "services/labels";
 
 export default function LabelById(): JSX.Element {
@@ -23,6 +23,8 @@ export default function LabelById(): JSX.Element {
 
   return (
     <>
+      {label.name && <MetaTags title={label.name} />}
+
       <Box
         mb={10}
         backgroundImage={label.artwork}

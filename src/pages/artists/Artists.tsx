@@ -3,7 +3,7 @@ import { Artist } from "types";
 import { useState, useEffect } from "react";
 import { Heading, Grid, GridItem, Flex, Container } from "@chakra-ui/react";
 
-import { ArtistCard, AddArtist } from "components";
+import { MetaTags, ArtistCard, AddArtist } from "components";
 import { getArtists, addArtistId } from "services/artists";
 
 export default function Artists() {
@@ -21,28 +21,32 @@ export default function Artists() {
   }, []);
 
   return (
-    <Container maxW="container.xl" mt={{ base: 16, sm: 20 }}>
-      <Flex justify="space-between">
-        <Heading as="h2" size="md" mb={8}>
-          Artists
-        </Heading>
+    <>
+      <MetaTags title="Artists" />
 
-        <AddArtist handleAddArtist={handleAddArtist} />
-      </Flex>
+      <Container maxW="container.xl" mt={{ base: 16, sm: 20 }}>
+        <Flex justify="space-between">
+          <Heading as="h2" size="md" mb={8}>
+            Artists
+          </Heading>
 
-      <Grid
-        templateColumns={{
-          base: "repeat(auto-fill, minmax(160px, 1fr))",
-          sm: "repeat(auto-fill, minmax(350px, 1fr))",
-        }}
-        gap={2}
-      >
-        {artists.map((artist) => (
-          <GridItem key={artist.id}>
-            <ArtistCard {...artist} />
-          </GridItem>
-        ))}
-      </Grid>
-    </Container>
+          <AddArtist handleAddArtist={handleAddArtist} />
+        </Flex>
+
+        <Grid
+          templateColumns={{
+            base: "repeat(auto-fill, minmax(160px, 1fr))",
+            sm: "repeat(auto-fill, minmax(350px, 1fr))",
+          }}
+          gap={2}
+        >
+          {artists.map((artist) => (
+            <GridItem key={artist.id}>
+              <ArtistCard {...artist} />
+            </GridItem>
+          ))}
+        </Grid>
+      </Container>
+    </>
   );
 }

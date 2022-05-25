@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Alert } from "@chakra-ui/react";
 
-import { DeleteArtist, TrackList } from "components";
+import { MetaTags, DeleteArtist, TrackList } from "components";
 import { getArtistById, deleteArtistsById } from "services/artists";
 
 export default function ArtistById(): JSX.Element {
@@ -27,6 +27,8 @@ export default function ArtistById(): JSX.Element {
 
   return (
     <>
+      {artist.name && <MetaTags title={artist.name} />}
+
       <Box
         mb={8}
         backgroundImage={artist.artwork}
