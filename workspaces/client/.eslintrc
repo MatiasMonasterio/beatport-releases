@@ -1,0 +1,11 @@
+{
+  "env": { "browser": true },
+  "extends": ["plugin:react/recommended", "plugin:react/jsx-runtime"],
+  "parserOptions": {
+    "ecmaFeatures": { "tsx": true }
+  },
+  "settings": {
+    "react": { "version": "detect" }
+  },
+  "plugins": ["react"]
+}

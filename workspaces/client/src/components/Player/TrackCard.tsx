@@ -1,0 +1,50 @@
+import type { Track } from "types";
+
+import { NavLink } from "react-router-dom";
+import { Flex, Image, Box, Text, Link } from "@chakra-ui/react";
+
+type Props = Omit<Track, "bpm" | "released" | "genres" | "remixers" | "preview">;
+
+export default function TrackCard({ name, mix, artwork, label, artists }: Props): JSX.Element {
+  return (
+    <Flex gap={4}>
+      <Image src={artwork} h={{ base: 14, sm: 16 }} w={{ base: 14, sm: 16 }} />
+
+      <Box fontSize="sm">
+        <Text fontWeight="bold">
+          {name} {mix}
+        </Text>
+
+        <Box lineHeight={1}>
+          {artists &&
+            artists.map((artist) => (
+              <Link
+                as={NavLink}
+                key={artist.id}
+                to={`/artist/${artist.id}`}
+                fontSize="xs"
+                color="gray.400"
+                lineHeight={1}
+                _notLast={{
+                  _after: { content: `", "` },
+                }}
+              >
+                {artist.name}
+              </Link>
+            ))}
+        </Box>
+
+        <Link
+          as={NavLink}
+          to={`/label/${label?.id}`}
+          fontSize="xs"
+          color="gray.400"
+          d="inline-block"
+          lineHeight={1}
+        >
+          {label?.name}
+        </Link>
+      </Box>
+    </Flex>
+  );
+}
