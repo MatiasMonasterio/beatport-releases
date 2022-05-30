@@ -4,6 +4,7 @@
   "description": "Scraper app to manage latest beatport releases",
   "author": "Matias M. Monasterio",
   "license": "ISC",
+  "private": true,
   "workspaces": [
     "workspaces/client",
     "workspaces/server",
