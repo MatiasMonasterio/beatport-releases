@@ -1,4 +1,4 @@
-import type { Artist, Track } from "types";
+import type { Artist, Track } from "@br/core";
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";

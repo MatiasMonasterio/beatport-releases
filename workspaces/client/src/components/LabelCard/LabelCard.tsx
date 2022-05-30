@@ -1,4 +1,4 @@
-import type { Label } from "types";
+import type { Label } from "@br/core";
 
 import { Link } from "react-router-dom";
 import { LinkBox, LinkOverlay, Heading, Box, Text } from "@chakra-ui/react";

@@ -1,4 +1,4 @@
-import type { Label } from "types";
+import type { Label } from "@br/core";
 
 import { useState, useEffect } from "react";
 import { Container, Flex, Heading, Grid, GridItem } from "@chakra-ui/react";

@@ -1,4 +1,4 @@
-import type { Label, Track } from "types";
+import type { Label, Track } from "@br/core";
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";

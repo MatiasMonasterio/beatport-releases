@@ -1,4 +1,4 @@
-import type { Artist } from "types";
+import type { Artist } from "@br/core";
 
 import { Link } from "react-router-dom";
 import { Flex, Heading, Text, Box } from "@chakra-ui/react";

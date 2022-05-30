@@ -1,4 +1,4 @@
-import type { Track } from "types";
+import type { Track } from "@br/core";
 import type { WidgetState } from "./types";
 
 import { INITIAL_VALUE } from "./WidgetProvider";

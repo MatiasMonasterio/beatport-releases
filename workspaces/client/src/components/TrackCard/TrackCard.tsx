@@ -1,4 +1,4 @@
-import type { Track } from "types";
+import type { Track } from "@br/core";
 
 import { useState, Suspense, useMemo } from "react";
 import { Link as ReactLink } from "react-router-dom";

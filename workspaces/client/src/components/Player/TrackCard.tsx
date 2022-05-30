@@ -1,4 +1,4 @@
-import type { Track } from "types";
+import type { Track } from "@br/core";
 
 import { NavLink } from "react-router-dom";
 import { Flex, Image, Box, Text, Link } from "@chakra-ui/react";

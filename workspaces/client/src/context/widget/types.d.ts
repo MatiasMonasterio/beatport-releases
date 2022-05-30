@@ -1,4 +1,4 @@
-import type { Track } from "types";
+import type { Track } from "@br/core";
 
 export interface WidgetState {
   active: boolean;

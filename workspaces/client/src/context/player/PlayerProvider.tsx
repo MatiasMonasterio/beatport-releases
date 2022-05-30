@@ -1,4 +1,4 @@
-import type { Track } from "types";
+import type { Track } from "@br/core";
 import { useState, useEffect, useRef } from "react";
 
 import { PlayerContext } from "./PlayerContext";

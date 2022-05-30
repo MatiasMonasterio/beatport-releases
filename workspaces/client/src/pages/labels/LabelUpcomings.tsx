@@ -1,4 +1,4 @@
-import type { Track } from "types";
+import type { Track } from "@br/core";
 
 import { useState, useEffect } from "react";
 import { Container, Heading } from "@chakra-ui/react";

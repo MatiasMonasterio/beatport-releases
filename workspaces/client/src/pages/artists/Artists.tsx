@@ -1,4 +1,4 @@
-import { Artist } from "types";
+import type { Artist } from "@br/core";
 
 import { useState, useEffect } from "react";
 import { Heading, Grid, GridItem, Flex, Container } from "@chakra-ui/react";
