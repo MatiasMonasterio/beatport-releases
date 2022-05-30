@@ -7,6 +7,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "baseUrl": "./src",
+    "noEmit": true,
   },
   "include": ["src", "next-env.d.ts"],
   "references": [{ "path": "./tsconfig.node.json", }]

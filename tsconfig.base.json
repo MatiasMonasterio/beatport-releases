@@ -12,7 +12,7 @@
     "allowJs": true,
 
     /* Emit */
-    "noEmit": true,
+    // "noEmit": true,
 
     /* Interop Constraints */
     "allowSyntheticDefaultImports": true,
@@ -27,6 +27,6 @@
     /* Completeness */
     "skipLibCheck": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  // "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "dist"]
 }
