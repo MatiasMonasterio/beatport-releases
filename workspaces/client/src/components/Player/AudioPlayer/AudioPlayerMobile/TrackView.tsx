@@ -42,11 +42,11 @@ export default function TrackView({
   const { duration, currentTime } = usePlayer(audioRef);
 
   const isFirstTrack: boolean = useMemo(() => {
-    return playlist.length > 0 && playlist[0].id === currentTrack.id;
+    return playlist.length > 0 && playlist[0].id === currentTrack?.id;
   }, [currentTrack, playlist]);
 
   const isLastTrack: boolean = useMemo(() => {
-    return playlist.length > 0 && playlist[playlist.length - 1].id === currentTrack.id;
+    return playlist.length > 0 && playlist[playlist.length - 1].id === currentTrack?.id;
   }, [currentTrack, playlist]);
 
   const handleCloseView = () => {
@@ -73,32 +73,33 @@ export default function TrackView({
       </Container>
       <Container display="flex" flexDirection="column" height="100%">
         <Box display="flex" flexGrow={1} alignItems="center">
-          <Image src={currentTrack.artwork} />
+          <Image src={currentTrack?.artwork} />
         </Box>
 
         <Box pb={10}>
           <Box mb={4}>
             <Heading size="md" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden" mb={1}>
-              {currentTrack.name} {currentTrack.mix}
+              {currentTrack?.name} {currentTrack?.mix}
             </Heading>
 
             <Text fontSize="sm" color="gray.400">
-              {currentTrack.artists.map((artist) => (
-                <Link
-                  as={NavLink}
-                  key={artist.id}
-                  to={`/artist/${artist.id}`}
-                  _notLast={{ _after: { content: `", "` } }}
-                  onClick={handleCloseView}
-                >
-                  {artist.name}
-                </Link>
-              ))}
+              {currentTrack?.artists &&
+                currentTrack.artists.map((artist) => (
+                  <Link
+                    as={NavLink}
+                    key={artist.id}
+                    to={`/artist/${artist.id}`}
+                    _notLast={{ _after: { content: `", "` } }}
+                    onClick={handleCloseView}
+                  >
+                    {artist.name}
+                  </Link>
+                ))}
             </Text>
 
             <Text fontSize="sm" color="gray.400">
-              <Link as={NavLink} to={`/label/${currentTrack.label.id}`} onClick={handleCloseView}>
-                {currentTrack.label.name}
+              <Link as={NavLink} to={`/label/${currentTrack?.label?.id}`} onClick={handleCloseView}>
+                {currentTrack?.label?.name}
               </Link>
             </Text>
           </Box>
