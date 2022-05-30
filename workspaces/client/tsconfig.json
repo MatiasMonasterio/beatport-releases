@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "incremental": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "baseUrl": "./src",
+    "noEmit": true,
+  },
+  "include": ["src", "next-env.d.ts"],
+  "references": [{ "path": "./tsconfig.node.json", }]
+}
