@@ -5,6 +5,10 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 
+import apiRoutes from "./api/routes";
+import { connectDatabases } from "./utils";
+import { PORT } from "./config/constants";
+
 const app = express();
 
 app.use(express.json());
@@ -15,9 +19,15 @@ app.get("/", (_req, res) => {
   res.send("Beat Releases API");
 });
 
-app.listen(3000, () => {
-  console.log("Server init");
+app.use(apiRoutes);
+
+app.all("*", (req, _res, next) => {
+  next({ status: 404, message: `Can't find ${req.originalUrl} on this server!` });
 });
+
+connectDatabases()
+  .then(() => app.listen(PORT || 3001, () => console.log("Server init")))
+  .catch((err) => console.error("Error: " + err));
 
 process.on("unhandledRejection", (err: Error) => {
   console.error(err.name, err.message);
