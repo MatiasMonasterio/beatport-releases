@@ -23,5 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 
+# Environment
+*.env
+
 # Typescript
 tsconfig.tsbuildinfo
+
+# sqlite
+*.db

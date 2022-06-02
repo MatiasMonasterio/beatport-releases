@@ -9,7 +9,7 @@
     "resolveJsonModule": true,
 
     /* JavaScript Support */
-    "allowJs": true,
+    // "allowJs": true,
 
     /* Emit */
     // "noEmit": true,
