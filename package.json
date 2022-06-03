@@ -14,11 +14,14 @@
     "npm": ">=7.9.0"
   },
   "scripts": {
+    "build": "npm run build:server",
+    "start:server": "npm run prisma:generate && npm start --w=server",
     "dev:client": "npm run dev --w=client",
     "dev:server": "npm run dev --w=server",
     "build:client": "npm run build --w=client",
     "build:server": "npm run build --w=server",
-    "start:server": "npm start --w=server",
+    "prisma:studio": "npm run prisma:studio --w=server",
+    "prisma:generate": "npm run prisma:generate --w=server",
     "commit": "sui-mono commit",
     "lint": "eslint ./workspaces",
     "lint:fix": "npm run lint --fix"
