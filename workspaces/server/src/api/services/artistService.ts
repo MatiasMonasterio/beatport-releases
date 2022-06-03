@@ -17,7 +17,7 @@ const scrapArtists = async (): Promise<Artist[]> => {
 
     if (!artistsDb.length) return [];
 
-    const artistsIdToScrap = artistsDb.map((artist) => artist.id);
+    const artistsIdToScrap = artistsDb.map((artist: { id: number }) => artist.id);
     const artists = await beatportScrap.artists(artistsIdToScrap);
 
     await cache.set(USER_ARTIST_KEY, JSON.stringify(artists));
