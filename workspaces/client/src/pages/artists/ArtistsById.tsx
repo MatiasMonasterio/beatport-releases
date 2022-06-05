@@ -2,23 +2,27 @@ import type { Artist, Track } from "@br/core";
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Heading, Flex, Link, Box, Container, Skeleton } from "@chakra-ui/react";
+import { Heading, Flex, Link, Box, Container, Skeleton, HStack } from "@chakra-ui/react";
 
 import { useFetch } from "hooks";
-import { MetaTags, DeleteArtist, TrackList } from "components";
-import { getArtistById, deleteArtistsById } from "services/artists";
+import { MetaTags, TrackList, Follow } from "components";
+import { getArtistById, deleteArtistsById, addArtistId } from "services/artists";
 
 export default function ArtistById(): JSX.Element {
   const { id } = useParams<{ id: string }>() as { id: string };
   const [artist, setArtits] = useState<Artist>({} as Artist);
   const { fetch, isLoading } = useFetch();
+  const { fetch: fetchRuntime, isLoading: isLoadingRuntime } = useFetch();
 
   const sortTracks = (tracks: Track[]): void => {
     setArtits(() => ({ ...artist, tracks: tracks }));
   };
 
-  const handleRemoveArtist = async (): Promise<void> => {
-    await deleteArtistsById(id);
+  const handleFollow = async (): Promise<void> => {
+    if (artist.follow) await fetchRuntime(async () => await deleteArtistsById(id));
+    else await fetchRuntime(async () => await addArtistId(id));
+
+    setArtits(() => ({ ...artist, follow: !artist.follow }));
   };
 
   useEffect(() => {
@@ -54,10 +58,14 @@ export default function ArtistById(): JSX.Element {
               </>
             ) : (
               <>
-                <Flex justify="space-between" align="center">
+                <HStack alignItems="end">
                   <Heading>{artist.name}</Heading>
-                  <DeleteArtist handleRemoveArtist={handleRemoveArtist} />
-                </Flex>
+                  <Follow
+                    isFollowing={!!artist.follow}
+                    onClick={handleFollow}
+                    isLoading={isLoadingRuntime}
+                  />
+                </HStack>
 
                 <Link isExternal href={artist.profile} fontSize="sm" color="gray.400" mr="auto">
                   Go to beatport profile

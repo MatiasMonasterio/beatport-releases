@@ -2,19 +2,27 @@ import type { Label, Track } from "@br/core";
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Heading, Flex, Link, Box, Container, Skeleton } from "@chakra-ui/react";
+import { Heading, Flex, Link, Box, Container, Skeleton, HStack } from "@chakra-ui/react";
 
 import { useFetch } from "hooks";
-import { MetaTags, TrackList } from "components";
-import { getLabelById } from "services/labels";
+import { MetaTags, TrackList, Follow } from "components";
+import { getLabelById, addLabelId, deleteLabelById } from "services/labels";
 
 export default function LabelById(): JSX.Element {
   const { id } = useParams<{ id: string }>() as { id: string };
   const [label, setLabel] = useState<Label>({} as Label);
   const { fetch, isLoading } = useFetch();
+  const { fetch: fetchRuntime, isLoading: isLoadingRuntime } = useFetch();
 
   const sortTracks = (tracks: Track[]): void => {
     setLabel(() => ({ ...label, tracks: tracks }));
+  };
+
+  const handleFollow = async (): Promise<void> => {
+    if (label.follow) await fetchRuntime(async () => await deleteLabelById(id));
+    else await fetchRuntime(async () => await addLabelId(id));
+
+    setLabel(() => ({ ...label, follow: !label.follow }));
   };
 
   useEffect(() => {
@@ -50,9 +58,14 @@ export default function LabelById(): JSX.Element {
               </>
             ) : (
               <>
-                <Flex justify="space-between" align="center">
+                <HStack alignItems="end">
                   <Heading>{label.name}</Heading>
-                </Flex>
+                  <Follow
+                    isFollowing={!!label.follow}
+                    isLoading={isLoadingRuntime}
+                    onClick={handleFollow}
+                  />
+                </HStack>
 
                 <Link isExternal href={label.profile} fontSize="sm" color="gray.400" mr="auto">
                   Go to beatport profile
