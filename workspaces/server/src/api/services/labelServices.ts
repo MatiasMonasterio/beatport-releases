@@ -60,6 +60,7 @@ const createNewLabel = async (id: number): Promise<Label> => {
     await cache.set(USER_LABEL_KEY, JSON.stringify(labelSorted));
   }
 
+  await cache.del(`/api/labels/${id}`);
   return newLabel;
 };
 
@@ -94,7 +95,10 @@ const getOneLabel = async (id: number): Promise<Label> => {
   const labels: Label[] = reply ? JSON.parse(reply) : await scrapLabels();
 
   const label = labels.find((label) => label.id === id);
-  if (label) return label;
+  if (label) {
+    label.follow = true;
+    return label;
+  }
 
   const [newLabel] = await beatportScrap.labels([+id]);
   return newLabel;
@@ -132,6 +136,8 @@ const deteleOneLabel = async (id: number): Promise<void> => {
       await cache.set(USER_LABEL_KEY, JSON.stringify(labelsSorted));
     }
   }
+
+  await cache.del(`/api/labels/${id}`);
 };
 
 export default {

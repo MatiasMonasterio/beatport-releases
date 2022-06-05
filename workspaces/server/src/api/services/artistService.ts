@@ -60,6 +60,7 @@ const createNewArtist = async (id: number): Promise<Artist> => {
     await cache.set(USER_ARTIST_KEY, JSON.stringify(artistSorted));
   }
 
+  await cache.del(`/api/artists/${id}`);
   return newArtist;
 };
 
@@ -92,7 +93,10 @@ const getOneArtist = async (id: string): Promise<Artist> => {
   const artists: Artist[] = reply ? JSON.parse(reply) : await scrapArtists();
 
   const artist = artists.find((artist) => artist.id.toString() === id);
-  if (artist) return artist;
+  if (artist) {
+    artist.follow = true;
+    return artist;
+  }
 
   const [newArtists] = await beatportScrap.artists([+id]);
   return newArtists;
@@ -130,6 +134,8 @@ const deteleOneArtist = async (id: number): Promise<void> => {
       await cache.set(USER_ARTIST_KEY, JSON.stringify(artistsSorted));
     }
   }
+
+  await cache.del(`/api/artists/${id}`);
 };
 
 export default {
