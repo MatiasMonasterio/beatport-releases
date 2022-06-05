@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Container, Flex, Box } from "@chakra-ui/react";
 
 import { usePlayerContext } from "context/player";
-import { TrackCard } from "components";
+import { TrackCard, TrackCardLoader } from "components";
 
 import SortDesktop from "./SortDesktop";
 import SortMobile from "./SortMobile";
@@ -18,10 +18,11 @@ export enum trackFilter {
 
 interface Props {
   tracks: Track[];
+  isLoading: boolean;
   setTracks: (tracks: Track[]) => void;
 }
 
-export default function TrackList({ tracks, setTracks }: Props): JSX.Element {
+export default function TrackList({ tracks, setTracks, isLoading }: Props): JSX.Element {
   const { loadPlaylist } = usePlayerContext();
 
   const [isDescFilter, setisDescFilter] = useState<number>(-1);
@@ -96,10 +97,19 @@ export default function TrackList({ tracks, setTracks }: Props): JSX.Element {
 
       <Container maxW="container.xl">
         <Flex direction="column" gap={2}>
-          {tracks.length > 0 &&
+          {isLoading && [1, 2, 3, 4].map((value) => <TrackCardLoader key={value} />)}
+
+          {!isLoading &&
+            tracks.length > 0 &&
             tracks.map((track) => (
               <TrackCard track={track} handlePlayTrack={handlePlayTrack} key={track.id} />
             ))}
+
+          {!isLoading && !tracks.length && (
+            <Box py={5} color="gray.500">
+              No results to show...
+            </Box>
+          )}
         </Flex>
       </Container>
     </>
