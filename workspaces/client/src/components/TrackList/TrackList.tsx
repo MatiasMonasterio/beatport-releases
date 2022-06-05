@@ -96,9 +96,10 @@ export default function TrackList({ tracks, setTracks }: Props): JSX.Element {
 
       <Container maxW="container.xl">
         <Flex direction="column" gap={2}>
-          {tracks.map((track) => (
-            <TrackCard track={track} handlePlayTrack={handlePlayTrack} key={track.id} />
-          ))}
+          {tracks.length > 0 &&
+            tracks.map((track) => (
+              <TrackCard track={track} handlePlayTrack={handlePlayTrack} key={track.id} />
+            ))}
         </Flex>
       </Container>
     </>
