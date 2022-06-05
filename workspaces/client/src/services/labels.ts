@@ -3,33 +3,35 @@ import type { Label, Track } from "@br/core";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type LabelsResponse = {
-  labels: Label[];
+  data: Label[];
   error?: string;
 };
 
 type LabelResponse = {
-  label: Label;
+  data: Label;
   error?: string;
 };
 
-type ReleasesResponse = {
-  releases: Track[];
+type TracksResponse = {
+  data: Track[];
+  error?: string;
 };
 
 export const getLabels = async (): Promise<Label[] | null> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/labels`);
-    const { labels, error }: LabelsResponse = await resp.json();
 
+    const { data: labels, error }: LabelsResponse = await resp.json();
     if (error) throw new Error(error);
+
     return labels;
   } catch (error: unknown) {
     console.error(error);
-    return null;
+    return [];
   }
 };
 
-export const addLabelId = async (beatportId: string): Promise<Label | null> => {
+export const addLabelId = async (id: string): Promise<Label | null> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/labels`, {
       method: "POST",
@@ -37,10 +39,10 @@ export const addLabelId = async (beatportId: string): Promise<Label | null> => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ beatportId }),
+      body: JSON.stringify({ id }),
     });
 
-    const { label, error }: LabelResponse = await resp.json();
+    const { data: label, error }: LabelResponse = await resp.json();
     if (error) throw new Error(error);
 
     return label;
@@ -53,7 +55,8 @@ export const addLabelId = async (beatportId: string): Promise<Label | null> => {
 export const getLabelById = async (id: string): Promise<Label | null> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/labels/${id}`);
-    const { label, error }: LabelResponse = await resp.json();
+
+    const { data: label, error }: LabelResponse = await resp.json();
     if (error) throw new Error(error);
 
     return label;
@@ -66,9 +69,11 @@ export const getLabelById = async (id: string): Promise<Label | null> => {
 export const getLabelReleases = async (): Promise<Track[]> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/labels/releases`);
-    const { releases }: ReleasesResponse = await resp.json();
 
-    return releases;
+    const { data: tracks, error }: TracksResponse = await resp.json();
+    if (error) throw new Error(error);
+
+    return tracks;
   } catch (error) {
     console.error(error);
     return [];
@@ -77,10 +82,12 @@ export const getLabelReleases = async (): Promise<Track[]> => {
 
 export const getLabelUpcomings = async (): Promise<Track[]> => {
   try {
-    const resp: Response = await fetch(`${API_URL}/api/labels/upcoming`);
-    const { releases }: ReleasesResponse = await resp.json();
+    const resp: Response = await fetch(`${API_URL}/api/labels/upcomings`);
 
-    return releases;
+    const { data: tracks, error }: TracksResponse = await resp.json();
+    if (error) throw new Error(error);
+
+    return tracks;
   } catch (error) {
     console.error(error);
     return [];

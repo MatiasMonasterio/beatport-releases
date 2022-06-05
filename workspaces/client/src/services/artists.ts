@@ -3,29 +3,31 @@ import type { Artist, Track } from "@br/core";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type ArtistsResponse = {
-  artists: Artist[];
+  data: Artist[];
   error?: string;
 };
 
 type ArtistResponse = {
-  artist: Artist;
+  data: Artist;
   error?: string;
 };
 
-type ReleasesResponse = {
-  releases: Track[];
+type TracksResponse = {
+  data: Track[];
+  error?: string;
 };
 
 export const getArtists = async (): Promise<Artist[] | null> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/artists`);
-    const { artists, error }: ArtistsResponse = await resp.json();
 
+    const { data: artists, error }: ArtistsResponse = await resp.json();
     if (error) throw new Error(error);
+
     return artists;
   } catch (error: unknown) {
     console.error(error);
-    return null;
+    return [];
   }
 };
 
@@ -40,7 +42,7 @@ export const addArtistId = async (beatportId: string): Promise<Artist | null> =>
       body: JSON.stringify({ beatportId }),
     });
 
-    const { artist, error }: ArtistResponse = await resp.json();
+    const { data: artist, error }: ArtistResponse = await resp.json();
     if (error) throw new Error(error);
 
     return artist;
@@ -53,7 +55,8 @@ export const addArtistId = async (beatportId: string): Promise<Artist | null> =>
 export const getArtistById = async (id: string): Promise<Artist | null> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/artists/${id}`);
-    const { artist, error }: ArtistResponse = await resp.json();
+
+    const { data: artist, error }: ArtistResponse = await resp.json();
     if (error) throw new Error(error);
 
     return artist;
@@ -67,7 +70,9 @@ export const deleteArtistsById = async (id: string): Promise<void> => {
   try {
     const endpoint = `${API_URL}/api/artists/${id}`;
     const resp: Response = await fetch(endpoint, { method: "DELETE" });
-    await resp.json();
+
+    const { error }: ArtistResponse = await resp.json();
+    if (error) throw new Error(error);
 
     return;
   } catch (error) {
@@ -79,23 +84,27 @@ export const deleteArtistsById = async (id: string): Promise<void> => {
 export const getArtistReleases = async (): Promise<Track[] | null> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/artists/releases`);
-    const { releases }: ReleasesResponse = await resp.json();
 
-    return releases;
+    const { data: tracks, error }: TracksResponse = await resp.json();
+    if (error) throw new Error(error);
+
+    return tracks;
   } catch (error) {
     console.error(error);
-    return null;
+    return [];
   }
 };
 
 export const getArtistUpcomings = async (): Promise<Track[] | null> => {
   try {
-    const resp: Response = await fetch(`${API_URL}/api/artists/upcoming`);
-    const { releases }: ReleasesResponse = await resp.json();
+    const resp: Response = await fetch(`${API_URL}/api/artists/upcomings`);
 
-    return releases;
+    const { data: tracks, error }: TracksResponse = await resp.json();
+    if (error) throw new Error(error);
+
+    return tracks;
   } catch (error) {
     console.error(error);
-    return null;
+    return [];
   }
 };
