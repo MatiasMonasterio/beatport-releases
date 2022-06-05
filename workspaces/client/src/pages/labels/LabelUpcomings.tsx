@@ -3,14 +3,16 @@ import type { Track } from "@br/core";
 import { useState, useEffect } from "react";
 import { Container, Heading } from "@chakra-ui/react";
 
+import { useFetch } from "hooks";
 import { MetaTags, TrackList } from "components";
 import { getLabelUpcomings } from "services/labels";
 
 export default function LabelUpcomings(): JSX.Element {
   const [upcomings, setUpcomings] = useState<Track[]>([]);
+  const { fetch, isLoading } = useFetch();
 
   useEffect(() => {
-    getLabelUpcomings().then((upcomings) => {
+    fetch<Track[]>(getLabelUpcomings).then((upcomings) => {
       upcomings && setUpcomings(upcomings);
     });
   }, []);
@@ -25,7 +27,7 @@ export default function LabelUpcomings(): JSX.Element {
         </Heading>
       </Container>
 
-      <TrackList tracks={upcomings} setTracks={setUpcomings} />
+      <TrackList tracks={upcomings} setTracks={setUpcomings} isLoading={isLoading} />
     </>
   );
 }
