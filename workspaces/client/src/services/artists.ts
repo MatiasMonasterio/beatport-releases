@@ -31,7 +31,7 @@ export const getArtists = async (): Promise<Artist[]> => {
   }
 };
 
-export const addArtistId = async (beatportId: string): Promise<Artist | null> => {
+export const addArtistId = async (id: string): Promise<Artist | null> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/artists`, {
       method: "POST",
@@ -39,7 +39,7 @@ export const addArtistId = async (beatportId: string): Promise<Artist | null> =>
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ beatportId }),
+      body: JSON.stringify({ id }),
     });
 
     const { data: artist, error }: ArtistResponse = await resp.json();

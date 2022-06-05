@@ -66,6 +66,21 @@ export const getLabelById = async (id: string): Promise<Label | null> => {
   }
 };
 
+export const deleteLabelById = async (id: string): Promise<void> => {
+  try {
+    const endpoint = `${API_URL}/api/labels/${id}`;
+    const resp: Response = await fetch(endpoint, { method: "DELETE" });
+
+    const { error }: LabelResponse = await resp.json();
+    if (error) throw new Error(error);
+
+    return;
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+};
+
 export const getLabelReleases = async (): Promise<Track[]> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/labels/releases`);
