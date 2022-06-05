@@ -17,7 +17,7 @@ type TracksResponse = {
   error?: string;
 };
 
-export const getLabels = async (): Promise<Label[] | null> => {
+export const getLabels = async (): Promise<Label[]> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/labels`);
 

@@ -17,7 +17,7 @@ type TracksResponse = {
   error?: string;
 };
 
-export const getArtists = async (): Promise<Artist[] | null> => {
+export const getArtists = async (): Promise<Artist[]> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/artists`);
 
@@ -81,7 +81,7 @@ export const deleteArtistsById = async (id: string): Promise<void> => {
   }
 };
 
-export const getArtistReleases = async (): Promise<Track[] | null> => {
+export const getArtistReleases = async (): Promise<Track[]> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/artists/releases`);
 
@@ -95,7 +95,7 @@ export const getArtistReleases = async (): Promise<Track[] | null> => {
   }
 };
 
-export const getArtistUpcomings = async (): Promise<Track[] | null> => {
+export const getArtistUpcomings = async (): Promise<Track[]> => {
   try {
     const resp: Response = await fetch(`${API_URL}/api/artists/upcomings`);
 
