@@ -12,3 +12,4 @@ export * from "./Player";
 export * from "./TrackList";
 export * from "./MetaTags";
 export * from "./TrackCardLoader";
+export * from "./Follow";
