@@ -5,6 +5,7 @@ export interface Artist {
   tracksCount: number;
   tracks: Track[];
   profile?: string;
+  follow?: boolean;
 }
 
 export interface Label {
@@ -12,7 +13,8 @@ export interface Label {
   name: string;
   artwork: string;
   tracks: Track[];
-  profile: string;
+  profile?: string;
+  follow?: boolean;
 }
 
 export interface Track {
