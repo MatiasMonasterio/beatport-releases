@@ -1,14 +1,15 @@
 import type { Request, Response } from "express";
+import type { Label, Track } from "@br/core";
 import type { ErrorRequest } from "../../types";
 
 import { clearLabelCache } from "../../utils/clearCache";
 import labelService from "../services/labelServices";
-import client from "../../cache";
+import cache from "../../cache";
 
 const getAllLabels = async (req: Request, res: Response): Promise<void> => {
   try {
     const labels = await labelService.getAllLabels();
-    await client.set(req.originalUrl, JSON.stringify(labels));
+    await cache.set<Label[]>(req.originalUrl, labels);
 
     res.send({ status: "OK", data: labels });
   } catch (error: unknown | ErrorRequest) {
@@ -45,7 +46,7 @@ const createNewLabel = async (req: Request, res: Response): Promise<void> => {
 const getLabelsReleases = async (req: Request, res: Response): Promise<void> => {
   try {
     const tracks = await labelService.getLabelsReleases();
-    await client.set(req.originalUrl, JSON.stringify(tracks));
+    await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
   } catch (error: unknown | ErrorRequest) {
@@ -60,7 +61,7 @@ const getLabelsReleases = async (req: Request, res: Response): Promise<void> => 
 const getLabelsUpcoming = async (req: Request, res: Response): Promise<void> => {
   try {
     const tracks = await labelService.getLabelsUpcoming();
-    await client.set(req.originalUrl, JSON.stringify(tracks));
+    await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
   } catch (error: unknown | ErrorRequest) {
@@ -85,7 +86,7 @@ const getOneLabel = async (req: Request, res: Response): Promise<void> => {
     if (!label) {
       res.status(404).send({ status: "FAILED", data: { error: "label not found" } });
     } else {
-      await client.set(req.originalUrl, JSON.stringify(label));
+      await cache.set<Label>(req.originalUrl, label);
       res.send({ status: "OK", data: label });
     }
   } catch (error: unknown | ErrorRequest) {

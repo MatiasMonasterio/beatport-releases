@@ -10,8 +10,8 @@ const USER_ID = 1;
 const USER_LABEL_KEY = `LABELS-${USER_ID}`;
 
 const getAllLabels = async (): Promise<Label[]> => {
-  const reply = await cache.get(USER_LABEL_KEY);
-  return reply ? JSON.parse(reply) : await scraperService.labels();
+  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
+  return labelsCached ? labelsCached : await scraperService.labels();
 };
 
 const createNewLabel = async (id: number): Promise<Label> => {
@@ -28,16 +28,15 @@ const createNewLabel = async (id: number): Promise<Label> => {
   if (!labelExist) await db.label.create({ data: { id: newLabel.id } });
   await db.labelsOnUser.create({ data: { userId: USER_ID, labelId: id } });
 
-  const reply = await cache.get(USER_LABEL_KEY);
+  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
 
-  if (!reply) {
-    await cache.set(USER_LABEL_KEY, JSON.stringify([newLabel]));
+  if (!labelsCached) {
+    await cache.set<Label[]>(USER_LABEL_KEY, [newLabel]);
   } else {
-    const labels: Label[] = JSON.parse(reply);
-    labels.push(newLabel);
+    labelsCached.push(newLabel);
 
-    const labelSorted = labels.sort((a, b) => a.name.localeCompare(b.name));
-    await cache.set(USER_LABEL_KEY, JSON.stringify(labelSorted));
+    const labelSorted = labelsCached.sort((a, b) => a.name.localeCompare(b.name));
+    await cache.set<Label[]>(USER_LABEL_KEY, labelSorted);
   }
 
   await cache.del(`/api/labels/${id}`);
@@ -45,8 +44,8 @@ const createNewLabel = async (id: number): Promise<Label> => {
 };
 
 const getLabelsReleases = async (): Promise<Track[]> => {
-  const reply = await cache.get(USER_LABEL_KEY);
-  const labels: Label[] = reply ? JSON.parse(reply) : await scraperService.labels();
+  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
+  const labels = labelsCached ? labelsCached : await scraperService.labels();
 
   if (!labels.length) return [];
 
@@ -58,8 +57,8 @@ const getLabelsReleases = async (): Promise<Track[]> => {
 };
 
 const getLabelsUpcoming = async (): Promise<Track[]> => {
-  const reply = await cache.get(USER_LABEL_KEY);
-  const labels: Label[] = reply ? JSON.parse(reply) : await scraperService.labels();
+  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
+  const labels = labelsCached ? labelsCached : await scraperService.labels();
 
   if (!labels.length) return [];
 
@@ -71,8 +70,8 @@ const getLabelsUpcoming = async (): Promise<Track[]> => {
 };
 
 const getOneLabel = async (id: number): Promise<Label> => {
-  const reply = await cache.get(USER_LABEL_KEY);
-  const labels: Label[] = reply ? JSON.parse(reply) : await scraperService.labels();
+  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
+  const labels = labelsCached ? labelsCached : await scraperService.labels();
 
   const label = labels.find((label) => label.id === id);
   if (label) {
@@ -101,19 +100,18 @@ const deteleOneLabel = async (id: number): Promise<void> => {
 
   if (!labelUsed.length) await db.label.delete({ where: { id: id } });
 
-  const reply = await cache.get(USER_LABEL_KEY);
+  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
 
-  if (!reply) {
+  if (!labelsCached) {
     const labels = await scraperService.labels();
-    labels.length && (await cache.set(USER_LABEL_KEY, JSON.stringify(labels)));
+    labels.length && (await cache.set<Label[]>(USER_LABEL_KEY, labels));
   } else {
-    const labels: Label[] = JSON.parse(reply);
-    const labelToRemove = labels.findIndex((label) => label.id === id);
+    const labelToRemove = labelsCached.findIndex((label) => label.id === id);
 
-    if (labelToRemove >= 0 && labels.length) {
-      labels.splice(labelToRemove, 1);
-      const labelsSorted = labels.sort((a, b) => a.name.localeCompare(b.name));
-      await cache.set(USER_LABEL_KEY, JSON.stringify(labelsSorted));
+    if (labelToRemove >= 0 && labelsCached.length) {
+      labelsCached.splice(labelToRemove, 1);
+      const labelsSorted = labelsCached.sort((a, b) => a.name.localeCompare(b.name));
+      await cache.set<Label[]>(USER_LABEL_KEY, labelsSorted);
     }
   }
 

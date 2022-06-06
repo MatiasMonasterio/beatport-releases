@@ -21,7 +21,7 @@ const scrapLabels = async (): Promise<Label[]> => {
     const labelsIdToScrap = labelsId.map((label: { id: number }) => label.id);
     const labels = await beatportScrap.labels(labelsIdToScrap);
 
-    await cache.set(USER_LABEL_KEY, JSON.stringify(labels));
+    await cache.set<Label[]>(USER_LABEL_KEY, labels);
 
     return labels;
   } catch (error) {
@@ -42,7 +42,7 @@ const scrapArtists = async (): Promise<Artist[]> => {
     const artistsIdToScrap = artistsDb.map((artist: { id: number }) => artist.id);
     const artists = await beatportScrap.artists(artistsIdToScrap);
 
-    await cache.set(USER_ARTIST_KEY, JSON.stringify(artists));
+    await cache.set<Artist[]>(USER_ARTIST_KEY, artists);
 
     return artists;
   } catch (error) {

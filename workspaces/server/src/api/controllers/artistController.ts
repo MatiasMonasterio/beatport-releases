@@ -1,14 +1,15 @@
 import type { Request, Response } from "express";
+import type { Artist, Track } from "@br/core";
 import type { ErrorRequest } from "../../types";
 
-import client from "../../cache";
+import cache from "../../cache";
 import { clearArtistCache } from "../../utils/clearCache";
 import artistService from "../services/artistService";
 
 const getAllArtists = async (req: Request, res: Response): Promise<void> => {
   try {
     const artists = await artistService.getAllArtists();
-    await client.set(req.originalUrl, JSON.stringify(artists));
+    await cache.set<Artist[]>(req.originalUrl, artists);
 
     res.send({ status: "OK", data: artists });
   } catch (error: unknown | ErrorRequest) {
@@ -45,7 +46,7 @@ const createNewArtist = async (req: Request, res: Response): Promise<void> => {
 const getArtistsReleases = async (req: Request, res: Response): Promise<void> => {
   try {
     const tracks = await artistService.getArtistsReleases();
-    await client.set(req.originalUrl, JSON.stringify(tracks));
+    await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
   } catch (error: unknown | ErrorRequest) {
@@ -60,7 +61,7 @@ const getArtistsReleases = async (req: Request, res: Response): Promise<void> =>
 const getArtistsUpcoming = async (req: Request, res: Response): Promise<void> => {
   try {
     const tracks = await artistService.getArtistsUpcoming();
-    await client.set(req.originalUrl, JSON.stringify(tracks));
+    await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
   } catch (error: unknown | ErrorRequest) {
@@ -85,7 +86,7 @@ const getOneArtist = async (req: Request, res: Response): Promise<void> => {
     if (!artist) {
       res.status(404).send({ status: "FAILED", data: { error: "artist not found" } });
     } else {
-      await client.set(req.originalUrl, JSON.stringify(artist));
+      await cache.set<Artist>(req.originalUrl, artist);
       res.send({ status: "OK", data: artist });
     }
   } catch (error: unknown | ErrorRequest) {

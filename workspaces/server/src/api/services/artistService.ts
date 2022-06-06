@@ -10,8 +10,8 @@ const USER_ID = 1;
 const USER_ARTIST_KEY = `ARTISTS-${USER_ID}`;
 
 const getAllArtists = async (): Promise<Artist[]> => {
-  const reply = await cache.get(USER_ARTIST_KEY);
-  return reply ? JSON.parse(reply) : await scraperService.artists();
+  const artists = await cache.get<Artist[]>(USER_ARTIST_KEY);
+  return artists ? artists : await scraperService.artists();
 };
 
 const createNewArtist = async (id: number): Promise<Artist> => {
@@ -28,16 +28,15 @@ const createNewArtist = async (id: number): Promise<Artist> => {
   if (!artistExits) await db.artist.create({ data: { id: newArtist.id } });
   await db.artistsOnUser.create({ data: { userId: USER_ID, artistId: id } });
 
-  const reply = await cache.get(USER_ARTIST_KEY);
+  const artists = await cache.get<Artist[]>(USER_ARTIST_KEY);
 
-  if (!reply) {
-    await cache.set(USER_ARTIST_KEY, JSON.stringify([newArtist]));
+  if (!artists) {
+    await cache.set<Artist[]>(USER_ARTIST_KEY, [newArtist]);
   } else {
-    const artists: Artist[] = JSON.parse(reply);
     artists.push(newArtist);
 
     const artistSorted = artists.sort((a, b) => a.name.localeCompare(b.name));
-    await cache.set(USER_ARTIST_KEY, JSON.stringify(artistSorted));
+    await cache.set<Artist[]>(USER_ARTIST_KEY, artistSorted);
   }
 
   await cache.del(`/api/artists/${id}`);
@@ -45,10 +44,11 @@ const createNewArtist = async (id: number): Promise<Artist> => {
 };
 
 const getArtistsReleases = async (): Promise<Track[]> => {
-  const reply = await cache.get(USER_ARTIST_KEY);
-  const artists: Artist[] = reply ? JSON.parse(reply) : await scraperService.artists();
+  const artistsCached = await cache.get<Artist[]>(USER_ARTIST_KEY);
+  const artists = artistsCached ? artistsCached : await scraperService.artists();
 
   if (!artists.length) return [];
+
   return artists
     .map((artist) => [...artist.tracks])
     .reduce((previous, current) => [...previous, ...current])
@@ -57,8 +57,8 @@ const getArtistsReleases = async (): Promise<Track[]> => {
 };
 
 const getArtistsUpcoming = async (): Promise<Track[]> => {
-  const reply = await cache.get(USER_ARTIST_KEY);
-  const artists: Artist[] = reply ? JSON.parse(reply) : await scraperService.artists();
+  const artistsCached = await cache.get<Artist[]>(USER_ARTIST_KEY);
+  const artists = artistsCached ? artistsCached : await scraperService.artists();
 
   if (!artists.length) return [];
   return artists
@@ -69,8 +69,8 @@ const getArtistsUpcoming = async (): Promise<Track[]> => {
 };
 
 const getOneArtist = async (id: string): Promise<Artist> => {
-  const reply = await cache.get(USER_ARTIST_KEY);
-  const artists: Artist[] = reply ? JSON.parse(reply) : await scraperService.artists();
+  const artistsCached = await cache.get<Artist[]>(USER_ARTIST_KEY);
+  const artists = artistsCached ? artistsCached : await scraperService.artists();
 
   const artist = artists.find((artist) => artist.id.toString() === id);
   if (artist) {
@@ -99,19 +99,18 @@ const deteleOneArtist = async (id: number): Promise<void> => {
 
   if (!artiesUsed.length) await db.artist.delete({ where: { id: id } });
 
-  const reply = await cache.get(USER_ARTIST_KEY);
+  const artistsCahed = await cache.get<Artist[]>(USER_ARTIST_KEY);
 
-  if (!reply) {
+  if (!artistsCahed) {
     const artists = await scraperService.artists();
-    artists.length && (await cache.set(USER_ARTIST_KEY, JSON.stringify(artists)));
+    artists.length && (await cache.set<Artist[]>(USER_ARTIST_KEY, artists));
   } else {
-    const artists: Artist[] = JSON.parse(reply);
-    const artistToRemove = artists.findIndex((artist) => artist.id === id);
+    const artistToRemove = artistsCahed.findIndex((artist) => artist.id === id);
 
-    if (artistToRemove >= 0 && artists.length) {
-      artists.splice(artistToRemove, 1);
-      const artistsSorted = artists.sort((a, b) => a.name.localeCompare(b.name));
-      await cache.set(USER_ARTIST_KEY, JSON.stringify(artistsSorted));
+    if (artistToRemove >= 0 && artistsCahed.length) {
+      artistsCahed.splice(artistToRemove, 1);
+      const artistsSorted = artistsCahed.sort((a, b) => a.name.localeCompare(b.name));
+      await cache.set<Artist[]>(USER_ARTIST_KEY, artistsSorted);
     }
   }
 
