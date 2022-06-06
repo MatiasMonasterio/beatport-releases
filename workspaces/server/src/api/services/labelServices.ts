@@ -1,6 +1,7 @@
 import { Label, Track } from "@br/core";
 
 import { beatportScrap } from "../../utils";
+import scraperService from "./scraperServices";
 import cache from "../../cache";
 import db from "../../database";
 
@@ -8,30 +9,9 @@ import db from "../../database";
 const USER_ID = 1;
 const USER_LABEL_KEY = `LABELS-${USER_ID}`;
 
-const scrapLabels = async (): Promise<Label[]> => {
-  try {
-    const labelsId = await db.label.findMany({
-      where: { users: { some: { userId: USER_ID } } },
-      select: { id: true },
-    });
-
-    if (!labelsId.length) return [];
-
-    const labelsIdToScrap = labelsId.map((label: { id: number }) => label.id);
-    const labels = await beatportScrap.labels(labelsIdToScrap);
-
-    await cache.set(USER_LABEL_KEY, JSON.stringify(labels));
-
-    return labels;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-
 const getAllLabels = async (): Promise<Label[]> => {
   const reply = await cache.get(USER_LABEL_KEY);
-  return reply ? JSON.parse(reply) : await scrapLabels();
+  return reply ? JSON.parse(reply) : await scraperService.labels();
 };
 
 const createNewLabel = async (id: number): Promise<Label> => {
@@ -66,7 +46,7 @@ const createNewLabel = async (id: number): Promise<Label> => {
 
 const getLabelsReleases = async (): Promise<Track[]> => {
   const reply = await cache.get(USER_LABEL_KEY);
-  const labels: Label[] = reply ? JSON.parse(reply) : await scrapLabels();
+  const labels: Label[] = reply ? JSON.parse(reply) : await scraperService.labels();
 
   if (!labels.length) return [];
 
@@ -79,7 +59,7 @@ const getLabelsReleases = async (): Promise<Track[]> => {
 
 const getLabelsUpcoming = async (): Promise<Track[]> => {
   const reply = await cache.get(USER_LABEL_KEY);
-  const labels: Label[] = reply ? JSON.parse(reply) : await scrapLabels();
+  const labels: Label[] = reply ? JSON.parse(reply) : await scraperService.labels();
 
   if (!labels.length) return [];
 
@@ -92,7 +72,7 @@ const getLabelsUpcoming = async (): Promise<Track[]> => {
 
 const getOneLabel = async (id: number): Promise<Label> => {
   const reply = await cache.get(USER_LABEL_KEY);
-  const labels: Label[] = reply ? JSON.parse(reply) : await scrapLabels();
+  const labels: Label[] = reply ? JSON.parse(reply) : await scraperService.labels();
 
   const label = labels.find((label) => label.id === id);
   if (label) {
@@ -124,7 +104,7 @@ const deteleOneLabel = async (id: number): Promise<void> => {
   const reply = await cache.get(USER_LABEL_KEY);
 
   if (!reply) {
-    const labels = await scrapLabels();
+    const labels = await scraperService.labels();
     labels.length && (await cache.set(USER_LABEL_KEY, JSON.stringify(labels)));
   } else {
     const labels: Label[] = JSON.parse(reply);

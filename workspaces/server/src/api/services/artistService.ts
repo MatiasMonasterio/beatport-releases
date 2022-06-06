@@ -1,6 +1,7 @@
 import { Artist, Track } from "@br/core";
 
 import { beatportScrap } from "../../utils";
+import scraperService from "./scraperServices";
 import cache from "../../cache";
 import db from "../../database";
 
@@ -8,30 +9,9 @@ import db from "../../database";
 const USER_ID = 1;
 const USER_ARTIST_KEY = `ARTISTS-${USER_ID}`;
 
-const scrapArtists = async (): Promise<Artist[]> => {
-  try {
-    const artistsDb = await db.artist.findMany({
-      where: { users: { some: { userId: USER_ID } } },
-      select: { id: true },
-    });
-
-    if (!artistsDb.length) return [];
-
-    const artistsIdToScrap = artistsDb.map((artist: { id: number }) => artist.id);
-    const artists = await beatportScrap.artists(artistsIdToScrap);
-
-    await cache.set(USER_ARTIST_KEY, JSON.stringify(artists));
-
-    return artists;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-
 const getAllArtists = async (): Promise<Artist[]> => {
   const reply = await cache.get(USER_ARTIST_KEY);
-  return reply ? JSON.parse(reply) : await scrapArtists();
+  return reply ? JSON.parse(reply) : await scraperService.artists();
 };
 
 const createNewArtist = async (id: number): Promise<Artist> => {
@@ -66,7 +46,7 @@ const createNewArtist = async (id: number): Promise<Artist> => {
 
 const getArtistsReleases = async (): Promise<Track[]> => {
   const reply = await cache.get(USER_ARTIST_KEY);
-  const artists: Artist[] = reply ? JSON.parse(reply) : await scrapArtists();
+  const artists: Artist[] = reply ? JSON.parse(reply) : await scraperService.artists();
 
   if (!artists.length) return [];
   return artists
@@ -78,7 +58,7 @@ const getArtistsReleases = async (): Promise<Track[]> => {
 
 const getArtistsUpcoming = async (): Promise<Track[]> => {
   const reply = await cache.get(USER_ARTIST_KEY);
-  const artists: Artist[] = reply ? JSON.parse(reply) : await scrapArtists();
+  const artists: Artist[] = reply ? JSON.parse(reply) : await scraperService.artists();
 
   if (!artists.length) return [];
   return artists
@@ -90,7 +70,7 @@ const getArtistsUpcoming = async (): Promise<Track[]> => {
 
 const getOneArtist = async (id: string): Promise<Artist> => {
   const reply = await cache.get(USER_ARTIST_KEY);
-  const artists: Artist[] = reply ? JSON.parse(reply) : await scrapArtists();
+  const artists: Artist[] = reply ? JSON.parse(reply) : await scraperService.artists();
 
   const artist = artists.find((artist) => artist.id.toString() === id);
   if (artist) {
@@ -122,7 +102,7 @@ const deteleOneArtist = async (id: number): Promise<void> => {
   const reply = await cache.get(USER_ARTIST_KEY);
 
   if (!reply) {
-    const artists = await scrapArtists();
+    const artists = await scraperService.artists();
     artists.length && (await cache.set(USER_ARTIST_KEY, JSON.stringify(artists)));
   } else {
     const artists: Artist[] = JSON.parse(reply);
