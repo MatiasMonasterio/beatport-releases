@@ -13,7 +13,7 @@ export default function LabelReleases(): JSX.Element {
 
   useEffect(() => {
     fetch<Track[]>(getLabelReleases).then((releases) => {
-      setReleases(releases);
+      releases && setReleases(releases);
     });
   }, []);
 

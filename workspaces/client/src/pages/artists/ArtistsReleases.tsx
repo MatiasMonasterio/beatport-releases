@@ -13,7 +13,7 @@ export default function ArtistsReleases(): JSX.Element {
 
   useEffect(() => {
     fetch<Track[]>(getArtistReleases).then((tracks) => {
-      setReleases(tracks);
+      tracks && setReleases(tracks);
     });
   }, []);
 

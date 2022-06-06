@@ -3,14 +3,14 @@ import { useToast } from "@chakra-ui/react";
 
 interface useFetchResponse {
   isLoading: boolean;
-  fetch: <T>(request: () => Promise<T>) => Promise<T>;
+  fetch: <T>(request: () => Promise<T>) => Promise<T | undefined>;
 }
 
 export const useFetch = (): useFetchResponse => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fetch = async <T>(request: () => Promise<T>): Promise<T> => {
+  const fetch = async <T>(request: () => Promise<T>): Promise<T | undefined> => {
     try {
       setIsLoading(true);
       const response = await request();
@@ -26,7 +26,7 @@ export const useFetch = (): useFetchResponse => {
         position: "bottom-right",
       });
 
-      return null as T;
+      return;
     }
   };
 
