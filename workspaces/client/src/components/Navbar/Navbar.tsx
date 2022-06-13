@@ -1,6 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { Box, Container, Image, Text, Flex, Button } from "@chakra-ui/react";
+import { Box, Container, Button, HStack } from "@chakra-ui/react";
 import { BiArrowBack } from "react-icons/bi";
+
+import GoBack from "./GoBack";
+import GoNext from "./GoNext";
+import Account from "./Account";
+import Notification from "./Notification";
 
 interface Props {
   isSolid: boolean;
@@ -9,9 +14,8 @@ interface Props {
 export default function Navbar({ isSolid }: Props) {
   const navigate = useNavigate();
 
-  const handleNavigateBack = () => {
-    navigate(-1);
-  };
+  const handleNavigateBack = () => navigate(-1);
+  const handleNavigateNext = () => navigate(1);
 
   return (
     <Box position="sticky" top={0} zIndex={2}>
@@ -37,26 +41,17 @@ export default function Navbar({ isSolid }: Props) {
             <BiArrowBack />
           </Button>
 
-          <Flex justify="end">
-            <Flex
-              gap={2}
-              alignItems="center"
-              bg="gray.900"
-              w={190}
-              p={1}
-              borderRadius="full"
-              display={{ base: "none", sm: "flex" }}
-            >
-              <Image
-                borderRadius="full"
-                boxSize="28px"
-                src="https://bit.ly/dan-abramov"
-                alt="Dan Abramov"
-              />
+          <HStack justifyContent="space-between">
+            <HStack>
+              <GoBack onClick={handleNavigateBack} />
+              <GoNext onClick={handleNavigateNext} />
+            </HStack>
 
-              <Text fontWeight="bold">Dan Abramov</Text>
-            </Flex>
-          </Flex>
+            <HStack>
+              <Notification />
+              <Account />
+            </HStack>
+          </HStack>
         </Container>
       </Box>
     </Box>
