@@ -1,11 +1,12 @@
 import type { Track } from "@br/core";
 
 import { useState, useEffect } from "react";
-import { Container, Flex, Box } from "@chakra-ui/react";
+import { Flex, Box } from "@chakra-ui/react";
 
 import { usePlayerContext } from "context/player";
-import { TrackCard, TrackCardLoader } from "components";
 
+import TrackCard from "./TrackCard";
+import TrackCardLoader from "./TrackCardLoader";
 import SortDesktop from "./SortDesktop";
 import SortMobile from "./SortMobile";
 
@@ -72,16 +73,14 @@ export default function TrackList({ tracks, setTracks, isLoading }: Props): JSX.
         zIndex={100}
         backgroundColor="gray.800"
       >
-        <Container maxW="container.xl" display={{ base: "none", sm: "block" }}>
-          <SortDesktop
-            filter={filterSelected}
-            isDesc={isDescFilter < 0}
-            sortTitle={() => handleSort(trackFilter.name)}
-            sortBpm={() => handleSort(trackFilter.bpm)}
-            sortGenre={() => handleSort(trackFilter.genres)}
-            sortReleased={() => handleSort(trackFilter.released)}
-          />
-        </Container>
+        <SortDesktop
+          filter={filterSelected}
+          isDesc={isDescFilter < 0}
+          sortTitle={() => handleSort(trackFilter.name)}
+          sortBpm={() => handleSort(trackFilter.bpm)}
+          sortGenre={() => handleSort(trackFilter.genres)}
+          sortReleased={() => handleSort(trackFilter.released)}
+        />
 
         <Box display={{ base: "block", sm: "none" }}>
           <SortMobile
@@ -95,23 +94,21 @@ export default function TrackList({ tracks, setTracks, isLoading }: Props): JSX.
         </Box>
       </Box>
 
-      <Container maxW="container.xl">
-        <Flex direction="column" gap={2}>
-          {isLoading && [1, 2, 3, 4].map((value) => <TrackCardLoader key={value} />)}
+      <Flex direction="column" gap={2}>
+        {isLoading && [1, 2, 3, 4].map((value) => <TrackCardLoader key={value} />)}
 
-          {!isLoading &&
-            tracks.length > 0 &&
-            tracks.map((track) => (
-              <TrackCard track={track} handlePlayTrack={handlePlayTrack} key={track.id} />
-            ))}
+        {!isLoading &&
+          tracks.length > 0 &&
+          tracks.map((track) => (
+            <TrackCard track={track} handlePlayTrack={handlePlayTrack} key={track.id} />
+          ))}
 
-          {!isLoading && !tracks.length && (
-            <Box py={5} color="gray.500">
-              No results to show...
-            </Box>
-          )}
-        </Flex>
-      </Container>
+        {!isLoading && !tracks.length && (
+          <Box py={5} color="gray.500">
+            No results to show...
+          </Box>
+        )}
+      </Flex>
     </>
   );
 }
