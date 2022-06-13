@@ -4,7 +4,7 @@ import {
   Button,
   Box,
   Popover,
-  PopoverTrigger,
+  PopoverTrigger as OrigPopoverTrigger,
   PopoverContent,
   PopoverHeader,
   PopoverArrow,
@@ -13,6 +13,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { BiBell } from "react-icons/bi";
+
+// problems with type in react 18
+// https://github.com/chakra-ui/chakra-ui/issues/5896
+const PopoverTrigger: React.FC<{ children: React.ReactNode }> = OrigPopoverTrigger;
 
 export default function Notification() {
   const { isOpen, onToggle, onClose } = useDisclosure();
