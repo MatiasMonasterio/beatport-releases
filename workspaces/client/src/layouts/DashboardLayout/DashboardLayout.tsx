@@ -34,7 +34,7 @@ export default function DashboardLayout({ children }: Props) {
           </GridItem>
 
           <GridItem
-            overflowY="auto"
+            overflowY="scroll"
             pb={10}
             h="100%"
             position="relative"
@@ -44,16 +44,17 @@ export default function DashboardLayout({ children }: Props) {
             css={{
               "@media (min-width: 480px)": {
                 "&::-webkit-scrollbar": {
-                  width: "10px",
+                  width: "12px",
                   borderLeft: "1px solid #2D3748",
-                  backgroundColor: "#171923",
+                  backgroundColor: "#1A202C",
                 },
                 "&::-webkit-scrollbar-track": {
                   width: "10px",
                 },
                 "&::-webkit-scrollbar-thumb": {
-                  background: "#4A5568",
-                  borderRadius: "10px",
+                  background: "rgba(0, 0, 0, 0.48)",
+                  borderLeft: "1px solid #2D3748",
+                  borderRadius: "2px",
                 },
               },
             }}
