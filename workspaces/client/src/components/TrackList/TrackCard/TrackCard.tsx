@@ -4,14 +4,9 @@ import { useState, Suspense, useMemo } from "react";
 import { Link as ReactLink } from "react-router-dom";
 import { Box, Text, Image, Grid, GridItem, Link, HStack, Button } from "@chakra-ui/react";
 
-import { useWidget } from "context/widget";
 import { usePlayerContext } from "context/player";
-import { getYoutubeVideoId } from "services/widget";
 import { getDiffDays } from "utils";
 
-import YoutubeButton from "./YoutubeButton";
-import BeatportButton from "./BeatportButton";
-import SpotifyButton from "./SpotifyButton";
 import LoadingBg from "./LoadingBg";
 
 interface Props {
@@ -22,8 +17,7 @@ interface Props {
 export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Element {
   const { id, name, artwork, artists, label, genres, released, bpm, mix } = track;
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { showYoutubeWidget } = useWidget();
+  const [isLoading] = useState<boolean>(false);
   const { currentTrack } = usePlayerContext();
 
   const daysPassed: number = useMemo(() => {
@@ -41,15 +35,6 @@ export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Elemen
 
     return new Intl.DateTimeFormat("es-ES").format(new Date(released));
   }, []);
-
-  const handleShowYoutubeWidget = async (): Promise<void> => {
-    setIsLoading(true);
-
-    const videoId = await getYoutubeVideoId(`${name} ${artists[0].name}`);
-    videoId && showYoutubeWidget(videoId);
-
-    setIsLoading(false);
-  };
 
   const handleShowBeatport = (): void => {
     handlePlayTrack(track);
@@ -71,7 +56,7 @@ export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Elemen
       >
         <GridItem mb="auto" pos="relative">
           <Button variant="link" d="block">
-            <Image src={artwork} boxSize={24} onClick={handleShowBeatport} loading="lazy" />
+            <Image src={artwork} boxSize={20} onClick={handleShowBeatport} loading="lazy" />
 
             {isLoading && (
               <Suspense fallback={null}>
@@ -80,19 +65,14 @@ export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Elemen
             )}
           </Button>
         </GridItem>
-        <GridItem py={{ base: 0, sm: 2 }}>
+        <GridItem display="flex" flexDirection="column" gap={0.2} alignItems="start">
           <Box color={isSelect ? "#01FF95" : ""}>
             <Text as="span">
               {name} {mix}
             </Text>{" "}
-            [
-            <Link as={ReactLink} to={`/label/${label.id}`}>
-              {label.name}
-            </Link>
-            ]
           </Box>
 
-          <HStack fontSize="sm" color="gray.400" spacing={1} mb={2}>
+          <HStack fontSize="sm" color="gray.400" spacing={1}>
             {artists.map((artist) => (
               <Link
                 as={ReactLink}
@@ -107,11 +87,9 @@ export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Elemen
             ))}
           </HStack>
 
-          <HStack spacing={1} alignItems="center">
-            <BeatportButton onClick={handleShowBeatport} />
-            <SpotifyButton onClick={handleShowBeatport} disabled={daysPassed < 0} />
-            <YoutubeButton onClick={handleShowYoutubeWidget} disabled={daysPassed < 0} />
-          </HStack>
+          <Link as={ReactLink} to={`/label/${label.id}`} fontSize="sm" color="gray.400">
+            {label.name}
+          </Link>
         </GridItem>
 
         <GridItem py={{ base: 0, sm: 2 }} fontSize="sm" display={{ base: "none", sm: "block" }}>
