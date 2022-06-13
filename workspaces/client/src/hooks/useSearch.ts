@@ -1,17 +1,16 @@
+import type { Artist, Label } from "@br/core";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 // check types!
-export const useSearch = <T>(valueToFilter: T) => {
-  const [results, setResults] = useState<T>([] as T);
+export const useSearch = <T extends Artist | Label>(valueToFilter: T[]) => {
+  const [results, setResults] = useState<T[]>([]);
   const [searchParams] = useSearchParams();
 
   const handleSearch = (searchValue: string) => {
-    const vl = valueToFilter as { name: string }[];
-
-    const results = vl.filter((value) => {
+    const results = valueToFilter.filter((value) => {
       return value.name.toLocaleLowerCase().includes(searchValue);
-    }) as T;
+    });
 
     setResults(results);
   };

@@ -13,7 +13,7 @@ export default function Labels(): JSX.Element {
   const [labels, setLabels] = useState<Label[]>([]);
 
   const { fetch, isLoading } = useFetch();
-  const { results } = useSearch<Label[]>(labels);
+  const { results } = useSearch<Label>(labels);
 
   const handleNewLabel = async (labelId: string): Promise<void> => {
     const newLabel = await addLabelId(labelId);

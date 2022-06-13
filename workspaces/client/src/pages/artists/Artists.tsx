@@ -12,7 +12,7 @@ export default function Artists() {
   const navigate = useNavigate();
   const [artists, setArtists] = useState<Artist[]>([]);
 
-  const { results } = useSearch<Artist[]>(artists);
+  const { results } = useSearch<Artist>(artists);
   const { fetch, isLoading } = useFetch();
 
   const handleAddArtist = async (artistId: string) => {
