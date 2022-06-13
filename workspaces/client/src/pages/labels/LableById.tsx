@@ -26,10 +26,12 @@ export default function LabelById(): JSX.Element {
   };
 
   useEffect(() => {
+    setLabel({} as Label);
+
     fetch<Label | null>(async () => await getLabelById(id)).then((labelResp) => {
       labelResp && setLabel(labelResp);
     });
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -80,9 +82,9 @@ export default function LabelById(): JSX.Element {
         <Heading as="h2" size="md" mb={4}>
           Last Releases
         </Heading>
-      </Container>
 
-      <TrackList tracks={label.tracks || []} setTracks={sortTracks} isLoading={isLoading} />
+        <TrackList tracks={label.tracks || []} setTracks={sortTracks} isLoading={isLoading} />
+      </Container>
     </>
   );
 }

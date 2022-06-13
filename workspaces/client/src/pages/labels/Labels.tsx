@@ -1,21 +1,27 @@
 import type { Label } from "@br/core";
 
 import { useState, useEffect } from "react";
-import { Container, Flex, Heading, Grid, GridItem } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { Flex, Heading, Skeleton } from "@chakra-ui/react";
 
-import { MetaTags, AddLabel, LabelCard } from "components";
+import { MetaTags, Search, CardList } from "components";
+import { useFetch, useSearch } from "hooks";
 import { getLabels, addLabelId } from "services/labels";
 
 export default function Labels(): JSX.Element {
+  const navigate = useNavigate();
   const [labels, setLabels] = useState<Label[]>([]);
 
-  const handleAddLabel = async (beatport: string): Promise<void> => {
-    const newLabel = await addLabelId(beatport);
-    newLabel && setLabels((labels) => [...labels, newLabel]);
+  const { fetch, isLoading } = useFetch();
+  const { results } = useSearch<Label[]>(labels);
+
+  const handleNewLabel = async (labelId: string): Promise<void> => {
+    const newLabel = await addLabelId(labelId);
+    if (newLabel) navigate(`/label/${newLabel.id}`);
   };
 
   useEffect(() => {
-    getLabels().then((labels) => {
+    fetch<Label[]>(getLabels).then((labels) => {
       labels && setLabels(labels);
     });
   }, []);
@@ -24,28 +30,27 @@ export default function Labels(): JSX.Element {
     <>
       <MetaTags title="Labels" />
 
-      <Container maxW="container.xl" mt={{ base: 16, sm: 20 }}>
-        <Flex justify="space-between">
-          <Heading as="h2" size="md" mb={8}>
-            Labels
-          </Heading>
-          <AddLabel handleAddLabel={handleAddLabel} />
-        </Flex>
+      <Flex justify="space-between" alignItems="center" mb={8}>
+        {isLoading && (
+          <Skeleton width="110px" h="1.5rem" startColor="gray.800" endColor="gray.700" />
+        )}
 
-        <Grid
-          templateColumns={{
-            base: "repeat(auto-fill, minmax(150px, 1fr))",
-            sm: "repeat(auto-fill, minmax(240px, 1fr))",
-          }}
-          gap={2}
-        >
-          {labels.map((label) => (
-            <GridItem key={label.id}>
-              <LabelCard {...label} />
-            </GridItem>
-          ))}
-        </Grid>
-      </Container>
+        {!isLoading && (
+          <Heading as="h2" size="md">
+            {results.length} Labels
+          </Heading>
+        )}
+
+        <Search placeholder="Search in labels" />
+      </Flex>
+
+      <CardList
+        datas={results}
+        size="md"
+        type="label"
+        isLoading={isLoading}
+        onNew={handleNewLabel}
+      />
     </>
   );
 }
