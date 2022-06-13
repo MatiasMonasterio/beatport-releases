@@ -2,37 +2,32 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { DashboardLayout } from "layouts";
 
-import Artists from "pages/artists/Artists";
-import ArtistById from "pages/artists/ArtistsById";
-import ArtistReleases from "pages/artists/ArtistsReleases";
-import ArtistUpcomings from "pages/artists/ArtistUpcomings";
+import Home from "pages/Home";
+import Releases from "pages/Releases";
+import Upcomings from "pages/Upcomings";
+import Favorites from "pages/Fovorites";
 
-import Labels from "pages/labels/Labels";
+import ArtistById from "pages/artists/ArtistsById";
 import LabeltById from "pages/labels/LableById";
-import LabelReleases from "pages/labels/LabelReleases";
-import LabelUpcomings from "pages/labels/LabelUpcomings";
+
+import ArtistsRouter from "./ArtistsRouter";
+import LabelsRouter from "./LabelsRouter";
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <DashboardLayout>
         <Routes>
-          <Route path="/" element={<Artists />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/releases" element={<Releases />} />
+          <Route path="/upcomings" element={<Upcomings />} />
+          <Route path="/favorites" element={<Favorites />} />
 
-          <Route path="artists">
-            <Route path="" element={<Artists />} />
-            <Route path="releases" element={<ArtistReleases />} />
-            <Route path="upcoming" element={<ArtistUpcomings />} />
-          </Route>
+          <Route path="/labels/*" element={<LabelsRouter />} />
+          <Route path="/artists/*" element={<ArtistsRouter />} />
 
           <Route path="artist">
             <Route path=":id" element={<ArtistById />} />
-          </Route>
-
-          <Route path="labels">
-            <Route path="" element={<Labels />} />
-            <Route path="releases" element={<LabelReleases />} />
-            <Route path="upcoming" element={<LabelUpcomings />} />
           </Route>
 
           <Route path="label">
