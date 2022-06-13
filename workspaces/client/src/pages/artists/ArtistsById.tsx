@@ -26,10 +26,12 @@ export default function ArtistById(): JSX.Element {
   };
 
   useEffect(() => {
+    setArtits({} as Artist);
+
     fetch<Artist | null>(async () => await getArtistById(id)).then((artistResp) => {
       artistResp && setArtits(artistResp);
     });
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -43,7 +45,7 @@ export default function ArtistById(): JSX.Element {
         backgroundPosition="center"
         h={{ base: 300, sm: 400 }}
       >
-        <Flex h="100%" bg="rgba(0,0,0,0.6)" direction="column" justify="end" py={10}>
+        <Flex h="100%" bg="blackAlpha.600" direction="column" justify="end" py={10}>
           <Container maxW="container.xl">
             {isLoading ? (
               <>
@@ -80,11 +82,11 @@ export default function ArtistById(): JSX.Element {
         <Heading as="h2" size="md" mb={4}>
           Releases
         </Heading>
-      </Container>
 
-      <Flex direction="column" gap={2}>
-        <TrackList tracks={artist.tracks || []} setTracks={sortTracks} isLoading={isLoading} />
-      </Flex>
+        <Flex direction="column" gap={2}>
+          <TrackList tracks={artist.tracks || []} setTracks={sortTracks} isLoading={isLoading} />
+        </Flex>
+      </Container>
     </>
   );
 }

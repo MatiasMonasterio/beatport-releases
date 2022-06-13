@@ -1,7 +1,7 @@
 import type { Track } from "@br/core";
 
 import { useEffect, useState } from "react";
-import { Heading, Container } from "@chakra-ui/react";
+import { HStack, Skeleton, Heading } from "@chakra-ui/react";
 
 import { useFetch } from "hooks";
 import { MetaTags, TrackList } from "components";
@@ -21,12 +21,17 @@ export default function ArtistsReleases(): JSX.Element {
     <>
       <MetaTags title="Artists Releases" />
 
-      <Container maxW="container.xl" mt={{ base: 16, sm: 20 }}>
-        <Heading as="h2" size="md" mb={4}>
-          Releases
-        </Heading>
-      </Container>
+      <HStack justify="space-between" mb={4} align="center">
+        {isLoading && (
+          <Skeleton width="110px" h="1.5rem" startColor="gray.800" endColor="gray.700" />
+        )}
 
+        {!isLoading && (
+          <Heading as="h2" size="md">
+            {releases.length} Artists
+          </Heading>
+        )}
+      </HStack>
       <TrackList tracks={releases} setTracks={setReleases} isLoading={isLoading} />
     </>
   );
