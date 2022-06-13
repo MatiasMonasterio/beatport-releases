@@ -1,124 +1,61 @@
 import { NavLink } from "react-router-dom";
-import { Container, UnorderedList, ListItem, Link, Box, VisuallyHidden } from "@chakra-ui/react";
+import {
+  Container,
+  UnorderedList,
+  ListItem,
+  Link,
+  Box,
+  VisuallyHidden,
+  Heading,
+} from "@chakra-ui/react";
+import { BiHome, BiMusic, BiUser, BiGridAlt, BiHeart, BiPulse } from "react-icons/bi";
+
+import SidebarItem from "./SidebarItem";
 
 export default function Sidebar() {
   return (
     <Container maxW="container.xl">
-      <Link to="/" as={NavLink} display="inline-block" mb={6} w="100%" h="40px">
-        <Box bgImage="/images/logo.svg" bgSize="cover" bgPosition="center" h="35px" w="160px" />
+      <Link to="/" as={NavLink} display="inline-block" mb={6} w="100%" py={2}>
+        <Box bgImage="/images/logo.svg" bgSize="cover" bgPosition="center" h="28px" w="165px" />
         <VisuallyHidden>Beat Releases</VisuallyHidden>
       </Link>
 
-      <UnorderedList styleType="none" ml={0}>
-        <ListItem mb={6}>
-          <Link
-            as={NavLink}
-            to="/artists"
-            py={2}
-            d="block"
-            fontSize="xl"
-            fontWeight="bold"
-            _hover={{
-              color: "#01FF95",
-            }}
-          >
-            Artists
-          </Link>
-
-          <UnorderedList styleType="none" color="gray.500" ml={0}>
-            <ListItem>
-              <Link
-                as={NavLink}
-                to="/artists/releases"
-                display="flex"
-                _hover={{
-                  color: "#01FF95",
-                }}
-                py={2}
-                pl={2}
-                gap={2}
-                alignItems="center"
-                textDecoration="none"
-                fontSize="sm"
-              >
-                Last Releases
-              </Link>
-            </ListItem>
-
-            <ListItem>
-              <Link
-                as={NavLink}
-                to="/artists/upcoming"
-                display="flex"
-                _hover={{
-                  color: "#01FF95",
-                }}
-                py={2}
-                pl={2}
-                alignItems="center"
-                textDecoration="none"
-                fontSize="sm"
-              >
-                Upcoming
-              </Link>
-            </ListItem>
-          </UnorderedList>
+      <UnorderedList styleType="none" ml={0} spacing={1} mb={4}>
+        <ListItem>
+          <SidebarItem to="/" content="Home" icon={<BiHome />} />
         </ListItem>
 
-        <ListItem py={2}>
-          <Link
-            as={NavLink}
-            to="labels"
-            d="block"
-            fontWeight="bold"
-            fontSize="xl"
-            w="100%"
-            _hover={{
-              color: "#01FF95",
-            }}
-          >
-            Labels
-          </Link>
+        <ListItem>
+          <SidebarItem to="/releases" content="Releases" icon={<BiMusic />} />
+        </ListItem>
+      </UnorderedList>
+
+      <UnorderedList styleType="none" ml={0} spacing={1} mb={4}>
+        <Heading fontSize="xs" color="gray.600" fontWeight="normal" px={2} mb={2}>
+          Your Collection
+        </Heading>
+
+        <ListItem>
+          <SidebarItem to="/favorites" content="Favorites Tracks" icon={<BiHeart />} />
         </ListItem>
 
-        <UnorderedList styleType="none" fontWeight="normal" color="gray.500" ml={0}>
-          <ListItem>
-            <Link
-              as={NavLink}
-              to="/labels/releases"
-              display="flex"
-              _hover={{
-                color: "#01FF95",
-              }}
-              py={2}
-              pl={2}
-              alignItems="center"
-              textDecoration="none"
-              fontSize="sm"
-            >
-              Last Releases
-            </Link>
-          </ListItem>
+        <ListItem>
+          <SidebarItem to="/artists" content="Artists" icon={<BiUser />} />
+        </ListItem>
 
-          <ListItem>
-            <Link
-              as={NavLink}
-              to="/labels/upcoming"
-              display="flex"
-              _hover={{
-                color: "#01FF95",
-              }}
-              gap={2}
-              py={2}
-              pl={2}
-              alignItems="center"
-              textDecoration="none"
-              fontSize="sm"
-            >
-              Upcoming
-            </Link>
-          </ListItem>
-        </UnorderedList>
+        <ListItem>
+          <SidebarItem to="/labels" content="Labels" icon={<BiGridAlt />} />
+        </ListItem>
+      </UnorderedList>
+
+      <UnorderedList styleType="none" ml={0} spacing={1} mb={4}>
+        <Heading fontSize="xs" color="gray.600" fontWeight="normal" px={2} mb={2}>
+          Discover
+        </Heading>
+
+        <ListItem>
+          <SidebarItem to="/upcomings" content="Upcomings" icon={<BiPulse />} />
+        </ListItem>
       </UnorderedList>
     </Container>
   );
