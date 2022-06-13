@@ -8,7 +8,6 @@ const client = createClient({
 });
 
 const set = async <T>(key: string, value: T): Promise<void> => {
-  console.log("SAVE");
   const currentTime = dayjs(new Date());
   const endOfDay = dayjs(new Date()).endOf("day");
 
