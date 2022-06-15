@@ -22,7 +22,7 @@ export default function Labels(): JSX.Element {
 
   useEffect(() => {
     fetch<Label[]>(getLabels).then((labels) => {
-      labels && setLabels(labels);
+      labels?.length && setLabels(labels);
     });
   }, []);
 

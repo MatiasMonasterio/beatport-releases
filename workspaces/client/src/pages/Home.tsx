@@ -44,13 +44,13 @@ export default function Home() {
 
   useEffect(() => {
     getArtists().then((artists) => {
-      artists && setArtists(artists.slice(0, 7));
+      artists.length && setArtists(artists.slice(0, 7));
     });
   }, []);
 
   useEffect(() => {
     getLabels().then((labels) => {
-      labels && setLabels(labels);
+      labels.length && setLabels(labels);
     });
   }, []);
 

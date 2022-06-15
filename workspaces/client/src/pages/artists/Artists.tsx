@@ -22,7 +22,7 @@ export default function Artists() {
 
   useEffect(() => {
     fetch<Artist[]>(getArtists).then((artists) => {
-      artists && setArtists(artists);
+      artists?.length && setArtists(artists);
     });
   }, []);
 
