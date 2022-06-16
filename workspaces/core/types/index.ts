@@ -6,6 +6,8 @@ export interface Artist {
   tracks: Track[];
   profile?: string;
   follow?: boolean;
+  createdAt?: number;
+  updatedAt?: number;
 }
 
 export interface Label {
@@ -15,6 +17,8 @@ export interface Label {
   tracks: Track[];
   profile?: string;
   follow?: boolean;
+  createdAt?: number;
+  updatedAt?: number;
 }
 
 export interface Track {
@@ -30,4 +34,21 @@ export interface Track {
   remixers: Array<{ id: number; name: string; slug: string }>;
   name: string;
   preview: string;
+}
+
+export interface FavoriteTrack {
+  id: number;
+  artists: string;
+  bpm: number;
+  released: number;
+  genres: string;
+  artwork: string;
+  key: string | number;
+  label: string;
+  mix: string;
+  remixers: string;
+  name: string;
+  preview: string;
+  createdAt: number;
+  updatedAt: number;
 }
