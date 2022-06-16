@@ -8,37 +8,77 @@ generator client {
 }
 
 model Artist {
-    id    Int             @unique
-    users ArtistsOnUser[]
+    id        Int             @unique
+    createdAt DateTime        @default(now())
+    updatedAt DateTime        @updatedAt
+    users     ArtistsOnUser[]
 }
 
 model Label {
-    id    Int            @unique
-    users LabelsOnUser[]
+    id        Int            @unique
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+    users     LabelsOnUser[]
 }
 
 model User {
-    id      Int             @id @default(autoincrement())
-    email   String          @unique
-    name    String?
-    artists ArtistsOnUser[]
-    labels  LabelsOnUser[]
+    id                   Int                    @id @default(autoincrement())
+    email                String                 @unique
+    name                 String
+    createdAt            DateTime               @default(now())
+    updatedAt            DateTime               @updatedAt
+    artists              ArtistsOnUser[]
+    labels               LabelsOnUser[]
+    FavoriteTracksOnUser FavoriteTracksOnUser[]
 }
 
 model ArtistsOnUser {
-    user     User   @relation(fields: [userId], references: [id])
-    userId   Int
-    artist   Artist @relation(fields: [artistId], references: [id])
-    artistId Int
+    user      User     @relation(fields: [userId], references: [id])
+    userId    Int
+    artist    Artist   @relation(fields: [artistId], references: [id])
+    artistId  Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     @@id([userId, artistId])
 }
 
 model LabelsOnUser {
-    user    User  @relation(fields: [userId], references: [id])
-    userId  Int
-    label   Label @relation(fields: [labelId], references: [id])
-    labelId Int
+    user      User     @relation(fields: [userId], references: [id])
+    userId    Int
+    label     Label    @relation(fields: [labelId], references: [id])
+    labelId   Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     @@id([userId, labelId])
+}
+
+model FavoriteTrack {
+    id                   Int                    @unique
+    bpm                  Int
+    released             Int
+    artwork              String
+    key                  String
+    name                 String
+    preview              String
+    mix                  String
+    label                String
+    artists              String
+    genres               String
+    remixers             String
+    createdAt            DateTime               @default(now())
+    updatedAt            DateTime               @updatedAt
+    FavoriteTracksOnUser FavoriteTracksOnUser[]
+}
+
+model FavoriteTracksOnUser {
+    user            User          @relation(fields: [userId], references: [id])
+    userId          Int
+    favoriteTrack   FavoriteTrack @relation(fields: [favoriteTrackId], references: [id])
+    favoriteTrackId Int
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
+
+    @@id([userId, favoriteTrackId])
 }
