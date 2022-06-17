@@ -7,7 +7,7 @@ const USER_ID = 1;
 const USER_FAVORITES_KEY = `FAVORITES-${USER_ID}`;
 
 const getAllFavorites = async (): Promise<FavoriteTrack[]> => {
-  let favorites = await cache.get<FavoriteTrack[]>(USER_FAVORITES_KEY);
+  let favorites: FavoriteTrack[] | null = await cache.get<FavoriteTrack[]>(USER_FAVORITES_KEY);
 
   if (!favorites) {
     const favoritesDb = await db.favoriteTracksOnUser.findMany({
@@ -24,17 +24,21 @@ const getAllFavorites = async (): Promise<FavoriteTrack[]> => {
       };
     });
 
-    await cache.set<FavoriteTrack[]>(USER_FAVORITES_KEY, favorites);
+    favorites && (await cache.set<FavoriteTrack[]>(USER_FAVORITES_KEY, favorites));
   }
 
-  return favorites.map((favorite) => ({
-    ...favorite,
-    artists: JSON.parse(favorite.artists),
-    genres: JSON.parse(favorite.genres),
-    label: JSON.parse(favorite.label),
-    remixers: JSON.parse(favorite.remixers),
-    favorite: true,
-  }));
+  if (favorites) {
+    favorites = favorites.map((favorite) => ({
+      ...favorite,
+      artists: JSON.parse(favorite.artists),
+      genres: JSON.parse(favorite.genres),
+      label: JSON.parse(favorite.label),
+      remixers: JSON.parse(favorite.remixers),
+      favorite: true,
+    }));
+  }
+
+  return favorites ? favorites : [];
 };
 
 const getAllFavoritesIds = async (): Promise<number[]> => {
