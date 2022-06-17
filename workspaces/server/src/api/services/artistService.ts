@@ -1,4 +1,4 @@
-import { Artist, Track } from "@br/core";
+import { Artist } from "@br/core";
 
 import { beatportScrap } from "../../utils";
 import scraperService from "./scraperServices";
@@ -68,31 +68,6 @@ const createNewArtist = async (id: number): Promise<Artist> => {
   return newArtist;
 };
 
-const getArtistsReleases = async (): Promise<Track[]> => {
-  const artistsCached = await cache.get<Artist[]>(USER_ARTIST_KEY);
-  const artists = artistsCached ? artistsCached : await scraperService.artists();
-
-  if (!artists.length) return [];
-
-  return artists
-    .map((artist) => [...artist.tracks])
-    .reduce((previous, current) => [...previous, ...current])
-    .filter((track) => track.released < new Date().getTime())
-    .sort((a, b) => b.released - a.released);
-};
-
-const getArtistsUpcoming = async (): Promise<Track[]> => {
-  const artistsCached = await cache.get<Artist[]>(USER_ARTIST_KEY);
-  const artists = artistsCached ? artistsCached : await scraperService.artists();
-
-  if (!artists.length) return [];
-  return artists
-    .map((artist) => [...artist.tracks])
-    .reduce((previous, current) => [...previous, ...current])
-    .filter((track) => track.released >= new Date().getTime())
-    .sort((a, b) => b.released - a.released);
-};
-
 const getOneArtist = async (id: string): Promise<Artist> => {
   const artistsCached = await cache.get<Artist[]>(USER_ARTIST_KEY);
   const artists = artistsCached ? artistsCached : await scraperService.artists();
@@ -146,8 +121,6 @@ const deteleOneArtist = async (id: number): Promise<void> => {
 export default {
   getAllArtists,
   createNewArtist,
-  getArtistsReleases,
-  getArtistsUpcoming,
   getOneArtist,
   deteleOneArtist,
 };

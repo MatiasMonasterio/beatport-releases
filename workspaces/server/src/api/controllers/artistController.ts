@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { Artist, Track } from "@br/core";
+import type { Artist } from "@br/core";
 import type { ErrorRequest } from "../../types";
 
 import cache from "../../cache";
@@ -34,36 +34,6 @@ const createNewArtist = async (req: Request, res: Response): Promise<void> => {
     res.status(201).send({ status: "OK", data: artist });
 
     await clearArtistCache();
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
-  }
-};
-
-const getArtistsReleases = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const tracks = await artistService.getArtistsReleases();
-    await cache.set<Track[]>(req.originalUrl, tracks);
-
-    res.send({ status: "OK", data: tracks });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
-  }
-};
-
-const getArtistsUpcoming = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const tracks = await artistService.getArtistsUpcoming();
-    await cache.set<Track[]>(req.originalUrl, tracks);
-
-    res.send({ status: "OK", data: tracks });
   } catch (error: unknown | ErrorRequest) {
     const err = error as ErrorRequest;
 
@@ -120,8 +90,6 @@ const deteleOneArtist = async (req: Request, res: Response): Promise<void> => {
 export default {
   getAllArtists,
   createNewArtist,
-  getArtistsReleases,
-  getArtistsUpcoming,
   getOneArtist,
   deteleOneArtist,
 };

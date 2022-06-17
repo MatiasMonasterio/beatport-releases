@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { Label, Track } from "@br/core";
+import type { Label } from "@br/core";
 import type { ErrorRequest } from "../../types";
 
 import { clearLabelCache } from "../../utils/clearCache";
@@ -34,36 +34,6 @@ const createNewLabel = async (req: Request, res: Response): Promise<void> => {
     res.status(201).send({ status: "OK", data: labels });
 
     await clearLabelCache();
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
-  }
-};
-
-const getLabelsReleases = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const tracks = await labelService.getLabelsReleases();
-    await cache.set<Track[]>(req.originalUrl, tracks);
-
-    res.send({ status: "OK", data: tracks });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
-  }
-};
-
-const getLabelsUpcoming = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const tracks = await labelService.getLabelsUpcoming();
-    await cache.set<Track[]>(req.originalUrl, tracks);
-
-    res.send({ status: "OK", data: tracks });
   } catch (error: unknown | ErrorRequest) {
     const err = error as ErrorRequest;
 
@@ -120,8 +90,6 @@ const deteleOneLabel = async (req: Request, res: Response): Promise<void> => {
 export default {
   getAllLabels,
   createNewLabel,
-  getLabelsReleases,
-  getLabelsUpcoming,
   getOneLabel,
   deteleOneLabel,
 };

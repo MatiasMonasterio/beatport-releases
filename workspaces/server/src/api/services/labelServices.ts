@@ -1,4 +1,4 @@
-import { Label, Track } from "@br/core";
+import { Label } from "@br/core";
 
 import { beatportScrap } from "../../utils";
 import scraperService from "./scraperServices";
@@ -68,32 +68,6 @@ const createNewLabel = async (id: number): Promise<Label> => {
   return newLabel;
 };
 
-const getLabelsReleases = async (): Promise<Track[]> => {
-  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
-  const labels = labelsCached ? labelsCached : await scraperService.labels();
-
-  if (!labels.length) return [];
-
-  return labels
-    .map((label) => [...label.tracks])
-    .reduce((previous, current) => [...previous, ...current])
-    .filter((track) => track.released < new Date().getTime())
-    .sort((a, b) => b.released - a.released);
-};
-
-const getLabelsUpcoming = async (): Promise<Track[]> => {
-  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
-  const labels = labelsCached ? labelsCached : await scraperService.labels();
-
-  if (!labels.length) return [];
-
-  return labels
-    .map((label) => [...label.tracks])
-    .reduce((previous, current) => [...previous, ...current])
-    .filter((track) => track.released >= new Date().getTime())
-    .sort((a, b) => b.released - a.released);
-};
-
 const getOneLabel = async (id: number): Promise<Label> => {
   const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
   const labels = labelsCached ? labelsCached : await scraperService.labels();
@@ -147,8 +121,6 @@ const deteleOneLabel = async (id: number): Promise<void> => {
 export default {
   getAllLabels,
   createNewLabel,
-  getLabelsReleases,
-  getLabelsUpcoming,
   getOneLabel,
   deteleOneLabel,
 };
