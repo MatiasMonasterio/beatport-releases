@@ -6,6 +6,23 @@ import cache from "../../cache";
 const USER_ID = 1;
 const USER_FAVORITES_KEY = `FAVORITES-${USER_ID}`;
 
+interface FavoriteTrackDb {
+  id: number;
+  bpm: number;
+  released: number;
+  artwork: string;
+  key: string;
+  name: string;
+  preview: string;
+  mix: string;
+  label: string;
+  artists: string;
+  genres: string;
+  remixers: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const getAllFavorites = async (): Promise<FavoriteTrack[]> => {
   let favorites: FavoriteTrack[] | null = await cache.get<FavoriteTrack[]>(USER_FAVORITES_KEY);
 
@@ -16,7 +33,7 @@ const getAllFavorites = async (): Promise<FavoriteTrack[]> => {
       select: { favoriteTrack: true },
     });
 
-    favorites = favoritesDb.map((favorite) => {
+    favorites = favoritesDb.map((favorite: { favoriteTrack: FavoriteTrackDb }) => {
       return {
         ...favorite.favoriteTrack,
         createdAt: new Date(favorite.favoriteTrack.createdAt).getTime(),
@@ -47,7 +64,7 @@ const getAllFavoritesIds = async (): Promise<number[]> => {
     select: { favoriteTrackId: true },
   });
 
-  return favorites.map((favorite) => favorite.favoriteTrackId);
+  return favorites.map((favorite: { favoriteTrackId: number }) => favorite.favoriteTrackId);
 };
 
 const createNewFavorite = async (track: Track): Promise<FavoriteTrack> => {
