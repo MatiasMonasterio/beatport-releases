@@ -17,9 +17,25 @@ type TracksResponse = {
   error?: string;
 };
 
-export const getArtists = async (): Promise<Artist[]> => {
+interface ParamsFilter {
+  sort?: keyof Artist;
+  order?: "desc" | "asc";
+  length?: number;
+}
+
+export const getArtists = async (params?: ParamsFilter): Promise<Artist[]> => {
+  const url = new URL(`${API_URL}/api/artists`);
+
+  if (params) {
+    let param: keyof typeof params;
+
+    for (param in params) {
+      url.searchParams.append(param, params[param] as string);
+    }
+  }
+
   try {
-    const resp: Response = await fetch(`${API_URL}/api/artists`);
+    const resp: Response = await fetch(url);
 
     const { data: artists, error }: ArtistsResponse = await resp.json();
     if (error) throw new Error(error);

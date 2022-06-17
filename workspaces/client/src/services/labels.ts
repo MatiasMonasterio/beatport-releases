@@ -17,9 +17,25 @@ type TracksResponse = {
   error?: string;
 };
 
-export const getLabels = async (): Promise<Label[]> => {
+interface ParamsFilter {
+  sort?: keyof Label;
+  order?: "desc" | "asc";
+  length?: number;
+}
+
+export const getLabels = async (params?: ParamsFilter): Promise<Label[]> => {
+  const url = new URL(`${API_URL}/api/labels`);
+
+  if (params) {
+    let param: keyof typeof params;
+
+    for (param in params) {
+      url.searchParams.append(param, params[param] as string);
+    }
+  }
+
   try {
-    const resp: Response = await fetch(`${API_URL}/api/labels`);
+    const resp: Response = await fetch(url);
 
     const { data: labels, error }: LabelsResponse = await resp.json();
     if (error) throw new Error(error);

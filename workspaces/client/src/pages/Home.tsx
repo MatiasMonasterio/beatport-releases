@@ -43,13 +43,13 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    getArtists().then((artists) => {
-      artists.length && setArtists(artists.slice(0, 7));
+    getArtists({ sort: "createdAt", length: 7 }).then((artists) => {
+      artists.length && setArtists(artists);
     });
   }, []);
 
   useEffect(() => {
-    getLabels().then((labels) => {
+    getLabels({ sort: "createdAt", length: 7 }).then((labels) => {
       labels.length && setLabels(labels);
     });
   }, []);
