@@ -10,10 +10,12 @@ import { usePlayerContext } from "context/player";
 import { getArtists, addArtistId } from "services/artists";
 import { getLabels, addLabelId } from "services/labels";
 import { getReleases, getUpcomings } from "services/tracks";
+import { getFavorites } from "services/favorites";
 
 export default function Home() {
   const [releases, setReleases] = useState<Track[]>([]);
   const [upcomings, setUpcomings] = useState<Track[]>([]);
+  const [favorites, setFavorites] = useState<Track[]>([]);
   const [artists, setArtists] = useState<Artist[]>([]);
   const [labels, setLabels] = useState<Label[]>([]);
 
@@ -43,14 +45,20 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    getArtists({ sort: "createdAt", length: 7 }).then((artists) => {
+    getArtists({ sort: "createdAt", length: 6 }).then((artists) => {
       artists.length && setArtists(artists);
     });
   }, []);
 
   useEffect(() => {
-    getLabels({ sort: "createdAt", length: 7 }).then((labels) => {
+    getLabels({ sort: "createdAt", length: 6 }).then((labels) => {
       labels.length && setLabels(labels);
+    });
+  }, []);
+
+  useEffect(() => {
+    getFavorites().then((favorites) => {
+      favorites.length && setFavorites(favorites);
     });
   }, []);
 
@@ -67,9 +75,9 @@ export default function Home() {
 
             <Grid gridTemplateColumns="repeat(3, 1fr)" gap={2}>
               <FeedCard
-                countTracks={0}
+                countTracks={favorites.length}
                 isLoading={isLoading}
-                onPlay={() => handlePlayFeed(upcomings)}
+                onPlay={() => handlePlayFeed(favorites)}
                 title="Favorites Tracks"
                 to="/favorites"
               />
@@ -122,7 +130,7 @@ export default function Home() {
             <CardList
               size="sm"
               type="artist"
-              datas={[...artists].slice(0, 6)}
+              datas={artists}
               isLoading={isLoading}
               onNew={handleAddArtist}
             />
@@ -142,7 +150,7 @@ export default function Home() {
             <CardList
               size="sm"
               type="label"
-              datas={[...labels].splice(0, 6)}
+              datas={labels}
               isLoading={isLoading}
               onNew={handleAddLabel}
             />
