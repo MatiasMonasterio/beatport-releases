@@ -35,7 +35,7 @@ export const getLabels = async (params?: ParamsFilter): Promise<Label[]> => {
   }
 
   try {
-    const resp: Response = await fetch(url);
+    const resp: Response = await fetch(url.toString());
 
     const { data: labels, error }: LabelsResponse = await resp.json();
     if (error) throw new Error(error);

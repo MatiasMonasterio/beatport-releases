@@ -35,7 +35,7 @@ export const getArtists = async (params?: ParamsFilter): Promise<Artist[]> => {
   }
 
   try {
-    const resp: Response = await fetch(url);
+    const resp: Response = await fetch(url.toString());
 
     const { data: artists, error }: ArtistsResponse = await resp.json();
     if (error) throw new Error(error);
