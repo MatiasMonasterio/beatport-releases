@@ -2,7 +2,7 @@ import db from "../../database";
 
 interface User {
   id: string | number;
-  name: string | null;
+  name: string;
   email: string;
 }
 
