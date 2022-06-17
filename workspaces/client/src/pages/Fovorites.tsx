@@ -1,8 +1,22 @@
-import { Container, Heading, Text } from "@chakra-ui/react";
+import type { Track } from "@br/core";
 
-import { MetaTags } from "components";
+import { useEffect, useState } from "react";
+import { Container, Heading } from "@chakra-ui/react";
+
+import { MetaTags, TrackList } from "components";
+import { useFetch } from "hooks";
+import { getFavorites } from "services/favorites";
 
 export default function Fovorites() {
+  const [favorites, setFavorites] = useState<Track[]>([]);
+  const { fetch, isLoading } = useFetch();
+
+  useEffect(() => {
+    fetch<Track[]>(getFavorites).then((tracks) => {
+      tracks && setFavorites(tracks);
+    });
+  }, []);
+
   return (
     <>
       <MetaTags title="Favorites" />
@@ -12,7 +26,12 @@ export default function Fovorites() {
           My Favorites Tracks
         </Heading>
 
-        <Text color="gray.400">Work in progres...</Text>
+        <TrackList
+          tracks={favorites}
+          setTracks={setFavorites}
+          isLoading={isLoading}
+          favoritesList
+        />
       </Container>
     </>
   );
