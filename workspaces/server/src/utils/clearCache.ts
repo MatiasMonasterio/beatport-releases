@@ -11,3 +11,11 @@ export const clearLabelCache = async (): Promise<void> => {
   await cache.del("/api/labels/releases");
   await cache.del("/api/labels/upcomings");
 };
+
+export const clearFavoriteCache = async (): Promise<void> => {
+  await cache.del("/api/favorites");
+  await cache.del("/api/labels/releases");
+  await cache.del("/api/labels/upcomings");
+  await cache.del("/api/tracks/releases");
+  await cache.del("/api/tracks/upcomings");
+};
