@@ -34,6 +34,7 @@ export interface Track {
   remixers: Array<{ id: number; name: string; slug: string }>;
   name: string;
   preview: string;
+  favorite?: boolean;
 }
 
 export interface FavoriteTrack {
@@ -49,6 +50,7 @@ export interface FavoriteTrack {
   remixers: string;
   name: string;
   preview: string;
-  createdAt: number;
-  updatedAt: number;
+  favorite?: boolean;
+  createdAt?: number;
+  updatedAt?: number;
 }
