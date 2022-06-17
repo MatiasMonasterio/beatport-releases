@@ -8,7 +8,7 @@ import cache from "../../cache";
 
 const getAllLabels = async (req: Request, res: Response): Promise<void> => {
   try {
-    const labels = await labelService.getAllLabels();
+    const labels = await labelService.getAllLabels(req.query);
     await cache.set<Label[]>(req.originalUrl, labels);
 
     res.send({ status: "OK", data: labels });

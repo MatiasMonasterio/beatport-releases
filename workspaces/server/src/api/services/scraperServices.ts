@@ -11,16 +11,13 @@ const USER_ARTIST_KEY = `ARTISTS-${USER_ID}`;
 
 const scrapLabels = async (): Promise<Label[]> => {
   try {
-    const labelsId = await db.label.findMany({
+    const labelsDb = await db.label.findMany({
       where: { users: { some: { userId: USER_ID } } },
-      select: { id: true },
     });
 
-    if (!labelsId.length) return [];
+    if (!labelsDb.length) return [];
 
-    const labelsIdToScrap = labelsId.map((label: { id: number }) => label.id);
-    const labels = await beatportScrap.labels(labelsIdToScrap);
-
+    const labels = await beatportScrap.labels(labelsDb);
     await cache.set<Label[]>(USER_LABEL_KEY, labels);
 
     return labels;
@@ -34,14 +31,11 @@ const scrapArtists = async (): Promise<Artist[]> => {
   try {
     const artistsDb = await db.artist.findMany({
       where: { users: { some: { userId: USER_ID } } },
-      select: { id: true },
     });
 
     if (!artistsDb.length) return [];
 
-    const artistsIdToScrap = artistsDb.map((artist: { id: number }) => artist.id);
-    const artists = await beatportScrap.artists(artistsIdToScrap);
-
+    const artists = await beatportScrap.artists(artistsDb);
     await cache.set<Artist[]>(USER_ARTIST_KEY, artists);
 
     return artists;

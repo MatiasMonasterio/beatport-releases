@@ -13,13 +13,19 @@ const findTextAndReturnRemainder = (target: string, variable: string): string =>
   return result;
 };
 
-const artistsScrapper = async (artistsId: number[]): Promise<Artist[]> => {
+interface dataDb {
+  id: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+const artistsScrapper = async (artistsDb: dataDb[]): Promise<Artist[]> => {
   const artists = await Promise.all(
-    artistsId.map(async (artistId) => {
+    artistsDb.map(async (artistDb) => {
       const endDate = dayjs(new Date()).add(60, "day").format("YYYY-MM-DD");
       const startDate = dayjs(new Date()).subtract(30, "day").format("YYYY-MM-DD");
 
-      const artistProfile = `${BEATPORT_BASE_URL}/artist/a/${artistId}`;
+      const artistProfile = `${BEATPORT_BASE_URL}/artist/a/${artistDb.id}`;
       const artistReleasesPage = `${artistProfile}/tracks?start-date=${startDate}&end-date=${endDate}`;
 
       const { data }: { data: string } = await axios.get(artistReleasesPage);
@@ -48,27 +54,32 @@ const artistsScrapper = async (artistsId: number[]): Promise<Artist[]> => {
         preview: track.preview.mp3.url,
       }));
 
-      return {
-        id: artistId,
+      const artist: Artist = {
+        id: artistDb.id,
         name: artistName.data,
         artwork: artworkSrc,
         tracksCount: tracks.length,
         profile: artistProfile,
         tracks: tracks,
       };
+
+      if (artistDb.createdAt) artist.createdAt = new Date(artistDb.createdAt).getTime();
+      if (artistDb.updatedAt) artist.updatedAt = new Date(artistDb.updatedAt).getTime();
+
+      return artist;
     })
   );
 
   return artists.sort((a, b) => a.name.localeCompare(b.name));
 };
 
-const labelsScrapper = async (labelsId: number[]): Promise<Label[]> => {
+const labelsScrapper = async (artistsDb: dataDb[]): Promise<Label[]> => {
   const labels = await Promise.all(
-    labelsId.map(async (id) => {
+    artistsDb.map(async (artistDb) => {
       const endDate = dayjs(new Date()).add(60, "day").format("YYYY-MM-DD");
       const startDate = dayjs(new Date()).subtract(30, "day").format("YYYY-MM-DD");
 
-      const labelProfile = `${BEATPORT_BASE_URL}/label/l/${id}`;
+      const labelProfile = `${BEATPORT_BASE_URL}/label/l/${artistDb.id}`;
       const labelReleasesPage = `${labelProfile}/tracks?start-date=${startDate}&end-date=${endDate}`;
 
       const { data }: { data: string } = await axios.get(labelReleasesPage);
@@ -97,13 +108,18 @@ const labelsScrapper = async (labelsId: number[]): Promise<Label[]> => {
         preview: track.preview.mp3.url,
       }));
 
-      return {
+      const label: Label = {
         name: labelName.data,
-        id: id,
+        id: artistDb.id,
         profile: labelProfile,
         artwork,
         tracks,
       };
+
+      if (artistDb.createdAt) label.createdAt = new Date(artistDb.createdAt).getTime();
+      if (artistDb.updatedAt) label.updatedAt = new Date(artistDb.updatedAt).getTime();
+
+      return label;
     })
   );
 

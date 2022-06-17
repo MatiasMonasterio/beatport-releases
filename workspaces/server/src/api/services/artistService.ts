@@ -9,24 +9,49 @@ import db from "../../database";
 const USER_ID = 1;
 const USER_ARTIST_KEY = `ARTISTS-${USER_ID}`;
 
-const getAllArtists = async (): Promise<Artist[]> => {
-  const artists = await cache.get<Artist[]>(USER_ARTIST_KEY);
-  return artists ? artists : await scraperService.artists();
+interface ParamsFilter {
+  sort?: keyof Artist;
+  order?: "desc" | "asc";
+  length?: number;
+}
+
+const getAllArtists = async ({ sort, order, length }: ParamsFilter): Promise<Artist[]> => {
+  let artists = await cache.get<Artist[]>(USER_ARTIST_KEY);
+  if (!artists) artists = await scraperService.artists();
+
+  if (sort && artists && artists.length) {
+    artists = artists.sort((a, b) => {
+      if (typeof a[sort] === "string" && typeof b[sort] === "string") {
+        const val1 = a[sort] as string;
+        const val2 = b[sort] as string;
+
+        return order === "desc" ? val1.localeCompare(val2) : val2.localeCompare(val1);
+      } else {
+        const val1 = a[sort] as number;
+        const val2 = b[sort] as number;
+
+        return order === "desc" ? val1 - val2 : val2 - val1;
+      }
+    });
+  }
+
+  if (length && artists) artists = artists.slice(0, length);
+
+  return artists;
 };
 
 const createNewArtist = async (id: number): Promise<Artist> => {
   const artist = await db.artist.findFirst({
     where: { id: id, users: { some: { userId: USER_ID } } },
-    select: { users: true },
   });
 
   if (artist) throw { status: 409, message: "Artists already exist" };
 
-  const [newArtist] = await beatportScrap.artists([id]);
-
-  const artistExits = await db.artist.findUnique({ where: { id: id } });
-  if (!artistExits) await db.artist.create({ data: { id: newArtist.id } });
+  let artistOnDb = await db.artist.findUnique({ where: { id: id } });
+  if (!artistOnDb) artistOnDb = await db.artist.create({ data: { id: id } });
   await db.artistsOnUser.create({ data: { userId: USER_ID, artistId: id } });
+
+  const [newArtist] = await beatportScrap.artists([artistOnDb]);
 
   const artists = await cache.get<Artist[]>(USER_ARTIST_KEY);
 
@@ -73,12 +98,13 @@ const getOneArtist = async (id: string): Promise<Artist> => {
   const artists = artistsCached ? artistsCached : await scraperService.artists();
 
   const artist = artists.find((artist) => artist.id.toString() === id);
+
   if (artist) {
     artist.follow = true;
     return artist;
   }
 
-  const [newArtists] = await beatportScrap.artists([+id]);
+  const [newArtists] = await beatportScrap.artists([{ id: +id }]);
   return newArtists;
 };
 

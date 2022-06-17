@@ -9,24 +9,49 @@ import db from "../../database";
 const USER_ID = 1;
 const USER_LABEL_KEY = `LABELS-${USER_ID}`;
 
-const getAllLabels = async (): Promise<Label[]> => {
-  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
-  return labelsCached ? labelsCached : await scraperService.labels();
+interface ParamsFilter {
+  sort?: keyof Label;
+  order?: "desc" | "asc";
+  length?: number;
+}
+
+const getAllLabels = async ({ sort, order, length }: ParamsFilter): Promise<Label[]> => {
+  let labels = await cache.get<Label[]>(USER_LABEL_KEY);
+  if (!labels) labels = await scraperService.labels();
+
+  if (sort && labels && labels.length) {
+    labels = labels.sort((a, b) => {
+      if (typeof a[sort] === "string" && typeof b[sort] === "string") {
+        const val1 = a[sort] as string;
+        const val2 = b[sort] as string;
+
+        return order === "desc" ? val1.localeCompare(val2) : val2.localeCompare(val1);
+      } else {
+        const val1 = a[sort] as number;
+        const val2 = b[sort] as number;
+
+        return order === "desc" ? val1 - val2 : val2 - val1;
+      }
+    });
+  }
+
+  if (length && labels) labels = labels.slice(0, length);
+
+  return labels;
 };
 
 const createNewLabel = async (id: number): Promise<Label> => {
   const label = await db.label.findFirst({
     where: { id: id, users: { some: { userId: USER_ID } } },
-    select: { users: true },
   });
 
   if (label) throw { status: 409, message: "Artists already exist" };
 
-  const [newLabel] = await beatportScrap.labels([id]);
-
-  const labelExist = await db.label.findUnique({ where: { id: id } });
-  if (!labelExist) await db.label.create({ data: { id: newLabel.id } });
+  let labelOnDb = await db.label.findUnique({ where: { id: id } });
+  if (!labelOnDb) labelOnDb = await db.label.create({ data: { id: id } });
   await db.labelsOnUser.create({ data: { userId: USER_ID, labelId: id } });
+
+  const [newLabel] = await beatportScrap.labels([labelOnDb]);
 
   const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
 
@@ -74,12 +99,13 @@ const getOneLabel = async (id: number): Promise<Label> => {
   const labels = labelsCached ? labelsCached : await scraperService.labels();
 
   const label = labels.find((label) => label.id === id);
+
   if (label) {
     label.follow = true;
     return label;
   }
 
-  const [newLabel] = await beatportScrap.labels([+id]);
+  const [newLabel] = await beatportScrap.labels([{ id }]);
   return newLabel;
 };
 

@@ -8,7 +8,7 @@ import artistService from "../services/artistService";
 
 const getAllArtists = async (req: Request, res: Response): Promise<void> => {
   try {
-    const artists = await artistService.getAllArtists();
+    const artists = await artistService.getAllArtists(req.query);
     await cache.set<Artist[]>(req.originalUrl, artists);
 
     res.send({ status: "OK", data: artists });
