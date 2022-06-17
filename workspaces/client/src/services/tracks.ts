@@ -1,38 +1,36 @@
 import type { Track } from "@br/core";
 
-import { getArtistReleases, getArtistUpcomings } from "./artists";
-import { getLabelReleases, getLabelUpcomings } from "./labels";
+const API_URL = import.meta.env.VITE_API_URL;
+
+type TracksResponse = {
+  data: Track[];
+  error?: string;
+};
 
 export const getReleases = async (): Promise<Track[]> => {
   try {
-    const artistReleases = await getArtistReleases();
-    const labelReleases = await getLabelReleases();
+    const resp: Response = await fetch(`${API_URL}/api/tracks/releases`);
 
-    const releases = [...artistReleases, ...labelReleases];
+    const { data: tracks, error }: TracksResponse = await resp.json();
+    if (error) throw new Error(error);
 
-    return releases
-      .filter((release, index, self) => {
-        return self.findIndex((releaseSelf) => releaseSelf.id === release.id) === index;
-      })
-      .sort((a, b) => b.released - a.released);
+    return tracks;
   } catch (error) {
+    console.error(error);
     return [];
   }
 };
 
 export const getUpcomings = async (): Promise<Track[]> => {
   try {
-    const artistUpcomings = await getArtistUpcomings();
-    const labelUpcomings = await getLabelUpcomings();
+    const resp: Response = await fetch(`${API_URL}/api/tracks/upcomings`);
 
-    const upcomings = [...artistUpcomings, ...labelUpcomings];
-    labelUpcomings;
-    return upcomings
-      .filter((upcoming, index, self) => {
-        return self.findIndex((upcomingSelf) => upcomingSelf.id === upcoming.id) === index;
-      })
-      .sort((a, b) => b.released - a.released);
+    const { data: tracks, error }: TracksResponse = await resp.json();
+    if (error) throw new Error(error);
+
+    return tracks;
   } catch (error) {
+    console.error(error);
     return [];
   }
 };
