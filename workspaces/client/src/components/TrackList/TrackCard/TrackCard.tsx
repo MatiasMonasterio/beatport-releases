@@ -1,5 +1,9 @@
 import type { Track } from "@br/core";
 
+interface ITrack extends Track {
+  createdAt: number;
+}
+
 import { useState, Suspense, useMemo } from "react";
 import { Link as ReactLink } from "react-router-dom";
 import { Box, Text, Image, Grid, GridItem, Link, HStack, Button } from "@chakra-ui/react";
@@ -8,14 +12,25 @@ import { usePlayerContext } from "context/player";
 import { getDiffDays } from "utils";
 
 import LoadingBg from "./LoadingBg";
+import Favorite from "./Favorite";
 
 interface Props {
+  favoritesList?: boolean;
   track: Track;
   handlePlayTrack: (track: Track) => void;
+  onAddFavorite: (id: number) => void;
+  onRemoveFavorite: (id: number) => void;
 }
 
-export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Element {
-  const { id, name, artwork, artists, label, genres, released, bpm, mix } = track;
+export default function TrackCard({
+  favoritesList,
+  track,
+  handlePlayTrack,
+  onAddFavorite,
+  onRemoveFavorite,
+}: Props): JSX.Element {
+  const { id, name, artwork, artists, label, genres, released, bpm, mix, favorite } = track;
+  const { createdAt } = track as ITrack;
 
   const [isLoading] = useState<boolean>(false);
   const { currentTrack } = usePlayerContext();
@@ -36,8 +51,22 @@ export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Elemen
     return new Intl.DateTimeFormat("es-ES").format(new Date(released));
   }, []);
 
+  const favoriteDate: string = useMemo(() => {
+    const daysFromCreated = getDiffDays(createdAt);
+
+    if (daysFromCreated === 0) return "Today";
+    if (daysFromCreated === 1) return `${daysFromCreated} day ago`;
+    if (daysFromCreated > 0) return `${daysFromCreated} days ago`;
+
+    return new Intl.DateTimeFormat("es-ES").format(new Date(released));
+  }, []);
+
   const handleShowBeatport = (): void => {
     handlePlayTrack(track);
+  };
+
+  const handleToggleFavoriteTrack = (): void => {
+    favorite ? onRemoveFavorite(id) : onAddFavorite(id);
   };
 
   return (
@@ -50,7 +79,7 @@ export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Elemen
       <Grid
         templateColumns={{
           base: "90px 1fr",
-          sm: "90px minmax(200px, 1fr) minmax(150px, 250px) minmax(30px, 100px) minmax(80px, 150px)",
+          sm: "90px minmax(200px, 1fr) minmax(150px, 290px) minmax(30px, 100px) minmax(50px, 120px) 60px",
         }}
         gap={6}
       >
@@ -65,7 +94,13 @@ export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Elemen
             )}
           </Button>
         </GridItem>
-        <GridItem display="flex" flexDirection="column" gap={0.2} alignItems="start">
+        <GridItem
+          display="flex"
+          flexDirection="column"
+          gap={0.2}
+          alignItems="start"
+          alignSelf="center"
+        >
           <Box color={isSelect ? "#01FF95" : ""}>
             <Text as="span">
               {name} {mix}
@@ -92,19 +127,36 @@ export default function TrackCard({ track, handlePlayTrack }: Props): JSX.Elemen
           </Link>
         </GridItem>
 
-        <GridItem py={{ base: 0, sm: 2 }} fontSize="sm" display={{ base: "none", sm: "block" }}>
+        <GridItem
+          py={{ base: 0, sm: 2 }}
+          fontSize="sm"
+          display={{ base: "none", sm: "block" }}
+          alignSelf="center"
+        >
           {genres.map((genre) => (
             <Text key={genre.id}>{genre.name}</Text>
           ))}
         </GridItem>
 
-        <GridItem fontSize="sm" py={{ base: 0, sm: 2 }} display={{ base: "none", sm: "block" }}>
+        <GridItem
+          fontSize="sm"
+          py={{ base: 0, sm: 2 }}
+          display={{ base: "none", sm: "block" }}
+          alignSelf="center"
+        >
           {bpm}
         </GridItem>
 
-        <GridItem py={{ base: 0, sm: 2 }} fontSize="sm" display={{ base: "none", sm: "block" }}>
-          {publishDate}
+        <GridItem
+          py={{ base: 0, sm: 2 }}
+          fontSize="sm"
+          display={{ base: "none", sm: "block" }}
+          alignSelf="center"
+        >
+          {favoritesList ? favoriteDate : publishDate}
         </GridItem>
+
+        <Favorite isFavorite={!!favorite} onClick={handleToggleFavoriteTrack} />
       </Grid>
     </Box>
   );

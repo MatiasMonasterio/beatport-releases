@@ -1,9 +1,14 @@
 import type { Track } from "@br/core";
 
+interface ITrack extends Track {
+  createdAt?: number;
+}
+
 import { useState, useEffect } from "react";
 import { Flex, Box } from "@chakra-ui/react";
 
 import { usePlayerContext } from "context/player";
+import { newFavoriteTrack, deleteFavoriteById } from "services/favorites";
 
 import TrackCard from "./TrackCard";
 import TrackCardLoader from "./TrackCardLoader";
@@ -15,15 +20,22 @@ export enum trackFilter {
   bpm = "bpm",
   genres = "genres",
   name = "name",
+  createdAt = "createdAt",
 }
 
 interface Props {
-  tracks: Track[];
+  tracks: ITrack[];
   isLoading: boolean;
+  favoritesList?: boolean;
   setTracks: (tracks: Track[]) => void;
 }
 
-export default function TrackList({ tracks, setTracks, isLoading }: Props): JSX.Element {
+export default function TrackList({
+  tracks,
+  setTracks,
+  isLoading,
+  favoritesList,
+}: Props): JSX.Element {
   const { loadPlaylist } = usePlayerContext();
 
   const [isDescFilter, setisDescFilter] = useState<number>(-1);
@@ -42,6 +54,18 @@ export default function TrackList({ tracks, setTracks, isLoading }: Props): JSX.
     }
   };
 
+  const handleFavorite = async (id: number, add: boolean): Promise<void> => {
+    const trackIndex = tracks.findIndex((track) => track.id === id);
+
+    if (trackIndex >= 0) {
+      const tracksToSave = [...tracks];
+      tracksToSave[trackIndex].favorite = add;
+
+      setTracks(tracksToSave);
+      add ? await newFavoriteTrack(tracks[trackIndex]) : await deleteFavoriteById(id);
+    }
+  };
+
   useEffect(() => {
     if (filterSelected === trackFilter.genres) {
       setTracks(
@@ -55,6 +79,19 @@ export default function TrackList({ tracks, setTracks, isLoading }: Props): JSX.
         [...tracks].sort(
           (a, b) => a[filterSelected].localeCompare(b[filterSelected]) * isDescFilter
         )
+      );
+    } else if (filterSelected === trackFilter.createdAt) {
+      setTracks(
+        [...tracks].sort((a, b) => {
+          if (a[filterSelected] && b[filterSelected]) {
+            const val1 = a[filterSelected] as number;
+            const val2 = b[filterSelected] as number;
+
+            return (val1 - val2) * isDescFilter;
+          }
+
+          return -1;
+        })
       );
     } else {
       setTracks([...tracks].sort((a, b) => (a[filterSelected] - b[filterSelected]) * isDescFilter));
@@ -74,6 +111,7 @@ export default function TrackList({ tracks, setTracks, isLoading }: Props): JSX.
         backgroundColor="gray.800"
       >
         <SortDesktop
+          favoritesList={favoritesList}
           filter={filterSelected}
           isDesc={isDescFilter < 0}
           sortTitle={() => handleSort(trackFilter.name)}
@@ -100,7 +138,14 @@ export default function TrackList({ tracks, setTracks, isLoading }: Props): JSX.
         {!isLoading &&
           tracks.length > 0 &&
           tracks.map((track) => (
-            <TrackCard track={track} handlePlayTrack={handlePlayTrack} key={track.id} />
+            <TrackCard
+              favoritesList={favoritesList}
+              track={track}
+              handlePlayTrack={handlePlayTrack}
+              key={track.id}
+              onAddFavorite={(id) => handleFavorite(id, true)}
+              onRemoveFavorite={(id) => handleFavorite(id, false)}
+            />
           ))}
 
         {!isLoading && !tracks.length && (

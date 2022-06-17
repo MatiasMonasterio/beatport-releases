@@ -7,6 +7,7 @@ import SortItem from "./SortItem";
 interface Props {
   filter: string;
   isDesc: boolean;
+  favoritesList?: boolean;
   sortTitle: () => void;
   sortGenre: () => void;
   sortBpm: () => void;
@@ -16,6 +17,7 @@ interface Props {
 export default function SortDesktop({
   filter,
   isDesc,
+  favoritesList,
   sortTitle,
   sortGenre,
   sortBpm,
@@ -24,7 +26,7 @@ export default function SortDesktop({
   return (
     <Grid
       display={{ base: "none", sm: "grid" }}
-      templateColumns="minmax(314px, 1fr) minmax(150px, 250px) minmax(30px, 100px) minmax(80px, 150px)"
+      templateColumns="minmax(314px, 1fr) minmax(150px, 290px) minmax(30px, 100px) minmax(50px, 120px) 60px"
       gap={6}
       color="gray.400"
       fontSize="xs"
@@ -53,14 +55,26 @@ export default function SortDesktop({
           onClick={sortBpm}
         />
       </GridItem>
-      <GridItem>
-        <SortItem
-          content="Released"
-          isDesc={isDesc}
-          isActive={filter === trackFilter.released}
-          onClick={sortReleased}
-        />
-      </GridItem>
+
+      {favoritesList ? (
+        <GridItem>
+          <SortItem
+            content="Incorporation"
+            isDesc={isDesc}
+            isActive={filter === trackFilter.createdAt}
+            onClick={sortBpm}
+          />
+        </GridItem>
+      ) : (
+        <GridItem>
+          <SortItem
+            content="Released"
+            isDesc={isDesc}
+            isActive={filter === trackFilter.released}
+            onClick={sortReleased}
+          />
+        </GridItem>
+      )}
     </Grid>
   );
 }
