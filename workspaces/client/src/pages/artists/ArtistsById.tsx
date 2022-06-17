@@ -4,12 +4,14 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Skeleton, HStack } from "@chakra-ui/react";
 
-import { useFetch } from "hooks";
+import { useFetch, useParallax } from "hooks";
 import { MetaTags, TrackList, Follow } from "components";
 import { getArtistById, deleteArtistsById, addArtistId } from "services/artists";
 
 export default function ArtistById(): JSX.Element {
   const { id } = useParams<{ id: string }>() as { id: string };
+  const { parallaxRef } = useParallax();
+
   const [artist, setArtits] = useState<Artist>({} as Artist);
   const { fetch, isLoading } = useFetch();
   const { fetch: fetchRuntime, isLoading: isLoadingRuntime } = useFetch();
@@ -37,14 +39,19 @@ export default function ArtistById(): JSX.Element {
     <>
       {artist.name && <MetaTags title={artist.name} />}
 
-      <Box
-        mb={8}
-        backgroundImage={artist.artwork}
-        backgroundRepeat="no-repeat"
-        backgroundSize="cover"
-        backgroundPosition="center"
-        h={{ base: 300, sm: 400 }}
-      >
+      <Box mb={8} h={{ base: 300, sm: 400 }} position="relative" zIndex={1} overflow="hidden">
+        <Box
+          ref={parallaxRef}
+          backgroundImage={artist.artwork}
+          backgroundRepeat="no-repeat"
+          backgroundSize="cover"
+          backgroundPosition="center 30%"
+          position="absolute"
+          w="100%"
+          h="100%"
+          zIndex={-1}
+        />
+
         <Flex h="100%" bg="blackAlpha.600" direction="column" justify="end" py={10}>
           <Container maxW="container.xl">
             {isLoading ? (

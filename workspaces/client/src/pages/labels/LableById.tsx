@@ -4,12 +4,14 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Skeleton, HStack } from "@chakra-ui/react";
 
-import { useFetch } from "hooks";
+import { useFetch, useParallax } from "hooks";
 import { MetaTags, TrackList, Follow } from "components";
 import { getLabelById, addLabelId, deleteLabelById } from "services/labels";
 
 export default function LabelById(): JSX.Element {
   const { id } = useParams<{ id: string }>() as { id: string };
+  const { parallaxRef } = useParallax();
+
   const [label, setLabel] = useState<Label>({} as Label);
   const { fetch, isLoading } = useFetch();
   const { fetch: fetchRuntime, isLoading: isLoadingRuntime } = useFetch();
@@ -37,14 +39,19 @@ export default function LabelById(): JSX.Element {
     <>
       {label.name && <MetaTags title={label.name} />}
 
-      <Box
-        mb={10}
-        backgroundImage={label.artwork}
-        backgroundRepeat="no-repeat"
-        backgroundSize="cover"
-        backgroundPosition="center"
-        h={{ base: 300, sm: 400 }}
-      >
+      <Box mb={10} h={{ base: 300, sm: 400 }} position="relative" zIndex={1} overflow="hidden">
+        <Box
+          ref={parallaxRef}
+          backgroundImage={label.artwork}
+          backgroundRepeat="no-repeat"
+          backgroundSize="cover"
+          backgroundPosition="center"
+          position="absolute"
+          w="100%"
+          h="100%"
+          zIndex={-1}
+        />
+
         <Flex h="100%" bg="rgba(0,0,0,0.6)" direction="column" justify="end" py={10}>
           <Container maxW="container.xl">
             {isLoading ? (

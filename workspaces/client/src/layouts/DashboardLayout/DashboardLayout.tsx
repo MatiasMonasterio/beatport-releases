@@ -34,6 +34,7 @@ export default function DashboardLayout({ children }: Props) {
           </GridItem>
 
           <GridItem
+            className="dashboard-main-content"
             overflowY="scroll"
             pb={10}
             h="100%"
