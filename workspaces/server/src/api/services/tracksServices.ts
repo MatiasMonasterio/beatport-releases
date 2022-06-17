@@ -1,6 +1,7 @@
 import { Artist, Label, Track } from "@br/core";
 
 import scraperService from "./scraperServices";
+import favoriteServices from "./favoriteServices";
 import cache from "../../cache";
 
 // remove when apply auth and users
@@ -35,6 +36,8 @@ const getAllUpcomings = async (): Promise<Track[]> => {
 };
 
 const getArtistsReleases = async (): Promise<Track[]> => {
+  const favoritesIds = await favoriteServices.getAllFavoritesIds();
+
   const artistsCached = await cache.get<Artist[]>(USER_ARTIST_KEY);
   const artists = artistsCached ? artistsCached : await scraperService.artists();
 
@@ -44,10 +47,13 @@ const getArtistsReleases = async (): Promise<Track[]> => {
     .map((artist) => [...artist.tracks])
     .reduce((previous, current) => [...previous, ...current])
     .filter((track) => track.released < new Date().getTime())
-    .sort((a, b) => b.released - a.released);
+    .sort((a, b) => b.released - a.released)
+    .map((track) => ({ ...track, favorite: favoritesIds.includes(track.id) }));
 };
 
 const getArtistsUpcoming = async (): Promise<Track[]> => {
+  const favoritesIds = await favoriteServices.getAllFavoritesIds();
+
   const artistsCached = await cache.get<Artist[]>(USER_ARTIST_KEY);
   const artists = artistsCached ? artistsCached : await scraperService.artists();
 
@@ -56,10 +62,13 @@ const getArtistsUpcoming = async (): Promise<Track[]> => {
     .map((artist) => [...artist.tracks])
     .reduce((previous, current) => [...previous, ...current])
     .filter((track) => track.released >= new Date().getTime())
-    .sort((a, b) => b.released - a.released);
+    .sort((a, b) => b.released - a.released)
+    .map((track) => ({ ...track, favorite: favoritesIds.includes(track.id) }));
 };
 
 const getLabelsReleases = async (): Promise<Track[]> => {
+  const favoritesIds = await favoriteServices.getAllFavoritesIds();
+
   const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
   const labels = labelsCached ? labelsCached : await scraperService.labels();
 
@@ -69,10 +78,13 @@ const getLabelsReleases = async (): Promise<Track[]> => {
     .map((label) => [...label.tracks])
     .reduce((previous, current) => [...previous, ...current])
     .filter((track) => track.released < new Date().getTime())
-    .sort((a, b) => b.released - a.released);
+    .sort((a, b) => b.released - a.released)
+    .map((track) => ({ ...track, favorite: favoritesIds.includes(track.id) }));
 };
 
 const getLabelsUpcoming = async (): Promise<Track[]> => {
+  const favoritesIds = await favoriteServices.getAllFavoritesIds();
+
   const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
   const labels = labelsCached ? labelsCached : await scraperService.labels();
 
@@ -82,7 +94,8 @@ const getLabelsUpcoming = async (): Promise<Track[]> => {
     .map((label) => [...label.tracks])
     .reduce((previous, current) => [...previous, ...current])
     .filter((track) => track.released >= new Date().getTime())
-    .sort((a, b) => b.released - a.released);
+    .sort((a, b) => b.released - a.released)
+    .map((track) => ({ ...track, favorite: favoritesIds.includes(track.id) }));
 };
 
 export default {
