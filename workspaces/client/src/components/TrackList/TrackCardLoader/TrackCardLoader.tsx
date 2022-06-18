@@ -6,12 +6,12 @@ export default function TrackCard() {
       <Grid
         templateColumns={{
           base: "90px 1fr",
-          sm: "90px minmax(200px, 1fr) minmax(150px, 250px) minmax(30px, 100px) minmax(80px, 150px)",
+          sm: "90px minmax(200px, 1fr) minmax(150px, 290px) minmax(30px, 100px) minmax(50px, 120px) 60px",
         }}
         gap={6}
       >
         <GridItem>
-          <Skeleton boxSize={24} startColor="gray.800" endColor="gray.700" />
+          <Skeleton boxSize={20} startColor="gray.800" endColor="gray.700" />
         </GridItem>
 
         <GridItem py={{ base: 0, sm: 1 }}>
@@ -29,16 +29,20 @@ export default function TrackCard() {
           </VStack>
         </GridItem>
 
-        <GridItem py={{ base: 0, sm: 1 }}>
+        <GridItem py={{ base: 0, sm: 1 }} alignSelf="center">
           <Skeleton width="150px" height="1rem" startColor="gray.800" endColor="gray.700" />
         </GridItem>
 
-        <GridItem py={{ base: 0, sm: 1 }}>
+        <GridItem py={{ base: 0, sm: 1 }} alignSelf="center">
           <Skeleton width="30px" height="1rem" startColor="gray.800" endColor="gray.700" />
         </GridItem>
 
-        <GridItem py={{ base: 0, sm: 1 }}>
+        <GridItem py={{ base: 0, sm: 1 }} alignSelf="center">
           <Skeleton width="80px" height="1rem" startColor="gray.800" endColor="gray.700" />
+        </GridItem>
+
+        <GridItem py={{ base: 0, sm: 1 }} px={5} alignSelf="center">
+          <Skeleton width="16px" height="16px" startColor="gray.800" endColor="gray.700" />
         </GridItem>
       </Grid>
     </Box>
