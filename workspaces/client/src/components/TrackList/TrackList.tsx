@@ -1,9 +1,5 @@
 import type { Track } from "@br/core";
 
-interface ITrack extends Track {
-  createdAt?: number;
-}
-
 import { useState, useEffect } from "react";
 import { Flex, Box } from "@chakra-ui/react";
 
@@ -14,6 +10,12 @@ import TrackCard from "./TrackCard";
 import TrackCardLoader from "./TrackCardLoader";
 import SortDesktop from "./SortDesktop";
 import SortMobile from "./SortMobile";
+
+import { useFilter } from "./useFilter";
+
+interface ITrack extends Track {
+  createdAt?: number;
+}
 
 export enum trackFilter {
   released = "released",
@@ -27,76 +29,32 @@ interface Props {
   tracks: ITrack[];
   isLoading: boolean;
   favoritesList?: boolean;
-  setTracks: (tracks: Track[]) => void;
 }
 
-export default function TrackList({
-  tracks,
-  setTracks,
-  isLoading,
-  favoritesList,
-}: Props): JSX.Element {
-  const { loadPlaylist } = usePlayerContext();
+export default function TrackList({ tracks, isLoading, favoritesList }: Props): JSX.Element {
+  const [innerTracks, setInnerTracks] = useState<ITrack[]>([]);
 
-  const [isDescFilter, setisDescFilter] = useState<number>(-1);
-  const [filterSelected, setFilterSelected] = useState<trackFilter>(trackFilter.released);
+  const { loadPlaylist } = usePlayerContext();
+  const { filterSelected, isDescFilter, handleSort } = useFilter(innerTracks, setInnerTracks);
 
   const handlePlayTrack = (track: Track): void => {
-    loadPlaylist({ track, playlist: tracks });
-  };
-
-  const handleSort = (filter: trackFilter): void => {
-    if (filterSelected !== filter) {
-      setFilterSelected(filter);
-      setisDescFilter(-1);
-    } else {
-      setisDescFilter(isDescFilter * -1);
-    }
+    loadPlaylist({ track, playlist: innerTracks });
   };
 
   const handleFavorite = async (id: number, add: boolean): Promise<void> => {
-    const trackIndex = tracks.findIndex((track) => track.id === id);
+    const trackIndex = innerTracks.findIndex((track) => track.id === id);
+    if (trackIndex < 0) return;
 
-    if (trackIndex >= 0) {
-      const tracksToSave = [...tracks];
-      tracksToSave[trackIndex].favorite = add;
+    const tracksToSave = [...innerTracks];
+    tracksToSave[trackIndex].favorite = add;
 
-      setTracks(tracksToSave);
-      add ? await newFavoriteTrack(tracks[trackIndex]) : await deleteFavoriteById(id);
-    }
+    setInnerTracks(tracksToSave);
+    add ? await newFavoriteTrack(innerTracks[trackIndex]) : await deleteFavoriteById(id);
   };
 
   useEffect(() => {
-    if (filterSelected === trackFilter.genres) {
-      setTracks(
-        [...tracks].sort(
-          (a, b) =>
-            a[filterSelected][0].name.localeCompare(b[filterSelected][0].name) * isDescFilter
-        )
-      );
-    } else if (filterSelected === trackFilter.name) {
-      setTracks(
-        [...tracks].sort(
-          (a, b) => a[filterSelected].localeCompare(b[filterSelected]) * isDescFilter
-        )
-      );
-    } else if (filterSelected === trackFilter.createdAt) {
-      setTracks(
-        [...tracks].sort((a, b) => {
-          if (a[filterSelected] && b[filterSelected]) {
-            const val1 = a[filterSelected] as number;
-            const val2 = b[filterSelected] as number;
-
-            return (val1 - val2) * isDescFilter;
-          }
-
-          return -1;
-        })
-      );
-    } else {
-      setTracks([...tracks].sort((a, b) => (a[filterSelected] - b[filterSelected]) * isDescFilter));
-    }
-  }, [isDescFilter, filterSelected]);
+    setInnerTracks(tracks);
+  }, [tracks]);
 
   return (
     <>
@@ -136,8 +94,8 @@ export default function TrackList({
         {isLoading && [1, 2, 3, 4].map((value) => <TrackCardLoader key={value} />)}
 
         {!isLoading &&
-          tracks.length > 0 &&
-          tracks.map((track) => (
+          innerTracks.length > 0 &&
+          innerTracks.map((track) => (
             <TrackCard
               favoritesList={favoritesList}
               track={track}
@@ -148,7 +106,7 @@ export default function TrackList({
             />
           ))}
 
-        {!isLoading && !tracks.length && (
+        {!isLoading && !innerTracks.length && (
           <Box py={5} color="gray.500">
             No results to show...
           </Box>

@@ -1,4 +1,4 @@
-import type { Artist, Track } from "@br/core";
+import type { Artist } from "@br/core";
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -15,10 +15,6 @@ export default function ArtistById(): JSX.Element {
   const [artist, setArtits] = useState<Artist>({} as Artist);
   const { fetch, isLoading } = useFetch();
   const { fetch: fetchRuntime, isLoading: isLoadingRuntime } = useFetch();
-
-  const sortTracks = (tracks: Track[]): void => {
-    setArtits(() => ({ ...artist, tracks: tracks }));
-  };
 
   const handleFollow = async (): Promise<void> => {
     if (artist.follow) await fetchRuntime(async () => await deleteArtistsById(id));
@@ -91,7 +87,7 @@ export default function ArtistById(): JSX.Element {
         </Heading>
 
         <Flex direction="column" gap={2}>
-          <TrackList tracks={artist.tracks || []} setTracks={sortTracks} isLoading={isLoading} />
+          <TrackList tracks={artist.tracks || []} isLoading={isLoading} />
         </Flex>
       </Container>
     </>

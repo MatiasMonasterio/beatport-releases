@@ -31,7 +31,7 @@ export default function LabelReleases(): JSX.Element {
         </Heading>
       )}
 
-      <TrackList tracks={releases} setTracks={setReleases} isLoading={isLoading} />
+      <TrackList tracks={releases} isLoading={isLoading} />
     </>
   );
 }

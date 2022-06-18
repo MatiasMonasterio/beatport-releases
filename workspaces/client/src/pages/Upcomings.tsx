@@ -24,7 +24,7 @@ export default function Upcomings() {
             Upcomings
           </Heading>
 
-          <TrackList tracks={upcomings} setTracks={setUpcomings} isLoading={isLoading} />
+          <TrackList tracks={upcomings} isLoading={isLoading} />
         </Box>
       </Container>
     </>

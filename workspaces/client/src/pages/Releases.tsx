@@ -27,7 +27,7 @@ export default function Releases() {
             Releases
           </Heading>
 
-          <TrackList tracks={releases} setTracks={setReleases} isLoading={isLoading} />
+          <TrackList tracks={releases} isLoading={isLoading} />
         </Box>
       </Container>
     </>

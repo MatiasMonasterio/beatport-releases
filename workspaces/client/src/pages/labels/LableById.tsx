@@ -1,4 +1,4 @@
-import type { Label, Track } from "@br/core";
+import type { Label } from "@br/core";
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -15,10 +15,6 @@ export default function LabelById(): JSX.Element {
   const [label, setLabel] = useState<Label>({} as Label);
   const { fetch, isLoading } = useFetch();
   const { fetch: fetchRuntime, isLoading: isLoadingRuntime } = useFetch();
-
-  const sortTracks = (tracks: Track[]): void => {
-    setLabel(() => ({ ...label, tracks: tracks }));
-  };
 
   const handleFollow = async (): Promise<void> => {
     if (label.follow) await fetchRuntime(async () => await deleteLabelById(id));
@@ -90,7 +86,7 @@ export default function LabelById(): JSX.Element {
           Last Releases
         </Heading>
 
-        <TrackList tracks={label.tracks || []} setTracks={sortTracks} isLoading={isLoading} />
+        <TrackList tracks={label.tracks || []} isLoading={isLoading} />
       </Container>
     </>
   );

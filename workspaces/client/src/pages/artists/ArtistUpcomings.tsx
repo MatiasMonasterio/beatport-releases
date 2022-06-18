@@ -29,7 +29,7 @@ export default function ArtistsReleasesUpcoming(): JSX.Element {
         </Heading>
       )}
 
-      <TrackList tracks={upcomings} setTracks={setUpcomings} isLoading={isLoading} />
+      <TrackList tracks={upcomings} isLoading={isLoading} />
     </>
   );
 }

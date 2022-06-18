@@ -32,7 +32,7 @@ export default function ArtistsReleases(): JSX.Element {
           </Heading>
         )}
       </HStack>
-      <TrackList tracks={releases} setTracks={setReleases} isLoading={isLoading} />
+      <TrackList tracks={releases} isLoading={isLoading} />
     </>
   );
 }

@@ -26,12 +26,7 @@ export default function Fovorites() {
           My Favorites Tracks
         </Heading>
 
-        <TrackList
-          tracks={favorites}
-          setTracks={setFavorites}
-          isLoading={isLoading}
-          favoritesList
-        />
+        <TrackList tracks={favorites} isLoading={isLoading} favoritesList />
       </Container>
     </>
   );
