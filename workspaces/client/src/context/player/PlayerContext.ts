@@ -18,6 +18,7 @@ const defaultValue: Track = {
 
 export type PlayerContextProps = {
   audioRef: React.RefObject<HTMLAudioElement>;
+  setCurrentTrack: (track: Track) => void;
   currentTrack: Track;
   playlist: Track[];
   isPlaying: boolean;

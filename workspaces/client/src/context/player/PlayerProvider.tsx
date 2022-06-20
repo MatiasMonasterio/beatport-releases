@@ -20,6 +20,11 @@ export const PlayerProvider = ({ children }: Props): JSX.Element => {
   const [playlistTrackIndex, setPlaylistTrackIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
+  const updateCurrentTrack = (track: Track) => {
+    setCurrentTrack(track);
+    localStorage.setItem("player", JSON.stringify(track));
+  };
+
   const loadPlaylist = ({ track, playlist }: loadPlaylistArgs): void => {
     const isPaused = audioRef.current?.paused;
     setCurrentPlaylist(playlist);
@@ -30,10 +35,9 @@ export const PlayerProvider = ({ children }: Props): JSX.Element => {
     if (currentTrack.id === track.id) {
       if (isPaused) audioRef.current.play();
       else audioRef.current?.pause();
-    } else {
-      setCurrentTrack(track);
-      localStorage.setItem("player", JSON.stringify(track));
     }
+
+    updateCurrentTrack(track);
   };
 
   const handleEnded = (): void => {
@@ -74,6 +78,7 @@ export const PlayerProvider = ({ children }: Props): JSX.Element => {
       value={{
         audioRef,
         currentTrack,
+        setCurrentTrack: updateCurrentTrack,
         playlist: currentPlaylist,
         isPlaying,
         loadPlaylist,
