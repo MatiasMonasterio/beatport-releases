@@ -1,13 +1,9 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 
-import { usePlayerContext } from "context/player";
-
 import AudioPlayer from "./AudioPlayer";
 import TrackCard from "./TrackCard";
 
 export default function Player(): JSX.Element {
-  const { currentTrack } = usePlayerContext();
-
   return (
     <Grid
       bg="gray.800"
@@ -21,7 +17,7 @@ export default function Player(): JSX.Element {
       position="relative"
     >
       <GridItem>
-        <TrackCard {...currentTrack} />
+        <TrackCard />
       </GridItem>
 
       <GridItem>

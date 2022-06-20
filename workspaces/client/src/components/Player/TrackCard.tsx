@@ -1,11 +1,13 @@
-import type { Track } from "@br/core";
-
 import { NavLink } from "react-router-dom";
 import { Flex, Image, Box, Text, Link } from "@chakra-ui/react";
 
-type Props = Omit<Track, "bpm" | "released" | "genres" | "remixers" | "preview">;
+import { Favorite } from "components";
+import { usePlayerContext } from "context/player";
 
-export default function TrackCard({ name, mix, artwork, label, artists }: Props): JSX.Element {
+export default function TrackCard(): JSX.Element {
+  const { currentTrack } = usePlayerContext();
+  const { name, mix, artwork, label, artists } = currentTrack;
+
   return (
     <Flex gap={4}>
       <Image src={artwork} h={{ base: 14, sm: 16 }} w={{ base: 14, sm: 16 }} />
@@ -45,6 +47,8 @@ export default function TrackCard({ name, mix, artwork, label, artists }: Props)
           {label?.name}
         </Link>
       </Box>
+
+      <Favorite track={currentTrack} />
     </Flex>
   );
 }

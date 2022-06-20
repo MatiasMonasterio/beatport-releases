@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { Flex, Box } from "@chakra-ui/react";
 
 import { usePlayerContext } from "context/player";
-import { newFavoriteTrack, deleteFavoriteById } from "services/favorites";
 
 import TrackCard from "./TrackCard";
 import TrackCardLoader from "./TrackCardLoader";
@@ -39,17 +38,6 @@ export default function TrackList({ tracks, isLoading, favoritesList }: Props): 
 
   const handlePlayTrack = (track: Track): void => {
     loadPlaylist({ track, playlist: innerTracks });
-  };
-
-  const handleFavorite = async (id: number, add: boolean): Promise<void> => {
-    const trackIndex = innerTracks.findIndex((track) => track.id === id);
-    if (trackIndex < 0) return;
-
-    const tracksToSave = [...innerTracks];
-    tracksToSave[trackIndex].favorite = add;
-
-    setInnerTracks(tracksToSave);
-    add ? await newFavoriteTrack(innerTracks[trackIndex]) : await deleteFavoriteById(id);
   };
 
   useEffect(() => {
@@ -101,8 +89,6 @@ export default function TrackList({ tracks, isLoading, favoritesList }: Props): 
               track={track}
               handlePlayTrack={handlePlayTrack}
               key={track.id}
-              onAddFavorite={(id) => handleFavorite(id, true)}
-              onRemoveFavorite={(id) => handleFavorite(id, false)}
             />
           ))}
 

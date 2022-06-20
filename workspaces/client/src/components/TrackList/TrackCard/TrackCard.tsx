@@ -8,28 +8,20 @@ import { useState, Suspense, useMemo } from "react";
 import { Link as ReactLink } from "react-router-dom";
 import { Box, Text, Image, Grid, GridItem, Link, HStack, Button } from "@chakra-ui/react";
 
+import { Favorite } from "components";
 import { usePlayerContext } from "context/player";
 import { getDiffDays } from "utils";
 
 import LoadingBg from "./LoadingBg";
-import Favorite from "./Favorite";
 
 interface Props {
   favoritesList?: boolean;
   track: Track;
   handlePlayTrack: (track: Track) => void;
-  onAddFavorite: (id: number) => void;
-  onRemoveFavorite: (id: number) => void;
 }
 
-export default function TrackCard({
-  favoritesList,
-  track,
-  handlePlayTrack,
-  onAddFavorite,
-  onRemoveFavorite,
-}: Props): JSX.Element {
-  const { id, name, artwork, artists, label, genres, released, bpm, mix, favorite } = track;
+export default function TrackCard({ favoritesList, track, handlePlayTrack }: Props): JSX.Element {
+  const { id, name, artwork, artists, label, genres, released, bpm, mix } = track;
   const { createdAt } = track as ITrack;
 
   const [isLoading] = useState<boolean>(false);
@@ -63,10 +55,6 @@ export default function TrackCard({
 
   const handleShowBeatport = (): void => {
     handlePlayTrack(track);
-  };
-
-  const handleToggleFavoriteTrack = (): void => {
-    favorite ? onRemoveFavorite(id) : onAddFavorite(id);
   };
 
   return (
@@ -156,7 +144,7 @@ export default function TrackCard({
           {favoritesList ? favoriteDate : publishDate}
         </GridItem>
 
-        <Favorite isFavorite={!!favorite} onClick={handleToggleFavoriteTrack} />
+        <Favorite track={track} />
       </Grid>
     </Box>
   );
