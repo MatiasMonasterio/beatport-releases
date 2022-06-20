@@ -10,3 +10,4 @@ export * from "./FeedCard";
 export * from "./CardList";
 export * from "./Search";
 export * from "./SecondNavbar";
+export * from "./Favorite";
