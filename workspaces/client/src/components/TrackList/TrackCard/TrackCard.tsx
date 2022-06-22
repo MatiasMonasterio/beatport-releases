@@ -88,9 +88,17 @@ export default function TrackCard({ favoritesList, track, handlePlayTrack }: Pro
           gap={0.2}
           alignItems="start"
           alignSelf="center"
+          overflow="hidden"
         >
-          <Box color={isSelect ? "#01FF95" : ""}>
-            <Text as="span">
+          <Box color={isSelect ? "#01FF95" : ""} w="100%">
+            <Text
+              as="span"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+              overflow="hidden"
+              width="100%"
+              display="inline-block"
+            >
               {name} {mix}
             </Text>{" "}
           </Box>
@@ -101,9 +109,7 @@ export default function TrackCard({ favoritesList, track, handlePlayTrack }: Pro
                 as={ReactLink}
                 key={artist.id}
                 to={`/artist/${artist.id}`}
-                _notLast={{
-                  _after: { content: `", "` },
-                }}
+                _notLast={{ _after: { content: `", "` } }}
               >
                 {artist.name}
               </Link>
