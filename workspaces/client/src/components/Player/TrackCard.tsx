@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
-import { Flex, Image, Box, Text, Link } from "@chakra-ui/react";
+import { Flex, Image, Box, Link, Text } from "@chakra-ui/react";
 
-import { Favorite } from "components";
+import { Favorite, MotionText } from "components";
 import { usePlayerContext } from "context/player";
 
 export default function TrackCard(): JSX.Element {
@@ -10,14 +10,16 @@ export default function TrackCard(): JSX.Element {
 
   return (
     <Flex gap={4}>
-      <Image src={artwork} h={{ base: 14, sm: 16 }} w={{ base: 14, sm: 16 }} />
+      <Image src={artwork} h={14} w={14} />
 
-      <Box fontSize="sm">
-        <Text fontWeight="bold">
-          {name} {mix}
-        </Text>
+      <Box fontSize="sm" overflow="hidden">
+        <MotionText>
+          <Text fontWeight="bold">
+            {name} {mix}
+          </Text>
+        </MotionText>
 
-        <Box lineHeight={1}>
+        <MotionText lineHeight={1}>
           {artists &&
             artists.map((artist) => (
               <Link
@@ -27,25 +29,25 @@ export default function TrackCard(): JSX.Element {
                 fontSize="xs"
                 color="gray.400"
                 lineHeight={1}
-                _notLast={{
-                  _after: { content: `", "` },
-                }}
+                _notLast={{ _after: { content: `", "` } }}
               >
                 {artist.name}
               </Link>
             ))}
-        </Box>
+        </MotionText>
 
-        <Link
-          as={NavLink}
-          to={`/label/${label?.id}`}
-          fontSize="xs"
-          color="gray.400"
-          d="inline-block"
-          lineHeight={1}
-        >
-          {label?.name}
-        </Link>
+        <MotionText>
+          <Link
+            as={NavLink}
+            to={`/label/${label?.id}`}
+            fontSize="xs"
+            color="gray.400"
+            d="inline-block"
+            lineHeight={1}
+          >
+            {label?.name}
+          </Link>
+        </MotionText>
       </Box>
 
       <Favorite track={currentTrack} />

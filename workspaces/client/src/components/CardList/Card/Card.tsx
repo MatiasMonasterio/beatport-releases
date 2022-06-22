@@ -3,6 +3,9 @@ import type { Type, CardData } from "../types";
 import { Link } from "react-router-dom";
 import { LinkBox, Box, LinkOverlay, Heading, VStack, Text } from "@chakra-ui/react";
 
+import { MotionText } from "components";
+import { useMotionText } from "components/MotionText";
+
 interface Props {
   data: CardData;
   type: Type;
@@ -11,9 +14,17 @@ interface Props {
 
 export default function Card({ data, type, height }: Props) {
   const { artwork, name, id, tracks } = data;
+  const { ref, onHoverStart, onHoverEnd } = useMotionText();
 
   return (
-    <LinkBox as="article" display="flex" alignItems="end" role="group">
+    <LinkBox
+      as="article"
+      display="flex"
+      alignItems="end"
+      role="group"
+      onMouseEnter={onHoverStart}
+      onMouseLeave={onHoverEnd}
+    >
       <VStack w="100%">
         <Box
           height={height}
@@ -36,11 +47,13 @@ export default function Card({ data, type, height }: Props) {
           }}
         />
 
-        <Box w="100%">
+        <Box w="100%" overflow="hidden">
           <LinkOverlay as={Link} to={`/${type}/${id}`}>
-            <Heading as="h2" size="sm" color="gray.200">
-              {name}
-            </Heading>
+            <MotionText ref={ref}>
+              <Heading as="h2" size="sm" color="gray.200">
+                {name}
+              </Heading>
+            </MotionText>
 
             <Text fontSize="xs" color="gray.500">
               {tracks.length} tracks
