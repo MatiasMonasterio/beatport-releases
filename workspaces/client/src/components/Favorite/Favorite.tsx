@@ -9,7 +9,7 @@ import { FaHeart } from "react-icons/fa";
 import { newFavoriteTrack, deleteFavoriteById } from "services/favorites";
 import { usePlayerContext } from "context/player";
 
-interface Props {
+export interface Props {
   track: Track;
   onClick?: () => void;
 }
@@ -61,7 +61,7 @@ export default function Favorite({ track, onClick }: Props) {
   }, [track]);
 
   useLayoutEffect(() => {
-    if (currentTrack.id === track.id) {
+    if (currentTrack && currentTrack.id === track.id) {
       setIsFavorite(!!currentTrack.favorite);
     }
   }, [currentTrack]);
@@ -74,6 +74,8 @@ export default function Favorite({ track, onClick }: Props) {
       variant="link"
       onClick={handleFavorite}
       fontSize={isFavorite ? "sm" : "md"}
+      aria-label={isFavorite ? "Remove Favorite" : "Add Favorite"}
+      role="switch"
     >
       {isFavorite ? <FaHeart fill="#01FF95" /> : <BiHeart />}
     </MotionButton>
