@@ -24,7 +24,7 @@ export default function Player(): JSX.Element {
         <AudioPlayer />
       </GridItem>
 
-      <GridItem d={{ base: "none", sm: "flex" }} justifyContent="center"></GridItem>
+      <GridItem display={{ base: "none", sm: "flex" }} justifyContent="center"></GridItem>
     </Grid>
   );
 }
