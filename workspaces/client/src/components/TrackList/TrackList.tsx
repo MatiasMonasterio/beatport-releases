@@ -5,7 +5,7 @@ import { Flex, Box } from "@chakra-ui/react";
 
 import { usePlayerContext } from "context/player";
 
-import TrackCard from "./TrackCard";
+import TrackRow from "./TrackRow";
 import TrackCardLoader from "./TrackCardLoader";
 import SortDesktop from "./SortDesktop";
 import SortMobile from "./SortMobile";
@@ -24,7 +24,7 @@ export enum trackFilter {
   createdAt = "createdAt",
 }
 
-interface Props {
+export interface Props {
   tracks: ITrack[];
   isLoading: boolean;
   favoritesList?: boolean;
@@ -78,16 +78,16 @@ export default function TrackList({ tracks, isLoading, favoritesList }: Props): 
         </Box>
       </Box>
 
-      <Flex direction="column" gap={2}>
+      <Flex direction="column" gap={2} role="list">
         {isLoading && [1, 2, 3, 4].map((value) => <TrackCardLoader key={value} />)}
 
         {!isLoading &&
           innerTracks.length > 0 &&
           innerTracks.map((track) => (
-            <TrackCard
-              favoritesList={favoritesList}
+            <TrackRow
+              isFavoriteList={favoritesList}
               track={track}
-              handlePlayTrack={handlePlayTrack}
+              onPlay={handlePlayTrack}
               key={track.id}
             />
           ))}
