@@ -1,6 +1,6 @@
 import { Button, Spinner, HStack } from "@chakra-ui/react";
 
-interface Props {
+export interface Props {
   isLoading?: boolean;
   isFollowing: boolean;
   onClick: () => void;
