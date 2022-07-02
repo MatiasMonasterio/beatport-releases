@@ -42,7 +42,7 @@ export default function TrackCard(): JSX.Element {
             to={`/label/${label?.id}`}
             fontSize="xs"
             color="gray.400"
-            d="inline-block"
+            display="inline-block"
             lineHeight={1}
           >
             {label?.name}
