@@ -9,7 +9,10 @@ const config: Config = {
   transform: {
     "\\.[jt]sx?$": ["babel-jest", { configFile: path.join(__dirname, "./babel-jest.config.js") }],
   },
-  moduleNameMapper: { ...jestAlias },
+  moduleNameMapper: {
+    ...jestAlias,
+    "^@/(.*)$": `${path.join(__dirname, "src/modules")}/$1`,
+  },
 };
 
 export default config;
