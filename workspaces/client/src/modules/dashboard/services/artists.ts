@@ -1,6 +1,5 @@
 import type { Artist, Track } from "@br/core";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { API_URL } from "config/env";
 
 type ArtistsResponse = {
   data: Artist[];
