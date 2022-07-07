@@ -1,4 +1,5 @@
-import { Image, Menu, MenuButton, MenuList, MenuItem, MenuDivider } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { Image, Menu, MenuButton, MenuList, MenuItem, Text } from "@chakra-ui/react";
 import { BiUser, BiSlider, BiLogOut } from "react-icons/bi";
 
 export default function Account() {
@@ -8,18 +9,43 @@ export default function Account() {
         <Image borderRadius="full" boxSize={8} src="https://bit.ly/dan-abramov" alt="Dan Abramov" />
       </MenuButton>
 
-      <MenuList bgColor="gray.900" color="gray.300" border="none" borderRadius="md" zIndex={101}>
-        <MenuItem icon={<BiUser />} _hover={{ color: "gray.800" }}>
-          Account
+      <MenuList
+        bgColor="gray.800"
+        color="gray.300"
+        border="none"
+        boxShadow="sm"
+        borderRadius="3px"
+        fontSize="lg"
+        zIndex={101}
+        w="100px"
+        mt="5px"
+      >
+        <MenuItem
+          as={Link}
+          to="/account"
+          _focus={{ bgColor: "initial", color: "white" }}
+          _hover={{ bgColor: "initial", color: "white" }}
+          icon={<BiUser />}
+        >
+          <Text fontSize="md">Profile</Text>
         </MenuItem>
-        <MenuItem icon={<BiSlider />} _hover={{ color: "gray.800" }}>
-          Settings
+        <MenuItem
+          as={Link}
+          to="/account/settings"
+          _focus={{ bgColor: "initial", color: "white" }}
+          _hover={{ bgColor: "initial", color: "white" }}
+          icon={<BiSlider />}
+        >
+          <Text fontSize="md">Settings</Text>
         </MenuItem>
-
-        <MenuDivider />
-
-        <MenuItem icon={<BiLogOut />} _hover={{ color: "gray.800" }}>
-          Sign Out
+        <MenuItem
+          as={Link}
+          to="/auth/login"
+          _focus={{ bgColor: "initial", color: "white" }}
+          _hover={{ bgColor: "initial", color: "white" }}
+          icon={<BiLogOut />}
+        >
+          <Text fontSize="md">Sign Out</Text>
         </MenuItem>
       </MenuList>
     </Menu>

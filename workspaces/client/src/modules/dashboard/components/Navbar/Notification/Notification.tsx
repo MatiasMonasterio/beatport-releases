@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link as NavLink } from "react-router-dom";
 import {
   Button,
   Box,
   Popover,
   PopoverTrigger as OrigPopoverTrigger,
   PopoverContent,
-  PopoverHeader,
-  PopoverArrow,
   PopoverBody,
   Text,
   useDisclosure,
+  Link,
 } from "@chakra-ui/react";
 import { BiBell } from "react-icons/bi";
 
@@ -56,20 +55,36 @@ export default function Notification() {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent width={200} bgColor="gray.700" border="none">
-        <PopoverHeader fontWeight="semibold">Notifications</PopoverHeader>
-        <PopoverArrow bgColor="gray.700" borderColor="gray.600" />
-
+      <PopoverContent width={400} bgColor="gray.800" border="none" mt="7px" borderRadius="4px">
         <PopoverBody zIndex={102}>
-          <Link to="/artists" onClick={onToggle}>
-            <Text fontSize="sm" fontWeight="medium">
-              5 new releases
+          <Box role="group">
+            <Text fontSize="xs" color="gray.500" _groupHover={{ color: "gray.400" }}>
+              New Releases | Today
             </Text>
 
-            <Text fontSize="xs" color="gray.400">
-              Today
+            <Text
+              color="gray.300"
+              fontSize="md"
+              _groupHover={{ color: "gray.200" }}
+              lineHeight="1.2em"
+            >
+              5 new releases!
             </Text>
-          </Link>
+
+            <Text as="span">
+              <Link
+                as={NavLink}
+                to="/releases"
+                onClick={onToggle}
+                fontSize="xs"
+                color="#01FF95"
+                mr={1}
+              >
+                Go to releases!
+              </Link>
+              🚀
+            </Text>
+          </Box>
         </PopoverBody>
       </PopoverContent>
     </Popover>
