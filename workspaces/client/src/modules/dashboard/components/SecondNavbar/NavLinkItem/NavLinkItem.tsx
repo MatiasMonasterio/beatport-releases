@@ -9,16 +9,16 @@ interface Props {
 export default function NavLinkItem({ path, name }: Props) {
   return (
     <Link
-      _activeLink={{ color: "gray.100", borderColor: "gray.100" }}
-      _hover={{ color: "gray.100", borderColor: "gray.100" }}
+      _activeLink={{ color: "gray.300", borderColor: "#01FF95" }}
+      _hover={{ color: "gray.300", borderColor: "gray.300" }}
       as={NavLink}
       borderBottom="2px solid"
       borderColor="transparent"
       color="gray.400"
       end
-      fontWeight="bold"
+      fontWeight="normal"
       pb={4}
-      px={6}
+      px={4}
       to={path}
     >
       {name}
