@@ -5,6 +5,7 @@ export { default as Player } from "./Player";
 export { default as SecondNavbar } from "./SecondNavbar";
 export { default as Favorite } from "./Favorite";
 export { default as Follow } from "./Follow";
+export { default as PlayButtonPlaylist } from "./PlayButtonPlaylist";
 export { default as Search } from "./Search";
 export { default as FeedCard } from "./FeedCard";
 export { default as MotionText } from "./MotionText";
