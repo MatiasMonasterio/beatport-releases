@@ -11,8 +11,8 @@ const labelsRoutes = [
 export default function LabelsLayout() {
   return (
     <>
-      <SecondNavbar routes={labelsRoutes} />
       <Container maxW="container.xl">
+        <SecondNavbar routes={labelsRoutes} />
         <Outlet />
       </Container>
     </>

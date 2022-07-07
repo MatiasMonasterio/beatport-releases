@@ -11,11 +11,9 @@ const artistsRoutes = [
 
 export default function ArtistsLayout() {
   return (
-    <>
+    <Container maxW="container.xl">
       <SecondNavbar routes={artistsRoutes} />
-      <Container maxW="container.xl">
-        <Outlet />
-      </Container>
-    </>
+      <Outlet />
+    </Container>
   );
 }

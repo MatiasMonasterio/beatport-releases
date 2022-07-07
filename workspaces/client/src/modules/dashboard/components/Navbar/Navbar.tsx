@@ -18,16 +18,17 @@ export default function Navbar({ isSolid }: Props) {
   const handleNavigateNext = () => navigate(1);
 
   return (
-    <Box position="sticky" top={0} zIndex={2}>
+    <Box position="sticky" top={0} zIndex={100}>
       <Box
         as="nav"
         position="absolute"
         w="100%"
         top={0}
-        py={4}
-        zIndex={100}
+        py={3}
         right={0}
-        bgColor={isSolid ? "gray.800" : "transparent"}
+        bgColor={isSolid ? "gray.900" : "transparent"}
+        borderBottom="1px solid"
+        borderColor={isSolid ? "gray.700" : "transparent"}
       >
         <Container maxW="container.xl">
           <Button

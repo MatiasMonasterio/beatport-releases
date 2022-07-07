@@ -17,7 +17,6 @@ export default function DashboardLayout() {
           templateRows="1fr"
           h="100vh"
           overflowY="hidden"
-          bg="gray.800"
           color="gray.50"
         >
           <GridItem
@@ -35,6 +34,7 @@ export default function DashboardLayout() {
           <GridItem
             className="dashboard-main-content"
             overflowY="scroll"
+            bg="gray.900"
             pb={10}
             h="100%"
             position="relative"
@@ -44,16 +44,14 @@ export default function DashboardLayout() {
             css={{
               "@media (min-width: 480px)": {
                 "&::-webkit-scrollbar": {
-                  width: "12px",
-                  borderLeft: "1px solid #2D3748",
+                  width: "4px",
                   backgroundColor: "#1A202C",
                 },
                 "&::-webkit-scrollbar-track": {
                   width: "10px",
                 },
                 "&::-webkit-scrollbar-thumb": {
-                  background: "rgba(0, 0, 0, 0.48)",
-                  borderLeft: "1px solid #2D3748",
+                  background: "#2D3748",
                   borderRadius: "2px",
                 },
               },

@@ -44,22 +44,24 @@ export default function Search({ value = "", placeholder, width = "300px" }: Pro
   }, []);
 
   return (
-    <Box as="form" onSubmit={handleFormSubmit}>
+    <Box as="form" onSubmit={handleFormSubmit} minW="350px">
       <InputGroup>
         <InputLeftElement color="gray.400">
           <BiSearch />
         </InputLeftElement>
 
         <Input
-          borderColor="gray.500"
+          borderColor="gray.600"
           fontSize="sm"
+          w="100%"
+          h={9}
           onChange={handleInputChange}
           placeholder={placeholder}
           type="text"
           value={inputValue}
           width={width}
-          h="2rem"
-          bg="gray.700"
+          bg="gray.800"
+          borderRadius="4px"
         />
 
         {inputValue && (

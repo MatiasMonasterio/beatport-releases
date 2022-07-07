@@ -21,15 +21,7 @@ interface Props {
 
 export default function FeedCard({ title, countTracks, to, isLoading, onPlay }: Props) {
   return (
-    <LinkBox
-      bgColor="gray.700"
-      p={4}
-      backdropBlur="2px"
-      borderRadius="lg"
-      _hover={{ bgColor: "gray.600" }}
-      role="group"
-      pt={16}
-    >
+    <LinkBox bgColor="gray.700" p={4} backdropBlur="2px" borderRadius="lg" role="group" pt={16}>
       <HStack justifyContent="space-between">
         <Box>
           <LinkOverlay as={Link} to={to}>
