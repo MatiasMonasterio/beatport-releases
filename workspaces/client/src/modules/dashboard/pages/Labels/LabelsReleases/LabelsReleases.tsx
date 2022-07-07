@@ -28,7 +28,7 @@ export default function LabelsReleases(): JSX.Element {
       )}
 
       {!isLoading && (
-        <Heading as="h2" size="md" mb={4}>
+        <Heading as="h2" size="lg" mb={4}>
           {releases.length} Releases
         </Heading>
       )}

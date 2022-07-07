@@ -28,7 +28,7 @@ export default function LabelsUpcomings(): JSX.Element {
       )}
 
       {!isLoading && (
-        <Heading as="h2" size="md" mb={4}>
+        <Heading as="h2" size="lg" mb={4}>
           {upcomings.length} Upcoming
         </Heading>
       )}

@@ -39,7 +39,7 @@ export default function Labels(): JSX.Element {
         )}
 
         {!isLoading && (
-          <Heading as="h2" size="md">
+          <Heading as="h2" size="lg">
             {results.length} Labels
           </Heading>
         )}

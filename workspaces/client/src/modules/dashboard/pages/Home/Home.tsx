@@ -71,7 +71,7 @@ export default function Home() {
       <Container maxW="container.xl" mt={{ base: 16, sm: 20 }}>
         <VStack spacing={12} alignItems="initial">
           <Box as="section">
-            <Heading as="h2" size="md" mb={8}>
+            <Heading as="h2" size="md" mb={4}>
               Feed
             </Heading>
 
@@ -115,7 +115,7 @@ export default function Home() {
           </VStack>
 
           <Box as="section">
-            <HStack mb={8} justifyContent="space-between" fontSize="sm">
+            <HStack mb={4} justifyContent="space-between" fontSize="sm">
               <Heading as="h2" size="md">
                 Recent Artist Followed
               </Heading>
@@ -135,7 +135,7 @@ export default function Home() {
           </Box>
 
           <Box as="section" w="100%">
-            <HStack mb={8} justifyContent="space-between" fontSize="sm">
+            <HStack mb={4} justifyContent="space-between" fontSize="sm">
               <Heading as="h2" size="md">
                 Recent Labels Followed
               </Heading>

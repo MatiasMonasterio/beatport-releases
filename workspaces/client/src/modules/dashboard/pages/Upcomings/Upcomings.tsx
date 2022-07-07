@@ -22,7 +22,7 @@ export default function Upcomings() {
 
       <Container maxW="container.xl" mt={{ base: 16, sm: 20 }}>
         <Box as="section">
-          <Heading as="h2" size="md" mb={8}>
+          <Heading as="h2" size="md" mb={4}>
             Upcomings
           </Heading>
 

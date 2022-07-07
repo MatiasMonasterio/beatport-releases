@@ -25,7 +25,7 @@ export default function Releases() {
 
       <Container maxW="container.xl" mt={{ base: 16, sm: 20 }}>
         <Box as="section">
-          <Heading as="h2" size="md" mb={8}>
+          <Heading as="h2" size="md" mb={4}>
             Releases
           </Heading>
 

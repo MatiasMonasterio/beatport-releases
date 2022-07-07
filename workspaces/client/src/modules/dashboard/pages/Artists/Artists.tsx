@@ -39,7 +39,7 @@ export default function Artists() {
         )}
 
         {!isLoading && (
-          <Heading as="h2" size="md">
+          <Heading as="h2" size="lg">
             {results.length} Artists
           </Heading>
         )}
