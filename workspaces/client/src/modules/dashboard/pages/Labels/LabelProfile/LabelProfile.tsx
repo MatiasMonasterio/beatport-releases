@@ -2,12 +2,12 @@ import type { Label } from "@br/core";
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Heading, Flex, Link, Box, Container, Skeleton, HStack } from "@chakra-ui/react";
+import { Heading, Flex, Link, Box, Container, Skeleton, HStack, VStack } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
 import { useFetch } from "hooks";
 
-import { TrackList, Follow } from "@/dashboard/components";
+import { TrackList, Follow, PlayButtonPlaylist } from "@/dashboard/components";
 import { useParallax } from "@/dashboard/hooks";
 import { getLabelById, addLabelId, deleteLabelById } from "@/dashboard/services/labels";
 
@@ -65,20 +65,24 @@ export default function LabelProfile(): JSX.Element {
                 <Skeleton width="150px" height="0.9rem" startColor="gray.800" endColor="gray.700" />
               </>
             ) : (
-              <>
-                <HStack alignItems="end">
-                  <Heading>{label.name}</Heading>
-                  <Follow
-                    isFollowing={!!label.follow}
-                    isLoading={isLoadingRuntime}
-                    onClick={handleFollow}
-                  />
-                </HStack>
+              <HStack gap={2}>
+                <PlayButtonPlaylist playlist={label.tracks} disabled={!label.tracks?.length} />
 
-                <Link isExternal href={label.profile} fontSize="sm" color="gray.400" mr="auto">
-                  Go to beatport profile
-                </Link>
-              </>
+                <VStack align="flex-start">
+                  <HStack alignItems="end">
+                    <Heading>{label.name}</Heading>
+                    <Follow
+                      isFollowing={!!label.follow}
+                      isLoading={isLoadingRuntime}
+                      onClick={handleFollow}
+                    />
+                  </HStack>
+
+                  <Link isExternal href={label.profile} fontSize="sm" color="gray.400" mr="auto">
+                    Go to beatport profile
+                  </Link>
+                </VStack>
+              </HStack>
             )}
           </Container>
         </Flex>
