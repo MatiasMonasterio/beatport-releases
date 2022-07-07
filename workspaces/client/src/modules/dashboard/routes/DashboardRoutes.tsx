@@ -1,7 +1,7 @@
 import { Route } from "react-router-dom";
 
 import { RoutesWithNotFound } from "hocs";
-import { DashboardLayout, ArtistsLayout, LabelsLayout } from "@/dashboard/layouts";
+import { DashboardLayout, ArtistsLayout, LabelsLayout, AccountLayout } from "@/dashboard/layouts";
 
 import Home from "@/dashboard/pages/Home";
 import Releases from "@/dashboard/pages/Releases";
@@ -17,6 +17,9 @@ import Labels from "@/dashboard/pages/Labels";
 import LabelsReleases from "@/dashboard/pages/Labels/LabelsReleases";
 import LabelsUpcomings from "@/dashboard/pages/Labels/LabelsUpcomings";
 import LabelProfile from "@/dashboard/pages/Labels/LabelProfile";
+
+import Account from "@/dashboard/pages/Account";
+import AccountSettings from "@/dashboard/pages/Account/Settings";
 
 export default function DashboardRoutes() {
   return (
@@ -45,6 +48,11 @@ export default function DashboardRoutes() {
 
         <Route path="label">
           <Route path=":id" element={<LabelProfile />} />
+        </Route>
+
+        <Route path="account" element={<AccountLayout />}>
+          <Route path="" element={<Account />} />
+          <Route path="settings" element={<AccountSettings />} />
         </Route>
       </Route>
     </RoutesWithNotFound>
