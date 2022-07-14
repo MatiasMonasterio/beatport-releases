@@ -19,7 +19,7 @@
     "dev:client": "npm run dev --w=client",
     "dev:server": "npm run dev --w=server",
     "build:client": "npm run build --w=client",
-    "build:server": "npm run prisma:generate && npm run prisma:migrate && npm run build:server",
+    "build:server": "npm run prisma:generate && npm run prisma:migrate && npm run build --w=server",
     "build:server:prod": "npm run prisma:generate && npm run prisma:migrate && npm run build:server",
     "prisma:migrate": "npm run prisma:migrate --w=server",
     "prisma:studio": "npm run prisma:studio --w=server",
