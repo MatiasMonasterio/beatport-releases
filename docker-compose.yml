@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - DATABASE_HOST=127.0.0.1
+      - POSTGRES_USER=develop
+      - POSTGRES_PASSWORD=develop
+      - POSTGRESS_DB=develop
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+  redis-commnader:
+    image: rediscommander/redis-commander
+    restart: always
+    environment: 
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=develop
+      - HTTP_PASSWORD=develop
+    ports:
+      - 8081:8081
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:7.0.2-alpine"
+    restart: always
+    hostname: redis
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  pg-data:
+  pgadmin-data:
+  redis-data:
