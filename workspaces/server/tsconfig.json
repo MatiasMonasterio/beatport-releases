@@ -3,7 +3,11 @@
   "compilerOptions": {
     "module": "commonjs",
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "typeRoots": [
+      "@types",
+      "./node_modules/@types"
+    ]
   },
   "exclude": ["./jest.config.ts", "**/*.test.ts"]
 }
