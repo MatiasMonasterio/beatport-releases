@@ -1,3 +1,6 @@
+import type { User } from "@br/core";
+
+import { useState, useEffect } from "react";
 import {
   Heading,
   VStack,
@@ -15,7 +18,19 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
+import { useFetch } from "hooks";
+import { getUserInfo } from "@/dashboard/services/user";
+
 export default function Account() {
+  const [user, setUser] = useState<User | null>(null);
+  const { fetch } = useFetch();
+
+  useEffect(() => {
+    fetch<User | null>(getUserInfo).then((user) => {
+      if (user) setUser(user);
+    });
+  }, []);
+
   return (
     <VStack spacing={8}>
       <Heading size="lg" borderBottom="1px solid" borderColor="gray.700" py={2} w="100%">
@@ -23,11 +38,11 @@ export default function Account() {
       </Heading>
 
       <HStack w="100%" spacing={4}>
-        <Avatar size="xl" name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+        <Avatar size="xl" name={user?.username} src={user?.avatar} />
 
         <VStack alignItems="flex-start">
           <Heading as="h2" size="md" color="gray.300" fontWeight="medium">
-            Matías M. Monasterio
+            {user?.username}
           </Heading>
 
           <Text color="gray.400">Init with Google</Text>
@@ -57,7 +72,7 @@ export default function Account() {
                 bgColor="gray.700"
                 borderColor="gray.600"
                 borderRadius="3px"
-                value="matias_monasterio@outlook.com"
+                value={user?.email}
                 color="gray.300"
                 type="text"
                 disabled
@@ -77,7 +92,7 @@ export default function Account() {
                 bgColor="gray.700"
                 borderColor="gray.600"
                 borderRadius="3px"
-                value="thisisapassword"
+                value={user?.password}
                 color="gray.300"
                 type="password"
                 disabled
@@ -107,15 +122,15 @@ export default function Account() {
               Genre:
             </FormLabel>
 
-            <RadioGroup>
+            <RadioGroup value={user?.genre}>
               <Stack direction="row">
-                <Radio value="1" borderColor="gray.700">
+                <Radio value="male" borderColor="gray.700">
                   Male
                 </Radio>
-                <Radio value="2" borderColor="gray.700">
+                <Radio value="female" borderColor="gray.700">
                   Female
                 </Radio>
-                <Radio value="3" borderColor="gray.700">
+                <Radio value="nobinary" borderColor="gray.700">
                   No Binary
                 </Radio>
               </Stack>
@@ -131,7 +146,7 @@ export default function Account() {
               bgColor="gray.700"
               borderColor="gray.600"
               borderRadius="3px"
-              value="Matias M. Monasterio"
+              value={user?.username}
               color="gray.300"
               type="text"
             />
@@ -158,13 +173,13 @@ export default function Account() {
             </FormLabel>
 
             <HStack>
-              <Select placeholder="Select option" bgColor="gray.700" borderColor="gray.600">
+              <Select placeholder="Day" bgColor="gray.700" borderColor="gray.600">
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
                 <option value="option3">Option 3</option>
               </Select>
 
-              <Select placeholder="Select option" bgColor="gray.700" borderColor="gray.600">
+              <Select placeholder="Month" bgColor="gray.700" borderColor="gray.600">
                 {new Array(12).map((index) => (
                   <option value="option1" key={index}>
                     Option 1
@@ -172,7 +187,7 @@ export default function Account() {
                 ))}
               </Select>
 
-              <Select placeholder="Select option" bgColor="gray.700" borderColor="gray.600">
+              <Select placeholder="Year" bgColor="gray.700" borderColor="gray.600">
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
                 <option value="option3">Option 3</option>
