@@ -7,13 +7,13 @@ import cors from "cors";
 
 import apiRoutes from "./api/routes";
 import { connectDatabases } from "./utils";
-import { PORT } from "./config/constants";
+import { PORT, CLIENT_URL } from "./config/constants";
 
 const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cors());
+app.use(cors({ origin: CLIENT_URL }));
 
 app.get("/", (_req, res) => {
   res.send("Beat Releases API");
