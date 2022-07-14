@@ -3,16 +3,9 @@ import type { ErrorRequest } from "../../types";
 
 import userService from "../services/userServices";
 
-const createNewUser = async (req: Request, res: Response) => {
-  const { id, name, email } = req.body;
-
-  if (!id || !name || !email) {
-    res.status(400).send({ status: "FAILED", data: { error: "user is missing or invalid" } });
-    return;
-  }
-
+const getUser = async (req: Request, res: Response) => {
   try {
-    const user = await userService.createNewArtist(req.body);
+    const user = await userService.getUser(+req.userId);
     res.send({ status: "OK", data: user });
   } catch (error: unknown | ErrorRequest) {
     const err = error as ErrorRequest;
@@ -23,6 +16,34 @@ const createNewUser = async (req: Request, res: Response) => {
   }
 };
 
+const createNewUser = async (req: Request, res: Response) => {
+  try {
+    const token = await userService.createNewUser(req.body);
+    res.send({ status: "OK", data: token });
+  } catch (error: unknown | ErrorRequest) {
+    const err = error as ErrorRequest;
+
+    res
+      .status(err?.status || 500)
+      .send({ status: "FAILED", data: { error: err?.message || error } });
+  }
+};
+
+const loginUser = async (req: Request, res: Response) => {
+  try {
+    const token = await userService.loginUser(req.body);
+    res.send({ status: "OK", data: token });
+  } catch (error: unknown | ErrorRequest) {
+    const err = error as ErrorRequest;
+
+    res
+      .status(err?.status || 500)
+      .send({ status: "FAILED", data: { error: err?.message || error } });
+  }
+};
+
 export default {
+  getUser,
   createNewUser,
+  loginUser,
 };
