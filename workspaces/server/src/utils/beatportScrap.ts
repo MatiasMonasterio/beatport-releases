@@ -15,8 +15,6 @@ const findTextAndReturnRemainder = (target: string, variable: string): string =>
 
 interface dataDb {
   id: number;
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
 const artistsScrapper = async (artistsDb: dataDb[]): Promise<Artist[]> => {
@@ -62,9 +60,6 @@ const artistsScrapper = async (artistsDb: dataDb[]): Promise<Artist[]> => {
         profile: artistProfile,
         tracks: tracks,
       };
-
-      if (artistDb.createdAt) artist.createdAt = new Date(artistDb.createdAt).getTime();
-      if (artistDb.updatedAt) artist.updatedAt = new Date(artistDb.updatedAt).getTime();
 
       return artist;
     })
@@ -115,9 +110,6 @@ const labelsScrapper = async (artistsDb: dataDb[]): Promise<Label[]> => {
         artwork,
         tracks,
       };
-
-      if (artistDb.createdAt) label.createdAt = new Date(artistDb.createdAt).getTime();
-      if (artistDb.updatedAt) label.updatedAt = new Date(artistDb.updatedAt).getTime();
 
       return label;
     })
