@@ -111,7 +111,10 @@ export default function Home() {
               New Releases this week 🔥
             </Heading>
 
-            <TrackList tracks={[...releases].splice(0, 5)} isLoading={isLoading} />
+            <TrackList
+              tracks={releases.length ? [...releases].splice(0, 5) : []}
+              isLoading={isLoading}
+            />
           </VStack>
 
           <Box as="section">
