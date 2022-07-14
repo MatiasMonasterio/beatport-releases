@@ -1,104 +1,229 @@
-import { Artist, Label, Track } from "@br/core";
+import type { Track } from "@br/core";
 
-import scraperService from "./scraperServices";
-import favoriteServices from "./favoriteServices";
-import cache from "../../cache";
+import db from "../../database";
+import { trackAdapter } from "../adapters";
 
-// remove when apply auth and users
-const USER_ID = 1;
-const USER_ARTIST_KEY = `ARTISTS-${USER_ID}`;
-const USER_LABEL_KEY = `LABELS-${USER_ID}`;
+interface ParamsFilter {
+  sort?: keyof Track;
+  order?: "desc" | "asc";
+  length?: number;
+  userId: number;
+}
 
-const getAllReleases = async (): Promise<Track[]> => {
-  const artistsReleases = await getArtistsReleases();
-  const labelReleases = await getLabelsReleases();
-
-  const releases = [...artistsReleases, ...labelReleases]
-    .filter((release, index, self) => {
-      return self.findIndex((releaseSelf) => releaseSelf.id === release.id) === index;
-    })
-    .sort((a, b) => b.released - a.released);
-
-  return releases;
+const createNewsTracks = async (tracks: Track[]): Promise<void> => {
+  try {
+    await db.trackDB.createMany({
+      data: tracks.map((track) => ({
+        id: track.id,
+        bpm: track.bpm,
+        released: new Date(track.released),
+        artwork: track.artwork,
+        key: track.key as string,
+        mix: track.mix,
+        name: track.name,
+        preview: track.preview,
+        genre: {
+          connectOrCreate: {
+            where: { id: track.genres[0].id },
+            create: {
+              id: track.genres[0].id,
+              name: track.genres[0].name,
+              slug: track.genres[0].slug,
+            },
+          },
+        },
+        label: {
+          connectOrCreate: {
+            where: { id: track.label.id },
+            create: {
+              id: track.label.id,
+              name: track.label.name,
+              profile: "",
+            },
+          },
+        },
+        remixers: {
+          connectOrCreate: track.remixers.map((remixer) => ({
+            where: { id: remixer.id },
+            create: {
+              id: remixer.id,
+              name: remixer.name,
+              profile: "",
+            },
+          })),
+        },
+        artists: {
+          connectOrCreate: track.artists.map((artist) => ({
+            where: { id: artist.id },
+            create: {
+              id: artist.id,
+              name: artist.name,
+              profile: "",
+            },
+          })),
+        },
+      })),
+      skipDuplicates: true,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-const getAllUpcomings = async (): Promise<Track[]> => {
-  const artistsUpcomings = await getArtistsUpcoming();
-  const labelsUpcomings = await getLabelsUpcoming();
+const getAllReleases = async ({ userId }: ParamsFilter): Promise<Track[]> => {
+  const releases = await db.trackDB.findMany({
+    where: {
+      OR: [
+        {
+          artists: { some: { users: { some: { id: userId } } } },
+          released: { lte: new Date() },
+        },
+        {
+          label: { users: { some: { id: userId } } },
+          released: { lte: new Date() },
+        },
+      ],
+    },
+    include: {
+      artists: true,
+      remixers: true,
+      label: true,
+      genre: true,
+      favorite: true,
+    },
+    orderBy: [{ released: "desc" }, { label: { name: "desc" } }],
+  });
 
-  const upcomings = [...artistsUpcomings, ...labelsUpcomings]
-    .filter((upcoming, index, self) => {
-      return self.findIndex((upcomingSelf) => upcomingSelf.id === upcoming.id) === index;
-    })
-    .sort((a, b) => b.released - a.released);
-
-  return upcomings;
+  return releases.map((release) => trackAdapter(release, userId));
 };
 
-const getArtistsReleases = async (): Promise<Track[]> => {
-  const favoritesIds = await favoriteServices.getAllFavoritesIds();
+const getAllUpcomings = async (userId: number): Promise<Track[]> => {
+  const releases = await db.trackDB.findMany({
+    where: {
+      OR: [
+        {
+          artists: {
+            some: {
+              users: {
+                some: { id: userId },
+              },
+            },
+          },
+          released: { gte: new Date() },
+        },
+        {
+          label: {
+            users: {
+              some: { id: userId },
+            },
+          },
+          released: { gte: new Date() },
+        },
+      ],
+    },
+    include: {
+      remixers: true,
+      label: true,
+      genre: true,
+      favorite: true,
+      artists: { orderBy: { name: "desc" } },
+    },
+    orderBy: [{ released: "desc" }, { label: { name: "desc" } }],
+  });
 
-  const artistsCached = await cache.get<Artist[]>(USER_ARTIST_KEY);
-  const artists = artistsCached ? artistsCached : await scraperService.artists();
-
-  if (!artists.length) return [];
-
-  return artists
-    .map((artist) => [...artist.tracks])
-    .reduce((previous, current) => [...previous, ...current])
-    .filter((track) => track.released < new Date().getTime())
-    .sort((a, b) => b.released - a.released)
-    .map((track) => ({ ...track, favorite: favoritesIds.includes(track.id) }));
+  return releases.map((release) => trackAdapter(release, userId));
 };
 
-const getArtistsUpcoming = async (): Promise<Track[]> => {
-  const favoritesIds = await favoriteServices.getAllFavoritesIds();
+const getArtistsReleases = async (userId: number): Promise<Track[]> => {
+  const releases = await db.trackDB.findMany({
+    where: {
+      artists: {
+        some: {
+          users: {
+            some: { id: userId },
+          },
+        },
+      },
+      released: { lte: new Date() },
+    },
+    include: {
+      artists: true,
+      remixers: true,
+      label: true,
+      genre: true,
+      favorite: true,
+    },
+    orderBy: [{ released: "desc" }, { label: { name: "desc" } }],
+  });
 
-  const artistsCached = await cache.get<Artist[]>(USER_ARTIST_KEY);
-  const artists = artistsCached ? artistsCached : await scraperService.artists();
-
-  if (!artists.length) return [];
-  return artists
-    .map((artist) => [...artist.tracks])
-    .reduce((previous, current) => [...previous, ...current])
-    .filter((track) => track.released >= new Date().getTime())
-    .sort((a, b) => b.released - a.released)
-    .map((track) => ({ ...track, favorite: favoritesIds.includes(track.id) }));
+  return releases.map((release) => trackAdapter(release, userId));
 };
 
-const getLabelsReleases = async (): Promise<Track[]> => {
-  const favoritesIds = await favoriteServices.getAllFavoritesIds();
+const getArtistsUpcoming = async (userId: number): Promise<Track[]> => {
+  const releases = await db.trackDB.findMany({
+    where: {
+      artists: {
+        some: {
+          users: {
+            some: { id: userId },
+          },
+        },
+      },
+      released: { gte: new Date() },
+    },
+    include: {
+      artists: true,
+      remixers: true,
+      label: true,
+      genre: true,
+      favorite: true,
+    },
+    orderBy: [{ released: "desc" }, { label: { name: "desc" } }],
+  });
 
-  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
-  const labels = labelsCached ? labelsCached : await scraperService.labels();
-
-  if (!labels.length) return [];
-
-  return labels
-    .map((label) => [...label.tracks])
-    .reduce((previous, current) => [...previous, ...current])
-    .filter((track) => track.released < new Date().getTime())
-    .sort((a, b) => b.released - a.released)
-    .map((track) => ({ ...track, favorite: favoritesIds.includes(track.id) }));
+  return releases.map((release) => trackAdapter(release, userId));
 };
 
-const getLabelsUpcoming = async (): Promise<Track[]> => {
-  const favoritesIds = await favoriteServices.getAllFavoritesIds();
+const getLabelsReleases = async (userId: number): Promise<Track[]> => {
+  const releases = await db.trackDB.findMany({
+    where: {
+      label: { users: { some: { id: userId } } },
+      released: { lte: new Date() },
+    },
+    include: {
+      artists: true,
+      remixers: true,
+      label: true,
+      genre: true,
+      favorite: true,
+    },
+    orderBy: [{ released: "desc" }, { label: { name: "desc" } }],
+  });
 
-  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
-  const labels = labelsCached ? labelsCached : await scraperService.labels();
+  return releases.map((release) => trackAdapter(release, userId));
+};
 
-  if (!labels.length) return [];
+const getLabelsUpcoming = async (userId: number): Promise<Track[]> => {
+  const upcomings = await db.trackDB.findMany({
+    where: {
+      label: { users: { some: { id: userId } } },
+      released: { gte: new Date() },
+    },
+    include: {
+      artists: true,
+      remixers: true,
+      label: true,
+      genre: true,
+      favorite: true,
+    },
+    orderBy: [{ released: "desc" }, { label: { name: "desc" } }],
+  });
 
-  return labels
-    .map((label) => [...label.tracks])
-    .reduce((previous, current) => [...previous, ...current])
-    .filter((track) => track.released >= new Date().getTime())
-    .sort((a, b) => b.released - a.released)
-    .map((track) => ({ ...track, favorite: favoritesIds.includes(track.id) }));
+  return upcomings.map((upcoming) => trackAdapter(upcoming, userId));
 };
 
 export default {
+  createNewsTracks,
   getAllReleases,
   getAllUpcomings,
   getArtistsReleases,

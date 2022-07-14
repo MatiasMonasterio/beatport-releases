@@ -1,121 +1,246 @@
 import { Label } from "@br/core";
 
-import { beatportScrap } from "../../utils";
-import scraperService from "./scraperServices";
-import cache from "../../cache";
 import db from "../../database";
+import cache from "../../cache";
+import { beatportScrap } from "../../utils";
 
-// remove when apply auth and users
-const USER_ID = 1;
-const USER_LABEL_KEY = `LABELS-${USER_ID}`;
+import { labelAdapter } from "../adapters";
 
 interface ParamsFilter {
   sort?: keyof Label;
   order?: "desc" | "asc";
   length?: number;
+  userId: number;
 }
 
-const getAllLabels = async ({ sort, order, length }: ParamsFilter): Promise<Label[]> => {
-  let labels = await cache.get<Label[]>(USER_LABEL_KEY);
-  if (!labels) labels = await scraperService.labels();
+import type { TrackDB, ArtistDB, GenreDB, FavoriteDB, LabelDB } from "@prisma/client";
+interface TracksExtended extends TrackDB {
+  artists: ArtistDB[];
+  remixers: ArtistDB[];
+  favorite: FavoriteDB[];
+  genre: GenreDB | null;
+  label: LabelDB | null;
+}
 
-  if (sort && labels && labels.length) {
-    labels = labels.sort((a, b) => {
-      if (typeof a[sort] === "string" && typeof b[sort] === "string") {
-        const val1 = a[sort] as string;
-        const val2 = b[sort] as string;
+interface LabelAndTracks extends LabelDB {
+  tracks: TracksExtended[];
+}
 
-        return order === "desc" ? val1.localeCompare(val2) : val2.localeCompare(val1);
-      } else {
-        const val1 = a[sort] as number;
-        const val2 = b[sort] as number;
-
-        return order === "desc" ? val1 - val2 : val2 - val1;
-      }
-    });
-  }
-
-  if (length && labels) labels = labels.slice(0, length);
-
-  return labels;
-};
-
-const createNewLabel = async (id: number): Promise<Label> => {
-  const label = await db.label.findFirst({
-    where: { id: id, users: { some: { userId: USER_ID } } },
+const getAllLabels = async ({ userId }: ParamsFilter): Promise<Label[]> => {
+  const labels = await db.labelDB.findMany({
+    where: { users: { some: { id: userId } } },
+    include: {
+      tracks: {
+        include: {
+          artists: true,
+          remixers: true,
+          label: true,
+          genre: true,
+          favorite: true,
+        },
+      },
+    },
   });
 
-  if (label) throw { status: 409, message: "Artists already exist" };
-
-  let labelOnDb = await db.label.findUnique({ where: { id: id } });
-  if (!labelOnDb) labelOnDb = await db.label.create({ data: { id: id } });
-  await db.labelsOnUser.create({ data: { userId: USER_ID, labelId: id } });
-
-  const [newLabel] = await beatportScrap.labels([labelOnDb]);
-
-  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
-
-  if (!labelsCached) {
-    await cache.set<Label[]>(USER_LABEL_KEY, [newLabel]);
-  } else {
-    labelsCached.push(newLabel);
-
-    const labelSorted = labelsCached.sort((a, b) => a.name.localeCompare(b.name));
-    await cache.set<Label[]>(USER_LABEL_KEY, labelSorted);
-  }
-
-  await cache.del(`/api/labels/${id}`);
-  return newLabel;
+  return labels.map((label) => labelAdapter(label));
 };
 
-const getOneLabel = async (id: number): Promise<Label> => {
-  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
-  const labels = labelsCached ? labelsCached : await scraperService.labels();
+const createNewLabel = async (id: number, userId: number): Promise<Label> => {
+  let label = await db.labelDB.findFirst({
+    where: {
+      id: id,
+      users: { some: { id: userId } },
+    },
+    include: {
+      tracks: {
+        include: {
+          artists: true,
+          remixers: true,
+          label: true,
+          genre: true,
+          favorite: true,
+        },
+      },
+    },
+  });
 
-  const label = labels.find((label) => label.id === id);
-
-  if (label) {
-    label.follow = true;
-    return label;
+  if (label && !label.artwork) {
+    throw { status: 409, message: "Label already exist" };
   }
+
+  label = await db.labelDB.findUnique({
+    where: { id: id },
+    include: {
+      tracks: {
+        include: {
+          artists: true,
+          remixers: true,
+          label: true,
+          genre: true,
+          favorite: true,
+        },
+      },
+    },
+  });
+
+  if (label && label.artwork) {
+    await db.labelDB.update({
+      where: { id: id },
+      data: {
+        users: {
+          connect: { id: userId },
+        },
+      },
+    });
+
+    return labelAdapter(label);
+  }
+
+  let newLabel = null;
+  const labelOnCache = await cache.get<Label>(`/label/${id}`);
+
+  if (labelOnCache) {
+    newLabel = labelOnCache;
+  } else {
+    const [label] = await beatportScrap.labels([{ id: id }]);
+    newLabel = label;
+  }
+
+  const transacion = await db.$transaction([
+    ...newLabel.tracks.map((track) =>
+      db.trackDB.upsert({
+        where: { id: track.id },
+        update: {},
+        create: {
+          id: track.id,
+          bpm: track.bpm,
+          released: new Date(track.released),
+          artwork: track.artwork,
+          key: track.key as string,
+          mix: track.mix,
+          name: track.name,
+          preview: track.preview,
+          genre: {
+            connectOrCreate: {
+              where: { id: track.genres[0].id },
+              create: {
+                id: track.genres[0].id,
+                name: track.genres[0].name,
+                slug: track.genres[0].slug,
+              },
+            },
+          },
+          label: {
+            connectOrCreate: {
+              where: { id: track.label.id },
+              create: {
+                id: track.label.id,
+                name: track.label.name,
+                profile: "",
+              },
+            },
+          },
+          remixers: {
+            connectOrCreate: track.remixers.map((remixer) => ({
+              where: { id: remixer.id },
+              create: {
+                id: remixer.id,
+                name: remixer.name,
+                profile: "",
+              },
+            })),
+          },
+          artists: {
+            connectOrCreate: track.artists.map((artist) => ({
+              where: { id: artist.id },
+              create: {
+                id: artist.id,
+                name: artist.name,
+                profile: "",
+              },
+            })),
+          },
+        },
+      })
+    ),
+    db.labelDB.update({
+      where: { id: newLabel.id },
+      data: {
+        profile: newLabel.profile || "",
+        artwork: newLabel.artwork,
+        tracks: {
+          connect: newLabel.tracks.map((track) => ({
+            id: track.id,
+          })),
+        },
+        users: {
+          connect: { id: userId },
+        },
+      },
+      include: {
+        tracks: {
+          include: {
+            artists: true,
+            remixers: true,
+            label: true,
+            genre: true,
+            favorite: true,
+          },
+        },
+      },
+    }),
+  ]);
+
+  return labelAdapter(transacion[transacion.length - 1] as LabelAndTracks);
+};
+
+const getOneLabel = async (id: number, userId: number): Promise<Label> => {
+  const label = await db.labelDB.findFirst({
+    where: { id: id },
+    include: {
+      users: true,
+      tracks: {
+        include: {
+          artists: true,
+          remixers: true,
+          label: true,
+          genre: true,
+          favorite: true,
+        },
+      },
+    },
+  });
+
+  if (label && label.artwork) {
+    return labelAdapter(label, userId);
+  }
+
+  const labelOnCache = await cache.get<Label>(`/label/${id}`);
+  if (labelOnCache) return labelOnCache;
 
   const [newLabel] = await beatportScrap.labels([{ id }]);
+  cache.set(`/label/${id}`, newLabel);
+
   return newLabel;
 };
 
-const deteleOneLabel = async (id: number): Promise<void> => {
-  const label = await db.labelsOnUser.findUnique({
-    where: { userId_labelId: { userId: USER_ID, labelId: id } },
+const deteleOneLabel = async (id: number, userId: number): Promise<void> => {
+  const label = await db.labelDB.findFirst({
+    where: { id: id, users: { some: { id: userId } } },
   });
 
-  if (!label) throw { status: 404, message: "label not found" };
-
-  await db.labelsOnUser.delete({
-    where: { userId_labelId: { labelId: id, userId: USER_ID } },
-  });
-
-  const labelUsed = await db.labelsOnUser.findMany({
-    where: { labelId: id },
-  });
-
-  if (!labelUsed.length) await db.label.delete({ where: { id: id } });
-
-  const labelsCached = await cache.get<Label[]>(USER_LABEL_KEY);
-
-  if (!labelsCached) {
-    const labels = await scraperService.labels();
-    labels.length && (await cache.set<Label[]>(USER_LABEL_KEY, labels));
-  } else {
-    const labelToRemove = labelsCached.findIndex((label) => label.id === id);
-
-    if (labelToRemove >= 0 && labelsCached.length) {
-      labelsCached.splice(labelToRemove, 1);
-      const labelsSorted = labelsCached.sort((a, b) => a.name.localeCompare(b.name));
-      await cache.set<Label[]>(USER_LABEL_KEY, labelsSorted);
-    }
+  if (!label) {
+    throw { status: 404, message: "label not found" };
   }
 
-  await cache.del(`/api/labels/${id}`);
+  await db.labelDB.update({
+    where: { id: id },
+    data: {
+      users: {
+        disconnect: { id: userId },
+      },
+    },
+  });
 };
 
 export default {

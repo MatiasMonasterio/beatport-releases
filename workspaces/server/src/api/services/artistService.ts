@@ -1,121 +1,256 @@
-import { Artist } from "@br/core";
+import type { Artist } from "@br/core";
 
-import { beatportScrap } from "../../utils";
-import scraperService from "./scraperServices";
-import cache from "../../cache";
 import db from "../../database";
+import cache from "../../cache";
+import { beatportScrap } from "../../utils";
 
-// remove when apply auth and users
-const USER_ID = 1;
-const USER_ARTIST_KEY = `ARTISTS-${USER_ID}`;
+import { artistAdapter } from "../adapters";
 
 interface ParamsFilter {
   sort?: keyof Artist;
   order?: "desc" | "asc";
-  length?: number;
+  length?: string;
+  userId: number;
 }
 
-const getAllArtists = async ({ sort, order, length }: ParamsFilter): Promise<Artist[]> => {
-  let artists = await cache.get<Artist[]>(USER_ARTIST_KEY);
-  if (!artists) artists = await scraperService.artists();
+import { TrackDB, ArtistDB, FavoriteDB, GenreDB, LabelDB } from "@prisma/client";
+interface TracksExtended extends TrackDB {
+  artists: ArtistDB[];
+  remixers: ArtistDB[];
+  favorite: FavoriteDB[];
+  genre: GenreDB | null;
+  label: LabelDB | null;
+}
 
-  if (sort && artists && artists.length) {
-    artists = artists.sort((a, b) => {
-      if (typeof a[sort] === "string" && typeof b[sort] === "string") {
-        const val1 = a[sort] as string;
-        const val2 = b[sort] as string;
+interface ArtistAndTracks extends ArtistDB {
+  tracks: TracksExtended[];
+}
 
-        return order === "desc" ? val1.localeCompare(val2) : val2.localeCompare(val1);
-      } else {
-        const val1 = a[sort] as number;
-        const val2 = b[sort] as number;
-
-        return order === "desc" ? val1 - val2 : val2 - val1;
-      }
-    });
-  }
-
-  if (length && artists) artists = artists.slice(0, length);
-
-  return artists;
-};
-
-const createNewArtist = async (id: number): Promise<Artist> => {
-  const artist = await db.artist.findFirst({
-    where: { id: id, users: { some: { userId: USER_ID } } },
+const getAllArtists = async ({ userId }: ParamsFilter): Promise<Artist[]> => {
+  const artists = await db.artistDB.findMany({
+    where: {
+      users: {
+        some: { id: userId },
+      },
+    },
+    include: {
+      tracks: {
+        include: {
+          artists: true,
+          remixers: true,
+          label: true,
+          genre: true,
+          favorite: true,
+        },
+      },
+    },
+    orderBy: [{ name: "asc" }],
   });
 
-  if (artist) throw { status: 409, message: "Artists already exist" };
+  return artists.map((artist) => artistAdapter(artist));
+};
 
-  let artistOnDb = await db.artist.findUnique({ where: { id: id } });
-  if (!artistOnDb) artistOnDb = await db.artist.create({ data: { id: id } });
-  await db.artistsOnUser.create({ data: { userId: USER_ID, artistId: id } });
+const createNewArtist = async (id: number, userId: number): Promise<Artist> => {
+  let artist = await db.artistDB.findFirst({
+    where: {
+      id: id,
+      users: { some: { id: userId } },
+    },
+    include: {
+      tracks: {
+        include: {
+          artists: true,
+          remixers: true,
+          label: true,
+          genre: true,
+          favorite: true,
+        },
+      },
+    },
+  });
 
-  const [newArtist] = await beatportScrap.artists([artistOnDb]);
+  // Encontro un artists relacionado al usuario y este esta actualizado
+  if (artist && artist.artwork) {
+    throw { status: 409, message: "Artists already exist" };
+  }
 
-  const artists = await cache.get<Artist[]>(USER_ARTIST_KEY);
+  artist = await db.artistDB.findUnique({
+    where: { id: id },
+    include: {
+      tracks: {
+        include: {
+          artists: true,
+          remixers: true,
+          label: true,
+          genre: true,
+          favorite: true,
+        },
+      },
+    },
+  });
 
-  if (!artists) {
-    await cache.set<Artist[]>(USER_ARTIST_KEY, [newArtist]);
+  // encontro al artista, este esta actualizado, pero no esta relacionado con el usuario
+  if (artist && artist.artwork && artist.updatedAt === new Date()) {
+    await db.userDB.update({
+      where: { id: userId },
+      data: {
+        artists: {
+          connect: { id: artist.id },
+        },
+      },
+    });
+
+    return artistAdapter(artist, userId);
+  }
+
+  let newArtist = null;
+  const artistOnCache = await cache.get<Artist>(`/artist/${id}`);
+
+  if (artistOnCache) {
+    newArtist = artistOnCache;
   } else {
-    artists.push(newArtist);
-
-    const artistSorted = artists.sort((a, b) => a.name.localeCompare(b.name));
-    await cache.set<Artist[]>(USER_ARTIST_KEY, artistSorted);
+    const [artist] = await beatportScrap.artists([{ id: id }]);
+    newArtist = artist;
   }
+  // a partir de aca no encontro a el artists o este no esta actualizado
 
-  await cache.del(`/api/artists/${id}`);
-  return newArtist;
+  const transaction = await db.$transaction([
+    ...newArtist.tracks.map((track) =>
+      db.trackDB.upsert({
+        where: { id: track.id },
+        update: {},
+        create: {
+          id: track.id,
+          bpm: track.bpm,
+          released: new Date(track.released),
+          artwork: track.artwork,
+          key: track.key as string,
+          mix: track.mix,
+          name: track.name,
+          preview: track.preview,
+          genre: {
+            connectOrCreate: {
+              where: { id: track.genres[0].id },
+              create: {
+                id: track.genres[0].id,
+                name: track.genres[0].name,
+                slug: track.genres[0].slug,
+              },
+            },
+          },
+          label: {
+            connectOrCreate: {
+              where: { id: track.label.id },
+              create: {
+                id: track.label.id,
+                name: track.label.name,
+                profile: "",
+              },
+            },
+          },
+          remixers: {
+            connectOrCreate: track.remixers.map((remixer) => ({
+              where: { id: remixer.id },
+              create: {
+                id: remixer.id,
+                name: remixer.name,
+                profile: "",
+              },
+            })),
+          },
+          artists: {
+            connectOrCreate: track.artists.map((artist) => ({
+              where: { id: artist.id },
+              create: {
+                id: artist.id,
+                name: artist.name,
+                profile: "",
+              },
+            })),
+          },
+        },
+      })
+    ),
+    db.artistDB.update({
+      where: { id: newArtist.id },
+      data: {
+        profile: newArtist.profile || "",
+        artwork: newArtist.artwork,
+        tracks: {
+          connect: newArtist.tracks.map((track) => ({ id: track.id })),
+        },
+        users: {
+          connect: { id: userId },
+        },
+      },
+      include: {
+        tracks: {
+          include: {
+            artists: true,
+            remixers: true,
+            label: true,
+            genre: true,
+            favorite: true,
+          },
+        },
+      },
+    }),
+  ]);
+
+  return artistAdapter(transaction[transaction.length - 1] as ArtistAndTracks);
 };
 
-const getOneArtist = async (id: string): Promise<Artist> => {
-  const artistsCached = await cache.get<Artist[]>(USER_ARTIST_KEY);
-  const artists = artistsCached ? artistsCached : await scraperService.artists();
+const getOneArtist = async (id: string, userId: number): Promise<Artist> => {
+  const artist = await db.artistDB.findUnique({
+    where: { id: +id },
+    include: {
+      users: true,
+      tracks: {
+        include: {
+          artists: true,
+          remixers: true,
+          label: true,
+          genre: true,
+          favorite: true,
+        },
+      },
+    },
+  });
 
-  const artist = artists.find((artist) => artist.id.toString() === id);
-
-  if (artist) {
-    artist.follow = true;
-    return artist;
+  if (artist && artist.artwork) {
+    return artistAdapter(artist, userId);
   }
 
-  const [newArtists] = await beatportScrap.artists([{ id: +id }]);
-  return newArtists;
+  const artistOnCache = await cache.get<Artist>(`/artist/${id}`);
+  if (artistOnCache) return artistOnCache;
+
+  const [artistScreped] = await beatportScrap.artists([{ id: +id }]);
+  cache.set(`/artist/${id}`, artistScreped);
+
+  return artistScreped;
 };
 
-const deteleOneArtist = async (id: number): Promise<void> => {
-  const artist = await db.artistsOnUser.findUnique({
-    where: { userId_artistId: { userId: USER_ID, artistId: id } },
+const deteleOneArtist = async (id: number, userId: number): Promise<void> => {
+  const artist = await db.artistDB.findFirst({
+    where: {
+      id: id,
+      users: {
+        some: { id: userId },
+      },
+    },
   });
 
   if (!artist) throw { status: 404, message: "artists not found" };
 
-  await db.artistsOnUser.delete({
-    where: { userId_artistId: { artistId: id, userId: USER_ID } },
+  await db.artistDB.update({
+    where: { id: id },
+    include: { users: true },
+    data: {
+      users: {
+        disconnect: { id: userId },
+      },
+    },
   });
-
-  const artiesUsed = await db.artistsOnUser.findMany({
-    where: { artistId: id },
-  });
-
-  if (!artiesUsed.length) await db.artist.delete({ where: { id: id } });
-
-  const artistsCahed = await cache.get<Artist[]>(USER_ARTIST_KEY);
-
-  if (!artistsCahed) {
-    const artists = await scraperService.artists();
-    artists.length && (await cache.set<Artist[]>(USER_ARTIST_KEY, artists));
-  } else {
-    const artistToRemove = artistsCahed.findIndex((artist) => artist.id === id);
-
-    if (artistToRemove >= 0 && artistsCahed.length) {
-      artistsCahed.splice(artistToRemove, 1);
-      const artistsSorted = artistsCahed.sort((a, b) => a.name.localeCompare(b.name));
-      await cache.set<Artist[]>(USER_ARTIST_KEY, artistsSorted);
-    }
-  }
-
-  await cache.del(`/api/artists/${id}`);
 };
 
 export default {
