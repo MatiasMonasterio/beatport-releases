@@ -1,3 +1,14 @@
+export interface User {
+  username: string;
+  email: string;
+  password: string;
+  name: string;
+  lastname: string;
+  genre: string;
+  avatar: string;
+  createdAt: Date;
+}
+
 export interface Artist {
   id: number;
   name: string;
@@ -35,6 +46,10 @@ export interface Track {
   name: string;
   preview: string;
   favorite?: boolean;
+}
+
+export interface Favorite extends Track {
+  createdAt?: number;
 }
 
 export interface FavoriteTrack {
