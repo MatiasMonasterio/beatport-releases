@@ -1,16 +1,16 @@
 import { Router } from "express";
 
-import { isCached } from "../middleware";
+import { isCached, isAuthenticated, updateData } from "../middleware";
 import labelController from "../controllers/labelController";
 import trackController from "../controllers/trackController";
 
 const router = Router();
 
-router.get("/", isCached, labelController.getAllLabels);
-router.post("/", labelController.createNewLabel);
-router.get("/releases", isCached, trackController.getLabelsReleases);
-router.get("/upcomings", isCached, trackController.getLabelsUpcoming);
-router.get("/:id", isCached, labelController.getOneLabel);
-router.delete("/:id", labelController.deteleOneLabel);
+router.get("/", isAuthenticated, isCached, updateData, labelController.getAllLabels);
+router.post("/", isAuthenticated, labelController.createNewLabel);
+router.get("/releases", isAuthenticated, isCached, updateData, trackController.getLabelsReleases);
+router.get("/upcomings", isAuthenticated, isCached, updateData, trackController.getLabelsUpcoming);
+router.get("/:id", isAuthenticated, isCached, updateData, labelController.getOneLabel);
+router.delete("/:id", isAuthenticated, labelController.deteleOneLabel);
 
 export default router;

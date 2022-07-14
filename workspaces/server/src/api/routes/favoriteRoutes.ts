@@ -1,12 +1,12 @@
 import { Router } from "express";
 
-import { isCached } from "../middleware";
+import { isCached, isAuthenticated, updateData } from "../middleware";
 import favoriteController from "../controllers/favoriteController";
 
 const router = Router();
 
-router.get("/", isCached, favoriteController.getAllFavorites);
-router.post("/", favoriteController.createNewFavorite);
-router.delete("/:id", favoriteController.deleteOneFavorite);
+router.get("/", isAuthenticated, isCached, updateData, favoriteController.getAllFavorites);
+router.post("/", isAuthenticated, favoriteController.createNewFavorite);
+router.delete("/:id", isAuthenticated, favoriteController.deleteOneFavorite);
 
 export default router;
