@@ -1,5 +1,7 @@
 import type { Label, Track } from "@br/core";
-import { API_URL } from "config/env";
+import type { AxiosResponse } from "axios";
+
+import { api } from "interceptors";
 
 type LabelsResponse = {
   data: Label[];
@@ -23,20 +25,9 @@ interface ParamsFilter {
 }
 
 export const getLabels = async (params?: ParamsFilter): Promise<Label[]> => {
-  const url = new URL(`${API_URL}/api/labels`);
-
-  if (params) {
-    let param: keyof typeof params;
-
-    for (param in params) {
-      url.searchParams.append(param, params[param] as string);
-    }
-  }
-
   try {
-    const resp: Response = await fetch(url.toString());
-
-    const { data: labels, error }: LabelsResponse = await resp.json();
+    const response: AxiosResponse = await api.get("/api/labels", { params });
+    const { data: labels, error }: LabelsResponse = response.data;
     if (error) throw new Error(error);
 
     return labels;
@@ -48,16 +39,8 @@ export const getLabels = async (params?: ParamsFilter): Promise<Label[]> => {
 
 export const addLabelId = async (id: string): Promise<Label | null> => {
   try {
-    const resp: Response = await fetch(`${API_URL}/api/labels`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id }),
-    });
-
-    const { data: label, error }: LabelResponse = await resp.json();
+    const response: AxiosResponse = await api.post("/api/labels", { id });
+    const { data: label, error }: LabelResponse = response.data;
     if (error) throw new Error(error);
 
     return label;
@@ -69,9 +52,8 @@ export const addLabelId = async (id: string): Promise<Label | null> => {
 
 export const getLabelById = async (id: string): Promise<Label | null> => {
   try {
-    const resp: Response = await fetch(`${API_URL}/api/labels/${id}`);
-
-    const { data: label, error }: LabelResponse = await resp.json();
+    const response: AxiosResponse = await api.get(`/api/labels/${id}`);
+    const { data: label, error }: LabelResponse = response.data;
     if (error) throw new Error(error);
 
     return label;
@@ -83,10 +65,7 @@ export const getLabelById = async (id: string): Promise<Label | null> => {
 
 export const deleteLabelById = async (id: string): Promise<void> => {
   try {
-    const endpoint = `${API_URL}/api/labels/${id}`;
-    const resp: Response = await fetch(endpoint, { method: "DELETE" });
-
-    const { error }: LabelResponse = await resp.json();
+    const { error }: LabelResponse = await api.delete(`/api/labels/${id}`);
     if (error) throw new Error(error);
 
     return;
@@ -98,9 +77,8 @@ export const deleteLabelById = async (id: string): Promise<void> => {
 
 export const getLabelReleases = async (): Promise<Track[]> => {
   try {
-    const resp: Response = await fetch(`${API_URL}/api/labels/releases`);
-
-    const { data: tracks, error }: TracksResponse = await resp.json();
+    const response = await api.get("/api/labels/releases");
+    const { data: tracks, error }: TracksResponse = response.data;
     if (error) throw new Error(error);
 
     return tracks;
@@ -112,9 +90,8 @@ export const getLabelReleases = async (): Promise<Track[]> => {
 
 export const getLabelUpcomings = async (): Promise<Track[]> => {
   try {
-    const resp: Response = await fetch(`${API_URL}/api/labels/upcomings`);
-
-    const { data: tracks, error }: TracksResponse = await resp.json();
+    const response = await api.get("/api/labels/upcomings");
+    const { data: tracks, error }: TracksResponse = response.data;
     if (error) throw new Error(error);
 
     return tracks;

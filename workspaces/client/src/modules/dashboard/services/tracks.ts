@@ -1,5 +1,7 @@
 import type { Track } from "@br/core";
-import { API_URL } from "config/env";
+import type { AxiosResponse } from "axios";
+
+import { api } from "interceptors";
 
 type TracksResponse = {
   data: Track[];
@@ -8,9 +10,8 @@ type TracksResponse = {
 
 export const getReleases = async (): Promise<Track[]> => {
   try {
-    const resp: Response = await fetch(`${API_URL}/api/tracks/releases`);
-
-    const { data: tracks, error }: TracksResponse = await resp.json();
+    const response: AxiosResponse = await api.get("/api/tracks/releases");
+    const { data: tracks, error }: TracksResponse = response.data;
     if (error) throw new Error(error);
 
     return tracks;
@@ -22,9 +23,8 @@ export const getReleases = async (): Promise<Track[]> => {
 
 export const getUpcomings = async (): Promise<Track[]> => {
   try {
-    const resp: Response = await fetch(`${API_URL}/api/tracks/upcomings`);
-
-    const { data: tracks, error }: TracksResponse = await resp.json();
+    const response: AxiosResponse = await api.get("/api/tracks/upcomings");
+    const { data: tracks, error }: TracksResponse = response.data;
     if (error) throw new Error(error);
 
     return tracks;
