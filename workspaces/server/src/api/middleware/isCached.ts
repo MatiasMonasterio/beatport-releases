@@ -3,14 +3,16 @@ import type { Artist, Label, Track } from "@br/core";
 
 import cache from "../../cache";
 
-export const isCached = async (req: Request, res: Response, next: NextFunction) => {
+export default async function isCached(req: Request, _res: Response, next: NextFunction) {
   try {
     const reply = await cache.get<Artist | Artist[] | Label | Label[] | Track[]>(req.originalUrl);
-    if (reply) return res.send({ status: "OK", data: reply });
+    // console.log(reply);
+    // if (reply) return res.send({ status: "OK", data: reply });
+    req.body.reply = reply;
 
     next();
   } catch (error) {
     console.error(error);
     next();
   }
-};
+}
