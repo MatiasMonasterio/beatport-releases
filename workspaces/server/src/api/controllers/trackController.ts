@@ -7,7 +7,7 @@ import cache from "../../cache";
 
 const getAllReleases = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tracks = await tracksServices.getAllReleases();
+    const tracks = await tracksServices.getAllReleases({ ...req.query, userId: +req.userId });
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
@@ -22,7 +22,7 @@ const getAllReleases = async (req: Request, res: Response): Promise<void> => {
 
 const getAllUpcomings = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tracks = await tracksServices.getAllUpcomings();
+    const tracks = await tracksServices.getAllUpcomings(+req.userId);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
@@ -37,7 +37,7 @@ const getAllUpcomings = async (req: Request, res: Response): Promise<void> => {
 
 const getArtistsReleases = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tracks = await tracksServices.getArtistsReleases();
+    const tracks = await tracksServices.getArtistsReleases(+req.userId);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
@@ -52,7 +52,7 @@ const getArtistsReleases = async (req: Request, res: Response): Promise<void> =>
 
 const getArtistsUpcoming = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tracks = await tracksServices.getArtistsUpcoming();
+    const tracks = await tracksServices.getArtistsUpcoming(+req.userId);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
@@ -67,7 +67,7 @@ const getArtistsUpcoming = async (req: Request, res: Response): Promise<void> =>
 
 const getLabelsReleases = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tracks = await tracksServices.getLabelsReleases();
+    const tracks = await tracksServices.getLabelsReleases(+req.userId);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
@@ -82,7 +82,7 @@ const getLabelsReleases = async (req: Request, res: Response): Promise<void> => 
 
 const getLabelsUpcoming = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tracks = await tracksServices.getLabelsUpcoming();
+    const tracks = await tracksServices.getLabelsUpcoming(+req.userId);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });

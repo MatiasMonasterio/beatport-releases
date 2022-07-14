@@ -8,9 +8,12 @@ import artistService from "../services/artistService";
 
 const getAllArtists = async (req: Request, res: Response): Promise<void> => {
   try {
-    const artists = await artistService.getAllArtists(req.query);
-    await cache.set<Artist[]>(req.originalUrl, artists);
+    const artists = await artistService.getAllArtists({
+      ...req.query,
+      userId: +req.userId,
+    });
 
+    await cache.set<Artist[]>(req.originalUrl, artists);
     res.send({ status: "OK", data: artists });
   } catch (error: unknown | ErrorRequest) {
     const err = error as ErrorRequest;
@@ -30,7 +33,7 @@ const createNewArtist = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-    const artist = await artistService.createNewArtist(+id);
+    const artist = await artistService.createNewArtist(+id, +req.userId);
     res.status(201).send({ status: "OK", data: artist });
 
     await clearArtistCache();
@@ -51,7 +54,7 @@ const getOneArtist = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-    const artist = await artistService.getOneArtist(id);
+    const artist = await artistService.getOneArtist(id, +req.userId);
 
     if (!artist) {
       res.status(404).send({ status: "FAILED", data: { error: "artist not found" } });
@@ -74,7 +77,7 @@ const deteleOneArtist = async (req: Request, res: Response): Promise<void> => {
   if (!id) res.status(404).send({ status: "FAILED", data: { error: "id is missing or invalid" } });
 
   try {
-    await artistService.deteleOneArtist(+id);
+    await artistService.deteleOneArtist(+id, +req.userId);
     res.status(200).send();
 
     await clearArtistCache();

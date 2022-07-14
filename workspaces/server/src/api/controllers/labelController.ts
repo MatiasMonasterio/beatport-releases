@@ -8,7 +8,7 @@ import cache from "../../cache";
 
 const getAllLabels = async (req: Request, res: Response): Promise<void> => {
   try {
-    const labels = await labelService.getAllLabels(req.query);
+    const labels = await labelService.getAllLabels({ ...req.query, userId: +req.userId });
     await cache.set<Label[]>(req.originalUrl, labels);
 
     res.send({ status: "OK", data: labels });
@@ -30,7 +30,7 @@ const createNewLabel = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-    const labels = await labelService.createNewLabel(+id);
+    const labels = await labelService.createNewLabel(+id, +req.userId);
     res.status(201).send({ status: "OK", data: labels });
 
     await clearLabelCache();
@@ -51,7 +51,7 @@ const getOneLabel = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-    const label = await labelService.getOneLabel(+id);
+    const label = await labelService.getOneLabel(+id, +req.userId);
 
     if (!label) {
       res.status(404).send({ status: "FAILED", data: { error: "label not found" } });
@@ -74,7 +74,7 @@ const deteleOneLabel = async (req: Request, res: Response): Promise<void> => {
   if (!id) res.status(404).send({ status: "FAILED", data: { error: "id is missing or invalid" } });
 
   try {
-    await labelService.deteleOneLabel(+id);
+    await labelService.deteleOneLabel(+id, +req.userId);
     res.status(200).send();
 
     await clearLabelCache();

@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { FavoriteTrack } from "@br/core";
+import type { Favorite } from "@br/core";
 import type { ErrorRequest } from "../../types";
 
 import favoriteServices from "../services/favoriteServices";
@@ -8,8 +8,8 @@ import { clearFavoriteCache } from "../../utils/clearCache";
 
 const getAllFavorites = async (req: Request, res: Response): Promise<void> => {
   try {
-    const favorites = await favoriteServices.getAllFavorites();
-    await cache.set<FavoriteTrack[]>(req.originalUrl, favorites);
+    const favorites = await favoriteServices.getAllFavorites(+req.userId);
+    await cache.set<Favorite[]>(req.originalUrl, favorites);
 
     res.send({ status: "OK", data: favorites });
   } catch (error: unknown | ErrorRequest) {
@@ -23,7 +23,7 @@ const getAllFavorites = async (req: Request, res: Response): Promise<void> => {
 
 const createNewFavorite = async (req: Request, res: Response): Promise<void> => {
   try {
-    const favorite = await favoriteServices.createNewFavorite(req.body);
+    const favorite = await favoriteServices.createNewFavorite(req.body, +req.userId);
     await clearFavoriteCache();
     res.send({ status: "OK", data: favorite });
   } catch (error: unknown | ErrorRequest) {
@@ -37,7 +37,7 @@ const createNewFavorite = async (req: Request, res: Response): Promise<void> => 
 
 const deleteOneFavorite = async (req: Request, res: Response): Promise<void> => {
   try {
-    await favoriteServices.deleteOneFavorite(+req.params.id);
+    await favoriteServices.deleteOneFavorite(+req.params.id, +req.userId);
     await clearFavoriteCache();
     res.status(200).send();
   } catch (error: unknown | ErrorRequest) {
