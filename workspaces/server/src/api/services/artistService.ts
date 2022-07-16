@@ -26,8 +26,9 @@ interface ArtistAndTracks extends ArtistDB {
   tracks: TracksExtended[];
 }
 
-const getAllArtists = async ({ userId }: ParamsFilter): Promise<Artist[]> => {
+const getAllArtists = async ({ userId, length, sort, order }: ParamsFilter): Promise<Artist[]> => {
   const artists = await db.artistDB.findMany({
+    ...(length && { take: +length }),
     where: {
       users: {
         some: { id: userId },
@@ -44,7 +45,7 @@ const getAllArtists = async ({ userId }: ParamsFilter): Promise<Artist[]> => {
         },
       },
     },
-    orderBy: [{ name: "asc" }],
+    orderBy: [...(sort ? [{ [sort]: order ? order : "desc" }] : []), { name: "asc" }],
   });
 
   return artists.map((artist) => artistAdapter(artist));

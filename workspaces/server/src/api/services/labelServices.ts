@@ -26,8 +26,9 @@ interface LabelAndTracks extends LabelDB {
   tracks: TracksExtended[];
 }
 
-const getAllLabels = async ({ userId }: ParamsFilter): Promise<Label[]> => {
+const getAllLabels = async ({ userId, length, sort, order }: ParamsFilter): Promise<Label[]> => {
   const labels = await db.labelDB.findMany({
+    ...(length && { take: +length }),
     where: { users: { some: { id: userId } } },
     include: {
       tracks: {
@@ -40,6 +41,7 @@ const getAllLabels = async ({ userId }: ParamsFilter): Promise<Label[]> => {
         },
       },
     },
+    orderBy: [...(sort ? [{ [sort]: order ? order : "desc" }] : []), { name: "asc" }],
   });
 
   return labels.map((label) => labelAdapter(label));
