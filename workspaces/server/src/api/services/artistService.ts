@@ -114,90 +114,119 @@ const createNewArtist = async (id: number, userId: number): Promise<Artist> => {
   }
   // a partir de aca no encontro a el artists o este no esta actualizado
 
-  const transaction = await db.$transaction([
-    ...newArtist.tracks.map((track) =>
-      db.trackDB.upsert({
-        where: { id: track.id },
-        update: {},
-        create: {
-          id: track.id,
-          bpm: track.bpm,
-          released: new Date(track.released),
-          artwork: track.artwork,
-          key: track.key as string,
-          mix: track.mix,
-          name: track.name,
-          preview: track.preview,
-          genre: {
-            connectOrCreate: {
-              where: { id: track.genres[0].id },
-              create: {
-                id: track.genres[0].id,
-                name: track.genres[0].name,
-                slug: track.genres[0].slug,
+  if (newArtist.tracks.length) {
+    const transaction = await db.$transaction([
+      ...newArtist.tracks.map((track) =>
+        db.trackDB.upsert({
+          where: { id: track.id },
+          update: {},
+          create: {
+            id: track.id,
+            bpm: track.bpm,
+            released: new Date(track.released),
+            artwork: track.artwork,
+            key: track.key as string,
+            mix: track.mix,
+            name: track.name,
+            preview: track.preview,
+            genre: {
+              connectOrCreate: {
+                where: { id: track.genres[0].id },
+                create: {
+                  id: track.genres[0].id,
+                  name: track.genres[0].name,
+                  slug: track.genres[0].slug,
+                },
               },
             },
-          },
-          label: {
-            connectOrCreate: {
-              where: { id: track.label.id },
-              create: {
-                id: track.label.id,
-                name: track.label.name,
-                profile: "",
+            label: {
+              connectOrCreate: {
+                where: { id: track.label.id },
+                create: {
+                  id: track.label.id,
+                  name: track.label.name,
+                  profile: "",
+                },
               },
             },
+            remixers: {
+              connectOrCreate: track.remixers.map((remixer) => ({
+                where: { id: remixer.id },
+                create: {
+                  id: remixer.id,
+                  name: remixer.name,
+                  profile: "",
+                },
+              })),
+            },
+            artists: {
+              connectOrCreate: track.artists.map((artist) => ({
+                where: { id: artist.id },
+                create: {
+                  id: artist.id,
+                  name: artist.name,
+                  profile: "",
+                },
+              })),
+            },
           },
-          remixers: {
-            connectOrCreate: track.remixers.map((remixer) => ({
-              where: { id: remixer.id },
-              create: {
-                id: remixer.id,
-                name: remixer.name,
-                profile: "",
-              },
-            })),
-          },
-          artists: {
-            connectOrCreate: track.artists.map((artist) => ({
-              where: { id: artist.id },
-              create: {
-                id: artist.id,
-                name: artist.name,
-                profile: "",
-              },
-            })),
-          },
-        },
-      })
-    ),
-    db.artistDB.update({
-      where: { id: newArtist.id },
-      data: {
-        profile: newArtist.profile || "",
-        artwork: newArtist.artwork,
-        tracks: {
-          connect: newArtist.tracks.map((track) => ({ id: track.id })),
-        },
-        users: {
-          connect: { id: userId },
-        },
-      },
-      include: {
-        tracks: {
-          include: {
-            artists: true,
-            remixers: true,
-            label: true,
-            genre: true,
-            favorite: true,
+        })
+      ),
+      db.artistDB.update({
+        where: { id: newArtist.id },
+        data: {
+          profile: newArtist.profile || "",
+          artwork: newArtist.artwork,
+          ...(newArtist.tracks.length && {
+            tracks: {
+              connect: newArtist.tracks.map((track) => ({ id: track.id })),
+            },
+          }),
+          users: {
+            connect: { id: userId },
           },
         },
-      },
-    }),
-  ]);
+        include: {
+          tracks: {
+            include: {
+              artists: true,
+              remixers: true,
+              label: true,
+              genre: true,
+              favorite: true,
+            },
+          },
+        },
+      }),
+    ]);
 
-  return artistAdapter(transaction[transaction.length - 1] as ArtistAndTracks);
+    return artistAdapter(transaction[transaction.length - 1] as ArtistAndTracks);
+  }
+
+  const newArtistDb = await db.artistDB.create({
+    data: {
+      id: newArtist.id,
+      name: newArtist.name,
+      profile: newArtist.profile || "",
+      artwork: newArtist.artwork,
+      users: {
+        connect: { id: userId },
+      },
+    },
+    include: {
+      tracks: {
+        include: {
+          artists: true,
+          remixers: true,
+          label: true,
+          genre: true,
+          favorite: true,
+        },
+      },
+    },
+  });
+
+  return artistAdapter(newArtistDb);
 };
 
 const getOneArtist = async (id: string, userId: number): Promise<Artist> => {
