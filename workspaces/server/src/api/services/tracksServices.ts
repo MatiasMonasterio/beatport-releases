@@ -1,5 +1,7 @@
 import type { Track } from "@br/core";
 
+import dayjs from "dayjs";
+
 import db from "../../database";
 import { trackAdapter } from "../adapters";
 
@@ -71,16 +73,18 @@ const createNewsTracks = async (tracks: Track[]): Promise<void> => {
 };
 
 const getAllReleases = async ({ userId }: ParamsFilter): Promise<Track[]> => {
+  const lasMonthDate = dayjs(new Date()).subtract(1, "month").toDate();
+
   const releases = await db.trackDB.findMany({
     where: {
       OR: [
         {
           artists: { some: { users: { some: { id: userId } } } },
-          released: { lte: new Date() },
+          released: { lte: new Date(), gte: lasMonthDate },
         },
         {
           label: { users: { some: { id: userId } } },
-          released: { lte: new Date() },
+          released: { lte: new Date(), gte: lasMonthDate },
         },
       ],
     },
@@ -135,6 +139,8 @@ const getAllUpcomings = async (userId: number): Promise<Track[]> => {
 };
 
 const getArtistsReleases = async (userId: number): Promise<Track[]> => {
+  const lasMonthDate = dayjs(new Date()).subtract(1, "month").toDate();
+
   const releases = await db.trackDB.findMany({
     where: {
       artists: {
@@ -144,7 +150,10 @@ const getArtistsReleases = async (userId: number): Promise<Track[]> => {
           },
         },
       },
-      released: { lte: new Date() },
+      released: {
+        lte: new Date(),
+        gte: lasMonthDate,
+      },
     },
     include: {
       artists: true,
@@ -185,10 +194,12 @@ const getArtistsUpcoming = async (userId: number): Promise<Track[]> => {
 };
 
 const getLabelsReleases = async (userId: number): Promise<Track[]> => {
+  const lasMonthDate = dayjs(new Date()).subtract(1, "month").toDate();
+
   const releases = await db.trackDB.findMany({
     where: {
       label: { users: { some: { id: userId } } },
-      released: { lte: new Date() },
+      released: { lte: new Date(), gte: lasMonthDate },
     },
     include: {
       artists: true,
