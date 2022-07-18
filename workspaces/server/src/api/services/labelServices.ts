@@ -236,6 +236,7 @@ const getOneLabel = async (id: number, userId: number): Promise<Label> => {
           genre: true,
           favorite: true,
         },
+        orderBy: { released: "desc" },
       },
     },
   });

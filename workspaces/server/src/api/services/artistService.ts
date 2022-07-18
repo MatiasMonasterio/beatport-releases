@@ -243,6 +243,7 @@ const getOneArtist = async (id: string, userId: number): Promise<Artist> => {
           genre: true,
           favorite: true,
         },
+        orderBy: { released: "desc" },
       },
     },
   });
