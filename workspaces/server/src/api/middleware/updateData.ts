@@ -1,14 +1,20 @@
 import type { Request, Response, NextFunction } from "express";
 
+import dayjs from "dayjs";
+
 import db from "../../database";
 import { beatportScrap } from "../../utils";
 
 export default async function isAuthenticated(req: Request, res: Response, next: NextFunction) {
   const userId = req.userId;
+  const currentDate = dayjs(new Date()).startOf("day").toDate();
 
   try {
     const user = await db.userDB.findFirst({
-      where: { id: +userId, updatedAt: { gte: new Date() } },
+      where: {
+        id: +userId,
+        updatedAt: { lt: currentDate },
+      },
     });
 
     if (!user) {
@@ -18,7 +24,7 @@ export default async function isAuthenticated(req: Request, res: Response, next:
     const artists = await db.artistDB.findMany({
       where: {
         users: { some: { id: +userId } },
-        updatedAt: { gte: new Date() },
+        updatedAt: { lt: currentDate },
       },
       select: { id: true },
     });
@@ -26,7 +32,7 @@ export default async function isAuthenticated(req: Request, res: Response, next:
     const labels = await db.labelDB.findMany({
       where: {
         users: { some: { id: +req.userId } },
-        updatedAt: { gte: new Date() },
+        updatedAt: { lt: currentDate },
       },
       select: { id: true },
     });
@@ -120,6 +126,11 @@ export default async function isAuthenticated(req: Request, res: Response, next:
         })
       ),
     ]);
+
+    await db.userDB.update({
+      where: { id: +userId },
+      data: {},
+    });
 
     next();
   } catch (error) {
