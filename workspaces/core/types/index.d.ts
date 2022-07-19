@@ -1,3 +1,20 @@
+export interface ApiParams {
+  sort?: keyof Artist;
+  order?: "desc" | "asc";
+  length?: number;
+}
+
+export interface UserCredentials {
+  email: string;
+  password: string;
+}
+
+export interface JwtDecode {
+  id: number;
+  username: string;
+  avatar: string;
+}
+
 export interface User {
   username: string;
   email: string;
