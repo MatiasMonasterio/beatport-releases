@@ -22,6 +22,8 @@ export default function DashboardLayout() {
           <GridItem
             bg="gray.900"
             h="100%"
+            boxShadow="0 -10px 25px rgba(0,0,0,0.2)"
+            zIndex={1000}
             pt={3}
             borderRight="1px solid"
             borderColor="gray.700"
