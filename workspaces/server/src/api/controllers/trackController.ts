@@ -6,8 +6,9 @@ import tracksServices from "../services/tracksServices";
 import cache from "../../cache";
 
 const getAllReleases = async (req: Request, res: Response): Promise<void> => {
+  const queryParams = req.query;
   try {
-    const tracks = await tracksServices.getAllReleases({ ...req.query, userId: +req.userId });
+    const tracks = await tracksServices.getAllReleases(+req.userId, queryParams);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });

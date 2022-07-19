@@ -1,16 +1,9 @@
-import type { Track } from "@br/core";
+import type { Track, ApiParams } from "@br/core";
 
 import dayjs from "dayjs";
 
 import db from "../../database";
 import { trackAdapter } from "../adapters";
-
-interface ParamsFilter {
-  sort?: keyof Track;
-  order?: "desc" | "asc";
-  length?: number;
-  userId: number;
-}
 
 const createNewsTracks = async (tracks: Track[]): Promise<void> => {
   try {
@@ -72,10 +65,12 @@ const createNewsTracks = async (tracks: Track[]): Promise<void> => {
   }
 };
 
-const getAllReleases = async ({ userId }: ParamsFilter): Promise<Track[]> => {
+const getAllReleases = async (userId: number, params: ApiParams): Promise<Track[]> => {
+  const { length } = params;
   const lasMonthDate = dayjs(new Date()).subtract(1, "month").toDate();
 
   const releases = await db.trackDB.findMany({
+    ...(length && { take: +length }),
     where: {
       OR: [
         {

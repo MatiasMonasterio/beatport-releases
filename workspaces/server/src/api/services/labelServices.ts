@@ -1,4 +1,5 @@
-import { Label } from "@br/core";
+import type { Label, ApiParams } from "@br/core";
+import type { LabelWithTracks } from "../../types";
 
 import db from "../../database";
 import cache from "../../cache";
@@ -6,27 +7,9 @@ import { beatportScrap } from "../../utils";
 
 import { labelAdapter } from "../adapters";
 
-interface ParamsFilter {
-  sort?: keyof Label;
-  order?: "desc" | "asc";
-  length?: number;
-  userId: number;
-}
+const getAllLabels = async (userId: number, params: ApiParams): Promise<Label[]> => {
+  const { length, sort, order } = params;
 
-import type { TrackDB, ArtistDB, GenreDB, FavoriteDB, LabelDB } from "@prisma/client";
-interface TracksExtended extends TrackDB {
-  artists: ArtistDB[];
-  remixers: ArtistDB[];
-  favorite: FavoriteDB[];
-  genre: GenreDB | null;
-  label: LabelDB | null;
-}
-
-interface LabelAndTracks extends LabelDB {
-  tracks: TracksExtended[];
-}
-
-const getAllLabels = async ({ userId, length, sort, order }: ParamsFilter): Promise<Label[]> => {
   const labels = await db.labelDB.findMany({
     ...(length && { take: +length }),
     where: { users: { some: { id: userId } } },
@@ -194,7 +177,7 @@ const createNewLabel = async (id: number, userId: number): Promise<Label> => {
       }),
     ]);
 
-    return labelAdapter(transacion[transacion.length - 1] as LabelAndTracks);
+    return labelAdapter(transacion[transacion.length - 1] as LabelWithTracks);
   }
 
   const newLabelInDb = await db.labelDB.create({

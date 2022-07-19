@@ -23,7 +23,7 @@ const getAllFavorites = async (userId: number): Promise<Favorite[]> => {
   return favorites.map((favorite) => favoriteAdapter(favorite, userId));
 };
 
-const createNewFavorite = async (track: Track, userId: number): Promise<Favorite> => {
+const createNewFavorite = async (userId: number, track: Track): Promise<Favorite> => {
   const favorite = await db.favoriteDB.findFirst({
     where: { userId: userId, trackId: track.id },
   });

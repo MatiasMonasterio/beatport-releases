@@ -7,11 +7,10 @@ import { clearArtistCache } from "../../utils/clearCache";
 import artistService from "../services/artistService";
 
 const getAllArtists = async (req: Request, res: Response): Promise<void> => {
+  const queryParams = req.query;
+
   try {
-    const artists = await artistService.getAllArtists({
-      ...req.query,
-      userId: +req.userId,
-    });
+    const artists = await artistService.getAllArtists(+req.userId, queryParams);
 
     await cache.set<Artist[]>(req.originalUrl, artists);
     res.send({ status: "OK", data: artists });

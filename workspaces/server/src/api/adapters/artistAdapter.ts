@@ -1,22 +1,9 @@
 import type { Artist } from "@br/core";
-import type { ArtistDB, TrackDB, GenreDB, LabelDB, FavoriteDB, UserDB } from "@prisma/client";
+import type { ArtistWithTracks } from "../../types";
 
 import trackAdapter from "./trackAdapter";
 
-interface TracksExtended extends TrackDB {
-  artists: ArtistDB[];
-  remixers: ArtistDB[];
-  favorite: FavoriteDB[];
-  genre: GenreDB | null;
-  label: LabelDB | null;
-}
-
-interface ArtistAndTracks extends ArtistDB {
-  tracks: TracksExtended[];
-  users?: UserDB[];
-}
-
-export default function (artist: ArtistAndTracks, userId?: number): Artist {
+export default function (artist: ArtistWithTracks, userId?: number): Artist {
   const tracks = artist.tracks.map((track) => trackAdapter(track, userId));
 
   return {

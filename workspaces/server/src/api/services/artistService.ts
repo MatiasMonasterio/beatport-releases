@@ -1,4 +1,5 @@
-import type { Artist } from "@br/core";
+import type { Artist, ApiParams } from "@br/core";
+import type { ArtistWithTracks } from "../../types";
 
 import db from "../../database";
 import cache from "../../cache";
@@ -6,27 +7,9 @@ import { beatportScrap } from "../../utils";
 
 import { artistAdapter } from "../adapters";
 
-interface ParamsFilter {
-  sort?: keyof Artist;
-  order?: "desc" | "asc";
-  length?: string;
-  userId: number;
-}
+const getAllArtists = async (userId: number, params: ApiParams): Promise<Artist[]> => {
+  const { length, sort, order } = params;
 
-import { TrackDB, ArtistDB, FavoriteDB, GenreDB, LabelDB } from "@prisma/client";
-interface TracksExtended extends TrackDB {
-  artists: ArtistDB[];
-  remixers: ArtistDB[];
-  favorite: FavoriteDB[];
-  genre: GenreDB | null;
-  label: LabelDB | null;
-}
-
-interface ArtistAndTracks extends ArtistDB {
-  tracks: TracksExtended[];
-}
-
-const getAllArtists = async ({ userId, length, sort, order }: ParamsFilter): Promise<Artist[]> => {
   const artists = await db.artistDB.findMany({
     ...(length && { take: +length }),
     where: {
@@ -201,7 +184,7 @@ const createNewArtist = async (id: number, userId: number): Promise<Artist> => {
       }),
     ]);
 
-    return artistAdapter(transaction[transaction.length - 1] as ArtistAndTracks);
+    return artistAdapter(transaction[transaction.length - 1] as ArtistWithTracks);
   }
 
   const newArtistDb = await db.artistDB.create({

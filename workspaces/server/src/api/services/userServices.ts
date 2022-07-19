@@ -1,4 +1,4 @@
-import type { User } from "@br/core";
+import type { User, UserCredentials, JwtDecode } from "@br/core";
 
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -8,25 +8,9 @@ import db from "../../database";
 
 import { userAdapters } from "../adapters";
 
-interface UserToCreate {
-  email: string;
-  password: string;
-}
-
-interface loginParams {
-  email: string;
-  password: string;
-}
-
-interface jwtDecode {
-  id: number;
-  username: string;
-  avatar: string;
-}
-
 const SALT_ROUNDS = 10;
 
-const createNewUser = async ({ email, password }: UserToCreate): Promise<string> => {
+const createNewUser = async ({ email, password }: UserCredentials): Promise<string> => {
   const username = email;
   password = await bcrypt.hash(password, SALT_ROUNDS);
 
@@ -44,7 +28,7 @@ const createNewUser = async ({ email, password }: UserToCreate): Promise<string>
 
   const newUser = await db.userDB.create({ data: { email, password, username, active: true } });
 
-  const jwtValue: jwtDecode = {
+  const jwtValue: JwtDecode = {
     id: newUser.id,
     username: newUser.username,
     avatar: newUser.avatar || "",
@@ -53,7 +37,7 @@ const createNewUser = async ({ email, password }: UserToCreate): Promise<string>
   return jwt.sign(jwtValue, JWT_SECRET);
 };
 
-const loginUser = async ({ email, password }: loginParams): Promise<string> => {
+const loginUser = async ({ email, password }: UserCredentials): Promise<string> => {
   const user = await db.userDB.findUnique({ where: { email: email } });
   if (!user || !user.active) throw { status: 401, message: "invalid email or password" };
 
@@ -64,7 +48,7 @@ const loginUser = async ({ email, password }: loginParams): Promise<string> => {
     throw { status: 401, message: "invalid user invalid email or password" };
   }
 
-  const jwtValue: jwtDecode = {
+  const jwtValue: JwtDecode = {
     id: user.id,
     username: user.username,
     avatar: user.avatar || "",

@@ -22,8 +22,10 @@ const getAllFavorites = async (req: Request, res: Response): Promise<void> => {
 };
 
 const createNewFavorite = async (req: Request, res: Response): Promise<void> => {
+  const track = req.body;
+
   try {
-    const favorite = await favoriteServices.createNewFavorite(req.body, +req.userId);
+    const favorite = await favoriteServices.createNewFavorite(+req.userId, track);
     await clearFavoriteCache();
     res.send({ status: "OK", data: favorite });
   } catch (error: unknown | ErrorRequest) {
