@@ -129,7 +129,7 @@ export default async function isAuthenticated(req: Request, res: Response, next:
 
     await db.userDB.update({
       where: { id: +userId },
-      data: {},
+      data: { updatedAt: new Date() },
     });
 
     next();
