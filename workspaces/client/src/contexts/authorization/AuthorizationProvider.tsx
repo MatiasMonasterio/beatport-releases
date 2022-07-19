@@ -1,3 +1,5 @@
+import type { JwtDecode } from "@br/core";
+
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import decode from "jwt-decode";
@@ -6,11 +8,6 @@ import AuthorizationContext from "./AuthorizationContext";
 
 interface Props {
   children: React.ReactNode;
-}
-
-interface JwtDecode {
-  username: string;
-  avatar: string;
 }
 
 const LOCALSTORAGE_AUTH_KEY = "auth";
