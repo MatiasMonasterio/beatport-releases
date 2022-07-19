@@ -19,14 +19,14 @@ export default function Account() {
 
       <MenuList
         bgColor="gray.800"
+        borderColor="gray.600"
         color="gray.300"
-        border="none"
         boxShadow="sm"
-        borderRadius="3px"
+        borderRadius="md"
         fontSize="lg"
         zIndex={101}
         w="100px"
-        mt="5px"
+        mt="10px"
       >
         <MenuItem
           as={Link}

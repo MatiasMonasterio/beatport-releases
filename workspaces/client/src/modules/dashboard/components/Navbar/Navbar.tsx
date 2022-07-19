@@ -29,6 +29,7 @@ export default function Navbar({ isSolid }: Props) {
         bgColor={isSolid ? "gray.900" : "transparent"}
         borderBottom="1px solid"
         borderColor={isSolid ? "gray.700" : "transparent"}
+        boxShadow={isSolid ? "0 0 25px rgba(0,0,0,0.2)" : "none"}
       >
         <Container maxW="container.xl">
           <Button

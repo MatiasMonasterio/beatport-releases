@@ -55,7 +55,13 @@ export default function Notification() {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent width={400} bgColor="gray.800" border="none" mt="7px" borderRadius="4px">
+      <PopoverContent
+        width={400}
+        bgColor="gray.800"
+        borderColor="gray.600"
+        mt="12px"
+        borderRadius="md"
+      >
         <PopoverBody zIndex={102}>
           <Box role="group">
             <Text fontSize="xs" color="gray.500" _groupHover={{ color: "gray.400" }}>
