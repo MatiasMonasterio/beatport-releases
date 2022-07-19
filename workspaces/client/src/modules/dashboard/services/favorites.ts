@@ -1,12 +1,8 @@
 import type { Track } from "@br/core";
 import type { AxiosResponse } from "axios";
+import type { TracksResponse } from "types";
 
 import { api } from "interceptors";
-
-type TracksResponse = {
-  data: Track[];
-  error?: string;
-};
 
 export const getFavorites = async (): Promise<Track[]> => {
   try {

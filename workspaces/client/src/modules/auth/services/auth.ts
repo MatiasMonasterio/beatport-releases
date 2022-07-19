@@ -1,20 +1,13 @@
 import type { AxiosResponse } from "axios";
+import type { UserCredentials } from "@br/core";
+import type { TokenResponse } from "types";
+
 import { api } from "interceptors";
 
-interface Credentials {
-  email: string;
-  password: string;
-}
-
-interface ResponseJson {
-  data: string;
-  error?: string;
-}
-
-export const login = async ({ email, password }: Credentials): Promise<string> => {
+export const login = async ({ email, password }: UserCredentials): Promise<string> => {
   try {
     const response: AxiosResponse = await api.post("/api/users/login", { email, password });
-    const { data: token, error }: ResponseJson = response.data;
+    const { data: token, error }: TokenResponse = response.data;
     if (error) throw new Error(error);
 
     return token;

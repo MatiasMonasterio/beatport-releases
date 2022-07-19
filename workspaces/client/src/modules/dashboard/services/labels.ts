@@ -1,30 +1,10 @@
-import type { Label, Track } from "@br/core";
+import type { Label, Track, ApiParams } from "@br/core";
 import type { AxiosResponse } from "axios";
+import type { LabelResponse, LabelsResponse, TracksResponse } from "types";
 
 import { api } from "interceptors";
 
-type LabelsResponse = {
-  data: Label[];
-  error?: string;
-};
-
-type LabelResponse = {
-  data: Label;
-  error?: string;
-};
-
-type TracksResponse = {
-  data: Track[];
-  error?: string;
-};
-
-interface ParamsFilter {
-  sort?: keyof Label;
-  order?: "desc" | "asc";
-  length?: number;
-}
-
-export const getLabels = async (params?: ParamsFilter): Promise<Label[]> => {
+export const getLabels = async (params?: ApiParams): Promise<Label[]> => {
   try {
     const response: AxiosResponse = await api.get("/api/labels", { params });
     const { data: labels, error }: LabelsResponse = response.data;

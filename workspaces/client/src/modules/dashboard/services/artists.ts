@@ -1,30 +1,10 @@
-import type { Artist, Track } from "@br/core";
+import type { Artist, Track, ApiParams } from "@br/core";
 import type { AxiosResponse } from "axios";
+import type { ArtistResponse, ArtistsResponse, TracksResponse } from "types";
 
 import { api } from "interceptors";
 
-type ArtistsResponse = {
-  data: Artist[];
-  error?: string;
-};
-
-type ArtistResponse = {
-  data: Artist;
-  error?: string;
-};
-
-type TracksResponse = {
-  data: Track[];
-  error?: string;
-};
-
-interface ParamsFilter {
-  sort?: keyof Artist;
-  order?: "desc" | "asc";
-  length?: number;
-}
-
-export const getArtists = async (params?: ParamsFilter): Promise<Artist[]> => {
+export const getArtists = async (params?: ApiParams): Promise<Artist[]> => {
   try {
     const response: AxiosResponse = await api.get("/api/artists", { params });
     const { data: artists, error }: ArtistsResponse = response.data;
