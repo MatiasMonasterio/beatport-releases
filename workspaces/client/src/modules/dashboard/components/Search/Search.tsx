@@ -46,12 +46,11 @@ export default function Search({ value = "", placeholder, width = "300px" }: Pro
   return (
     <Box as="form" onSubmit={handleFormSubmit} minW="350px">
       <InputGroup>
-        <InputLeftElement color="gray.400">
+        <InputLeftElement>
           <BiSearch />
         </InputLeftElement>
 
         <Input
-          borderColor="gray.600"
           fontSize="sm"
           w="100%"
           h={9}
@@ -60,13 +59,11 @@ export default function Search({ value = "", placeholder, width = "300px" }: Pro
           type="text"
           value={inputValue}
           width={width}
-          bg="gray.800"
-          borderRadius="4px"
         />
 
         {inputValue && (
           <InputRightElement>
-            <Button variant="link" onClick={handleClearInput} color="gray.200">
+            <Button variant="link" onClick={handleClearInput}>
               <BiX />
             </Button>
           </InputRightElement>

@@ -32,7 +32,8 @@ export default function Notification() {
         <Button
           variant="link"
           fontSize="xl"
-          color="gray.300"
+          color="secondary.gray.200"
+          _active={{ color: "secondary.gray.100" }}
           p={2}
           onClick={handleOpenNotifications}
         >
@@ -44,7 +45,7 @@ export default function Notification() {
               position: "absolute",
               width: 2,
               height: 2,
-              bgColor: "#01FF95",
+              bgColor: "primary.green",
               borderRadius: "full",
               bottom: 0,
               right: "-2px",
@@ -57,21 +58,25 @@ export default function Notification() {
 
       <PopoverContent
         width={400}
-        bgColor="gray.800"
-        borderColor="gray.600"
+        bgColor="secondary.black.800"
+        borderColor="secondary.black.600"
         mt="12px"
         borderRadius="md"
       >
         <PopoverBody zIndex={102}>
           <Box role="group">
-            <Text fontSize="xs" color="gray.500" _groupHover={{ color: "gray.400" }}>
+            <Text
+              fontSize="xs"
+              color="secondary.gray.700"
+              _groupHover={{ color: "secondary.gray.500" }}
+            >
               New Releases | Today
             </Text>
 
             <Text
-              color="gray.300"
+              color="secondary.gray.200"
               fontSize="md"
-              _groupHover={{ color: "gray.200" }}
+              _groupHover={{ color: "secondary.gray.100" }}
               lineHeight="1.2em"
             >
               5 new releases!
@@ -83,7 +88,7 @@ export default function Notification() {
                 to="/releases"
                 onClick={onToggle}
                 fontSize="xs"
-                color="#01FF95"
+                color="primary.green"
                 mr={1}
               >
                 Go to releases!

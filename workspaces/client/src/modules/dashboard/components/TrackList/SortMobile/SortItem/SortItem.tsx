@@ -13,14 +13,14 @@ export default function SortItem({ content, isDesc, isActive, onClick }: Props) 
     <Button
       justifyContent="space-between"
       variant="link"
-      color="gray.300"
+      color="secondary.gray.500"
       fontWeight="normal"
       onClick={onClick}
     >
       {content}
 
       {isActive && (
-        <Box as="span" color="#01FF95" fontSize="xl">
+        <Box as="span" color="primary.green" fontSize="xl">
           {isDesc ? <BiDownArrowAlt /> : <BiUpArrowAlt />}
         </Box>
       )}

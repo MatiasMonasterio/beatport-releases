@@ -42,8 +42,10 @@ export default function DialogForm({ type, isOpen, onClose, onNewCard }: Props) 
   return (
     <AlertDialog isOpen={isOpen} leastDestructiveRef={inputRef} onClose={onClose}>
       <AlertDialogOverlay />
-      <AlertDialogContent textAlign="center" pt={6}>
-        <AlertDialogHeader>Please entry the beatport {type} ID</AlertDialogHeader>
+      <AlertDialogContent textAlign="center" pt={6} bgColor="secondary.black.800">
+        <AlertDialogHeader color="secondary.gray.100">
+          Please entry the beatport {type} ID
+        </AlertDialogHeader>
 
         <AlertDialogCloseButton />
 
@@ -57,7 +59,8 @@ export default function DialogForm({ type, isOpen, onClose, onNewCard }: Props) 
               isLoading={isLoading}
               loadingText="Loading..."
               type="submit"
-              colorScheme="gray"
+              bgColor="secondary.pink"
+              color="secondary.gray.200"
               ml={3}
             >
               Submit

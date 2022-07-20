@@ -31,7 +31,7 @@ export default function Sidebar() {
       </UnorderedList>
 
       <UnorderedList styleType="none" ml={0} spacing={1} mb={4}>
-        <Heading fontSize="xs" color="gray.600" fontWeight="normal" px={2} mb={2}>
+        <Heading fontSize="xs" color="secondary.gray.700" fontWeight="normal" px={2} mb={2}>
           Your Collection
         </Heading>
 
@@ -49,7 +49,7 @@ export default function Sidebar() {
       </UnorderedList>
 
       <UnorderedList styleType="none" ml={0} spacing={1} mb={4}>
-        <Heading fontSize="xs" color="gray.600" fontWeight="normal" px={2} mb={2}>
+        <Heading fontSize="xs" color="secondary.gray.700" fontWeight="normal" px={2} mb={2}>
           Discover
         </Heading>
 

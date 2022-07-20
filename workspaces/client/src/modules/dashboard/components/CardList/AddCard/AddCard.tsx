@@ -32,10 +32,11 @@ export default function AddCard({ height, type, onNewCard }: Props) {
           w="100%"
           borderRadius="lg"
           overflow="hidden"
+          color="secondary.gray.200"
           position="relative"
           fontSize="7xl"
           _groupHover={{
-            _after: { bgColor: "blackAlpha.400" },
+            _after: { bgColor: "blackAlpha.500" },
           }}
           _after={{
             content: `""`,
@@ -43,7 +44,7 @@ export default function AddCard({ height, type, onNewCard }: Props) {
             position: "absolute",
             width: "100%",
             height: "100%",
-            bgColor: "blackAlpha.500",
+            bgColor: "blackAlpha.600",
             transition: "background-color .1s",
             left: 0,
             top: 0,
@@ -53,11 +54,11 @@ export default function AddCard({ height, type, onNewCard }: Props) {
         </Center>
 
         <Box w="100%" textAlign="left">
-          <Heading as="h2" size="sm" color="gray.200">
+          <Heading as="h2" size="sm">
             Add new
           </Heading>
 
-          <Text fontSize="xs" color="gray.500" textTransform="capitalize">
+          <Text fontSize="xs" textTransform="capitalize">
             {type}
           </Text>
         </Box>

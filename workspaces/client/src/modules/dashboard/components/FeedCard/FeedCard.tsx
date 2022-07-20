@@ -21,24 +21,25 @@ interface Props {
 
 export default function FeedCard({ title, countTracks, to, isLoading, onPlay }: Props) {
   return (
-    <LinkBox bgColor="gray.700" p={4} backdropBlur="2px" borderRadius="lg" role="group" pt={16}>
+    <LinkBox
+      bgGradient="linear(to-bl, secondary.blue, secondary.pink)"
+      p={4}
+      backdropBlur="2px"
+      borderRadius="lg"
+      role="group"
+      pt={16}
+    >
       <HStack justifyContent="space-between">
-        <Box>
+        <Box color="secondary.gray.200">
           <LinkOverlay as={Link} to={to}>
-            <Heading as="h2" size="sm">
+            <Heading as="h3" size="sm" fontWeight="medium">
               {title}
             </Heading>
           </LinkOverlay>
 
-          <Text fontSize="sm" color="gray.400">
+          <Text fontSize="sm">
             {isLoading ? (
-              <Skeleton
-                width="70px"
-                height="0.8rem"
-                startColor="gray.700"
-                endColor="gray.600"
-                mt={2}
-              />
+              <Skeleton width="70px" height="0.8rem" mt={2} />
             ) : countTracks > 0 ? (
               `${countTracks} tracks`
             ) : (
@@ -52,8 +53,7 @@ export default function FeedCard({ title, countTracks, to, isLoading, onPlay }: 
             borderRadius="full"
             p={0}
             fontSize="2xl"
-            bgColor="gray.100"
-            color="gray.800"
+            color="secondary.black.700"
             onClick={onPlay}
             opacity={0}
             pointerEvents="none"

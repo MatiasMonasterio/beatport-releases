@@ -1,6 +1,8 @@
 import { Outlet } from "react-router-dom";
 import { Grid, GridItem } from "@chakra-ui/react";
 
+import { black } from "theme/colors";
+
 import { WidgetProvider } from "@/dashboard/contexts/widget";
 import { PlayerProvider } from "@/dashboard/contexts/player";
 import { Navbar, Sidebar, Player } from "@/dashboard/components";
@@ -17,16 +19,15 @@ export default function DashboardLayout() {
           templateRows="1fr"
           h="100vh"
           overflowY="hidden"
-          color="gray.50"
         >
           <GridItem
-            bg="gray.900"
             h="100%"
             boxShadow="0 -10px 25px rgba(0,0,0,0.2)"
             zIndex={1000}
             pt={3}
             borderRight="1px solid"
-            borderColor="gray.700"
+            borderColor="secondary.black.600"
+            bgColor="secondary.black.900"
             gridArea="1 / 1 / 2 / 2"
             display={{ base: "none", sm: "block" }}
           >
@@ -36,7 +37,6 @@ export default function DashboardLayout() {
           <GridItem
             className="dashboard-main-content"
             overflowY="scroll"
-            bg="gray.900"
             pb={10}
             h="100%"
             position="relative"
@@ -47,13 +47,12 @@ export default function DashboardLayout() {
               "@media (min-width: 480px)": {
                 "&::-webkit-scrollbar": {
                   width: "4px",
-                  backgroundColor: "#1A202C",
                 },
                 "&::-webkit-scrollbar-track": {
                   width: "10px",
                 },
                 "&::-webkit-scrollbar-thumb": {
-                  background: "#2D3748",
+                  background: black[700],
                   borderRadius: "2px",
                 },
               },

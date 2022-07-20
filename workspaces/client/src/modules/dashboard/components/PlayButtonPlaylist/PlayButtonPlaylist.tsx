@@ -19,8 +19,8 @@ export default function PlayButtonPlaylist({ playlist, disabled }: Props) {
 
   return (
     <Button
-      bgColor="gray.200"
-      color="gray.900"
+      bgColor="secondary.gray.200"
+      color="secondary.black.800"
       gap={4}
       borderRadius="full"
       px={3}

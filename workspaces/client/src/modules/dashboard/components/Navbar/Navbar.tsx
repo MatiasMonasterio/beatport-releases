@@ -26,16 +26,16 @@ export default function Navbar({ isSolid }: Props) {
         top={0}
         py={3}
         right={0}
-        bgColor={isSolid ? "gray.900" : "transparent"}
+        bgColor={isSolid ? "secondary.black.900" : "transparent"}
         borderBottom="1px solid"
-        borderColor={isSolid ? "gray.700" : "transparent"}
+        borderColor={isSolid ? "secondary.black.600" : "transparent"}
         boxShadow={isSolid ? "0 0 25px rgba(0,0,0,0.2)" : "none"}
       >
         <Container maxW="container.xl">
           <Button
             variant="link"
             fontSize="2xl"
-            color="gray.300"
+            color="secondary.gray.200"
             justifyContent="left"
             onClick={handleNavigateBack}
             display={{ base: "flex", sm: "none" }}

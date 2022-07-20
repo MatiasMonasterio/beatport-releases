@@ -4,6 +4,8 @@ import { useLayoutEffect, useRef, useImperativeHandle, forwardRef } from "react"
 import { Box } from "@chakra-ui/react";
 import { motion, useMotionValue, animate } from "framer-motion";
 
+import { black } from "theme/colors";
+
 interface Props extends BoxProps {
   children: React.ReactNode;
   speed?: number;
@@ -68,7 +70,7 @@ export default forwardRef<ForwardRef, Props>(function MotionText(props, ref) {
         width: "10px",
         height: "110%",
         transition: "none",
-        background: `linear-gradient(90deg, rgba(26, 32, 44, 0.2) 0%, #1A202C 90%);`,
+        background: `linear-gradient(90deg, rgba(26, 32, 44, 0.2) 0%, ${black[800]} 90%);`,
         right: 0,
         top: 0,
       }}

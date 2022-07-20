@@ -13,7 +13,7 @@ export default function Follow({ isFollowing, isLoading, onClick }: Props): JSX.
         onClick={onClick}
         variant={isFollowing ? "solid" : "outline"}
         fontSize="sm"
-        color="white"
+        color="secondary.gray.100"
         size="xs"
         colorScheme={isFollowing ? "green" : "white"}
         disabled={isLoading}

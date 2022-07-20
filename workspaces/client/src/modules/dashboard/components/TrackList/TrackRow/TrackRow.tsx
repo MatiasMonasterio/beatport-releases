@@ -6,7 +6,7 @@ export interface ITrack extends Track {
 
 import { useMemo } from "react";
 import { Link as ReactLink } from "react-router-dom";
-import { Box, Text, Grid, GridItem, Link } from "@chakra-ui/react";
+import { Box, Text, Grid, GridItem, Link, Heading } from "@chakra-ui/react";
 
 import { Favorite } from "@/dashboard/components";
 import { usePlayerContext } from "@/dashboard/contexts/player";
@@ -38,7 +38,7 @@ export default function TrackRow({ isFavoriteList, track, onPlay }: Props): JSX.
 
   return (
     <Box
-      _hover={{ bgColor: "gray.700" }}
+      _hover={{ bgColor: "secondary.black.700" }}
       borderRadius="sm"
       overflow="hidden"
       transition="background-color 0.1s"
@@ -56,9 +56,11 @@ export default function TrackRow({ isFavoriteList, track, onPlay }: Props): JSX.
         </GridItem>
 
         <GridItem gap={0.2} display="flex" flexDir="column" alignItems="start">
-          <Text
-            as="span"
-            color={isSelect ? "#01FF95" : ""}
+          <Heading
+            size="sm"
+            as="h3"
+            fontWeight="normal"
+            color={isSelect ? "primary.green" : "secondary.gray.200"}
             whiteSpace="nowrap"
             textOverflow="ellipsis"
             overflow="hidden"
@@ -66,11 +68,10 @@ export default function TrackRow({ isFavoriteList, track, onPlay }: Props): JSX.
             display="inline-block"
           >
             {name} {mix}
-          </Text>
+          </Heading>
 
           <Box
             fontSize="sm"
-            color="gray.400"
             whiteSpace="nowrap"
             textOverflow="ellipsis"
             overflow="hidden"
@@ -82,7 +83,7 @@ export default function TrackRow({ isFavoriteList, track, onPlay }: Props): JSX.
             ))}
           </Box>
 
-          <Link as={ReactLink} to={`/label/${label.id}`} fontSize="sm" color="gray.400">
+          <Link as={ReactLink} to={`/label/${label.id}`} fontSize="sm">
             {label.name}
           </Link>
         </GridItem>
@@ -90,6 +91,7 @@ export default function TrackRow({ isFavoriteList, track, onPlay }: Props): JSX.
         <GridItem
           py={{ base: 0, sm: 2 }}
           fontSize="sm"
+          color="secondary.gray.700"
           display={{ base: "none", sm: "block" }}
           alignSelf="center"
         >
@@ -103,6 +105,7 @@ export default function TrackRow({ isFavoriteList, track, onPlay }: Props): JSX.
           py={{ base: 0, sm: 2 }}
           display={{ base: "none", sm: "block" }}
           alignSelf="center"
+          color="secondary.gray.700"
         >
           {bpm}
         </GridItem>
@@ -112,6 +115,7 @@ export default function TrackRow({ isFavoriteList, track, onPlay }: Props): JSX.
           fontSize="sm"
           display={{ base: "none", sm: "block" }}
           alignSelf="center"
+          color="secondary.gray.700"
         >
           {isFavoriteList && <FavoriteDate createdAt={createdAt} />}
           {!isFavoriteList && <PublishedDate released={released} />}

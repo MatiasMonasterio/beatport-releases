@@ -15,17 +15,18 @@ export default function SortItem({ content, isActive, isDesc, onClick }: Props) 
       fontSize="inherit"
       onClick={onClick}
       justifyContent="start"
+      color="secondary.gray.700"
       gap={2}
       textTransform="uppercase"
-      _active={{ color: "gray.200" }}
+      _active={{ color: "secondary.gray.200" }}
       _hover={{
         textDecoration: "none",
-        color: "gray.200",
+        color: "secondary.gray.200",
       }}
     >
       {content}
       {isActive && (
-        <Box as="span" color="#01FF95">
+        <Box as="span" color="primary.green">
           {isDesc ? <BiCaretDown /> : <BiCaretUp />}
         </Box>
       )}

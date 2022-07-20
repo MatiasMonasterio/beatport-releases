@@ -48,13 +48,13 @@ export default function TrackList({ tracks, isLoading, favoritesList }: Props): 
     <>
       <Box
         borderBottom="1px solid"
-        borderColor="whiteAlpha.200"
+        borderColor="secondary.black.600"
         py={{ base: 0, sm: 2 }}
         mb={3}
         position="sticky"
         top={{ base: "57px", sm: "65px" }}
         zIndex={50}
-        backgroundColor="gray.900"
+        backgroundColor="secondary.black.900"
       >
         <SortDesktop
           favoritesList={favoritesList}
@@ -93,7 +93,7 @@ export default function TrackList({ tracks, isLoading, favoritesList }: Props): 
           ))}
 
         {!isLoading && !innerTracks.length && (
-          <Box py={5} color="gray.500">
+          <Box py={5} color="secondary.gray.700">
             No results to show...
           </Box>
         )}

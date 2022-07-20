@@ -23,9 +23,7 @@ export default function LabelsUpcomings(): JSX.Element {
     <>
       <MetaTags title="Labels Upcoming" />
 
-      {isLoading && (
-        <Skeleton width="110px" h="1.5rem" startColor="gray.800" endColor="gray.700" mb={4} />
-      )}
+      {isLoading && <Skeleton width="110px" h="1.5rem" mb={4} />}
 
       {!isLoading && (
         <Heading as="h2" size="lg" mb={4}>

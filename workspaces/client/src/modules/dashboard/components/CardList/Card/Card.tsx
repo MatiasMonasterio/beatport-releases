@@ -50,14 +50,12 @@ export default function Card({ data, type, height }: Props) {
         <Box w="100%" overflow="hidden">
           <LinkOverlay as={Link} to={`/${type}/${id}`}>
             <MotionText ref={ref}>
-              <Heading as="h2" size="sm" color="gray.200">
+              <Heading as="h2" size="sm">
                 {name}
               </Heading>
             </MotionText>
 
-            <Text fontSize="xs" color="gray.500">
-              {tracks.length} tracks
-            </Text>
+            <Text fontSize="xs">{tracks.length} tracks</Text>
           </LinkOverlay>
         </Box>
       </VStack>

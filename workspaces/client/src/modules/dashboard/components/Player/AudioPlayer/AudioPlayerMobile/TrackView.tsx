@@ -60,7 +60,7 @@ export default function TrackView({
       left={0}
       width="100%"
       height="100%"
-      backgroundColor="gray.800"
+      backgroundColor="secondary.black.900"
       zIndex={101}
       transition="transform 0.2s"
       transitionDelay="0.1s"
@@ -72,8 +72,8 @@ export default function TrackView({
         </Button>
       </Container>
       <Container display="flex" flexDirection="column" height="100%">
-        <Box display="flex" flexGrow={1} alignItems="center">
-          <Image src={currentTrack?.artwork} />
+        <Box display="flex" flexGrow={1} alignItems="center" w="100%">
+          <Image src={currentTrack?.artwork} w="100%" />
         </Box>
 
         <Box pb={10}>
@@ -82,7 +82,7 @@ export default function TrackView({
               {currentTrack?.name} {currentTrack?.mix}
             </Heading>
 
-            <Text fontSize="sm" color="gray.400">
+            <Text fontSize="sm">
               {currentTrack?.artists &&
                 currentTrack.artists.map((artist) => (
                   <Link
@@ -97,7 +97,7 @@ export default function TrackView({
                 ))}
             </Text>
 
-            <Text fontSize="sm" color="gray.400">
+            <Text fontSize="sm">
               <Link as={NavLink} to={`/label/${currentTrack?.label?.id}`} onClick={handleCloseView}>
                 {currentTrack?.label?.name}
               </Link>

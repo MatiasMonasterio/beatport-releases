@@ -38,7 +38,7 @@ export default function ArtistProfile(): JSX.Element {
     <>
       {artist.name && <MetaTags title={artist.name} />}
 
-      <Box mb={8} h={{ base: 300, sm: 400 }} position="relative" zIndex={1} overflow="hidden">
+      <Box mb={8} h={{ base: 300, sm: 350 }} position="relative" zIndex={1} overflow="hidden">
         <Box
           ref={parallaxRef}
           backgroundImage={artist.artwork}
@@ -55,14 +55,8 @@ export default function ArtistProfile(): JSX.Element {
           <Container maxW="container.xl">
             {isLoading ? (
               <>
-                <Skeleton
-                  width="250px"
-                  height="2.1rem"
-                  startColor="gray.800"
-                  endColor="gray.700"
-                  mb={2}
-                />
-                <Skeleton width="150px" height="0.9rem" startColor="gray.800" endColor="gray.700" />
+                <Skeleton width="250px" height="2.1rem" mb={2} />
+                <Skeleton width="150px" height="0.9rem" />
               </>
             ) : (
               <HStack gap={2}>
@@ -78,7 +72,13 @@ export default function ArtistProfile(): JSX.Element {
                     />
                   </HStack>
 
-                  <Link isExternal href={artist.profile} fontSize="sm" color="gray.400" mr="auto">
+                  <Link
+                    isExternal
+                    href={artist.profile}
+                    fontSize="sm"
+                    color="secondary.gray.200"
+                    mr="auto"
+                  >
                     Go to beatport profile
                   </Link>
                 </VStack>

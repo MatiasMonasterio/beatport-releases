@@ -12,7 +12,7 @@ export default function SecondNavbar({ routes }: Props) {
       spacing={4}
       w="100%"
       borderBottom="1px solid"
-      borderColor="gray.700"
+      borderColor="secondary.black.600"
       mt={{ base: 16, sm: 20 }}
       mb={8}
     >

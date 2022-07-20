@@ -38,7 +38,7 @@ export default function LabelProfile(): JSX.Element {
     <>
       {label.name && <MetaTags title={label.name} />}
 
-      <Box mb={10} h={{ base: 300, sm: 400 }} position="relative" zIndex={1} overflow="hidden">
+      <Box mb={10} h={{ base: 300, sm: 350 }} position="relative" zIndex={1} overflow="hidden">
         <Box
           ref={parallaxRef}
           backgroundImage={label.artwork}
@@ -55,14 +55,8 @@ export default function LabelProfile(): JSX.Element {
           <Container maxW="container.xl">
             {isLoading ? (
               <>
-                <Skeleton
-                  width="250px"
-                  height="2.1rem"
-                  startColor="gray.800"
-                  endColor="gray.700"
-                  mb={2}
-                />
-                <Skeleton width="150px" height="0.9rem" startColor="gray.800" endColor="gray.700" />
+                <Skeleton width="250px" height="2.1rem" mb={2} />
+                <Skeleton width="150px" height="0.9rem" />
               </>
             ) : (
               <HStack gap={2}>
@@ -78,7 +72,13 @@ export default function LabelProfile(): JSX.Element {
                     />
                   </HStack>
 
-                  <Link isExternal href={label.profile} fontSize="sm" color="gray.400" mr="auto">
+                  <Link
+                    isExternal
+                    href={label.profile}
+                    fontSize="sm"
+                    color="secondary.gray.200"
+                    mr="auto"
+                  >
                     Go to beatport profile
                   </Link>
                 </VStack>

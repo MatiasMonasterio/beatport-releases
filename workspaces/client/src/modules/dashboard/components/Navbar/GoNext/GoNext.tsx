@@ -14,7 +14,8 @@ export default function GoNext({ onClick }: Props) {
       fontSize="1.2rem"
       justifyContent="start"
       p={2}
-      color="gray.400"
+      color="secondary.gray.200"
+      _hover={{ color: "secondary.gray.100" }}
     >
       <BiArrowBack />
     </Button>

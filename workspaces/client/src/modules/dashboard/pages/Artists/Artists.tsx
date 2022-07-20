@@ -34,9 +34,7 @@ export default function Artists() {
       <MetaTags title="Artists" />
 
       <HStack justify="space-between" mb={8} align="center">
-        {isLoading && (
-          <Skeleton width="110px" h="1.5rem" startColor="gray.800" endColor="gray.700" />
-        )}
+        {isLoading && <Skeleton width="110px" h="1.5rem" />}
 
         {!isLoading && (
           <Heading as="h2" size="lg">

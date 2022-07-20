@@ -45,16 +45,16 @@ export default function Timeline({ currentTime, duration, onTimelineChange }: Pr
         <Box
           h="3px"
           w="100%"
-          bg="gray.700"
+          backgroundColor="secondary.black.500"
           _after={{
             content: `""`,
             display: "block",
             height: "100%",
             width: progress,
-            bg: "gray.100",
+            bgColor: "secondary.gray.200",
           }}
           _groupHover={{
-            _after: { bg: "#01FF95" },
+            _after: { bgColor: "primary.green" },
           }}
         />
       </Box>
@@ -64,10 +64,10 @@ export default function Timeline({ currentTime, duration, onTimelineChange }: Pr
       </Text>
 
       <HStack justifyContent="space-between" mb={2} display={{ base: "flex", sm: "none" }}>
-        <Text fontSize="xs" as="span" color="gray.400">
+        <Text fontSize="xs" as="span">
           {currentTimeString}
         </Text>
-        <Text fontSize="xs" as="span" color="gray.400">
+        <Text fontSize="xs" as="span">
           {durationString}
         </Text>
       </HStack>

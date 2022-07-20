@@ -14,7 +14,7 @@ export default function TrackCard(): JSX.Element {
 
       <Box fontSize="sm" overflow="hidden">
         <MotionText>
-          <Text fontWeight="bold">
+          <Text fontWeight="medium" color="secondary.gray.200">
             {name} {mix}
           </Text>
         </MotionText>
@@ -27,7 +27,6 @@ export default function TrackCard(): JSX.Element {
                 key={artist.id}
                 to={`/artist/${artist.id}`}
                 fontSize="xs"
-                color="gray.400"
                 lineHeight={1}
                 _notLast={{ _after: { content: `", "` } }}
               >
@@ -41,7 +40,6 @@ export default function TrackCard(): JSX.Element {
             as={NavLink}
             to={`/label/${label?.id}`}
             fontSize="xs"
-            color="gray.400"
             display="inline-block"
             lineHeight={1}
           >

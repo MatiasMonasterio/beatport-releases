@@ -36,7 +36,7 @@ export default function SortMobile({
   return (
     <>
       <HStack justifyContent="end" position="absolute" bottom="15px" right={0}>
-        <Button variant="link" fontSize="xl" color="gray.300" onClick={onOpen}>
+        <Button variant="link" fontSize="xl" onClick={onOpen}>
           <BiSortAlt2 />
         </Button>
       </HStack>
@@ -44,8 +44,14 @@ export default function SortMobile({
       <Drawer isOpen={isOpen} onClose={onClose} placement="bottom">
         <DrawerOverlay />
 
-        <DrawerContent backgroundColor="gray.900" color="gray.300" py={4}>
-          <DrawerHeader py={0} mb={2} fontWeight="semibold" fontSize="md" color="white">
+        <DrawerContent backgroundColor="secondary.black.800" py={4}>
+          <DrawerHeader
+            py={0}
+            mb={2}
+            fontWeight="semibold"
+            fontSize="md"
+            color="secondary.gray.100"
+          >
             Sort by
           </DrawerHeader>
 

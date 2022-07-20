@@ -6,6 +6,8 @@ import { motion, useAnimation } from "framer-motion";
 import { BiHeart } from "react-icons/bi";
 import { FaHeart } from "react-icons/fa";
 
+import { green } from "theme/colors";
+
 import { newFavoriteTrack, deleteFavoriteById } from "@/dashboard/services/favorites";
 import { usePlayerContext } from "@/dashboard/contexts/player";
 
@@ -77,7 +79,7 @@ export default function Favorite({ track, onClick }: Props) {
       aria-label={isFavorite ? "Remove Favorite" : "Add Favorite"}
       role="switch"
     >
-      {isFavorite ? <FaHeart fill="#01FF95" /> : <BiHeart />}
+      {isFavorite ? <FaHeart fill={green} /> : <BiHeart />}
     </MotionButton>
   );
 }

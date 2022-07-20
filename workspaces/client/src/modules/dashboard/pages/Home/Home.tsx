@@ -107,7 +107,7 @@ export default function Home() {
               Last Releases
             </Heading>
 
-            <Heading as="h3" size="xs" color="gray.500" fontWeight="normal" mb={8}>
+            <Heading as="h3" size="xs" color="secondary.gray.500" fontWeight="normal" mb={8}>
               New Releases this week 🔥
             </Heading>
 
@@ -123,7 +123,12 @@ export default function Home() {
                 Recent Artist Followed
               </Heading>
 
-              <Link as={ReactLink} to="/artists" color="gray.300" _hover={{ color: "#01FF95" }}>
+              <Link
+                as={ReactLink}
+                to="/artists"
+                color="secondary.gray.700"
+                _hover={{ color: "primary.green" }}
+              >
                 View all
               </Link>
             </HStack>
@@ -143,7 +148,12 @@ export default function Home() {
                 Recent Labels Followed
               </Heading>
 
-              <Link as={ReactLink} to="/labels" color="gray.300" _hover={{ color: "#01FF95" }}>
+              <Link
+                as={ReactLink}
+                to="/labels"
+                color="secondary.gray.700"
+                _hover={{ color: "primary.green" }}
+              >
                 View all
               </Link>
             </HStack>

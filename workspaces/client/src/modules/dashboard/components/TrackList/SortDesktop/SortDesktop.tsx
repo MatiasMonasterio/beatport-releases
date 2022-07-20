@@ -28,7 +28,6 @@ export default function SortDesktop({
       display={{ base: "none", sm: "grid" }}
       templateColumns="minmax(314px, 1fr) minmax(150px, 290px) minmax(30px, 100px) minmax(50px, 120px) 60px"
       gap={6}
-      color="gray.400"
       fontSize="xs"
     >
       <GridItem>

@@ -10,11 +10,11 @@ export default function PlayButton({ isPlaying, onClick }: Props) {
   return (
     <Button
       variant="link"
-      _hover={{ color: "white" }}
+      _hover={{ color: "secondary.gray.100" }}
       _active={{ transform: "scale(0.9)" }}
       fontSize="5xl"
       onClick={onClick}
-      color="gray.200"
+      color="secondary.gray.200"
     >
       {isPlaying ? <BiPause /> : <BiPlay />}
     </Button>

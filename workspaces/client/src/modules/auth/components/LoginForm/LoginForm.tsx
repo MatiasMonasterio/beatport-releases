@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import { Box, FormControl, FormLabel, Input, Button, Flex, Link, Text } from "@chakra-ui/react";
+import { Box, FormControl, Input, Button, Flex, Link, Text } from "@chakra-ui/react";
 import { BiArrowBack } from "react-icons/bi";
 
 import { useFetch } from "hooks";
@@ -41,39 +41,36 @@ export default function LoginForm({ onSubmit }: Props) {
   }, []);
 
   return (
-    <Box as="form" display="flex" flexDirection="column" gap={2} onSubmit={handleSubmit} w="100%">
-      <FormControl border="1px solid" borderRadius="4px" borderColor="gray.300" px={2} py={1}>
-        <FormLabel mb={0} fontSize="xs" color="gray.500" fontWeight="normal" lineHeight="1em">
-          E-mail
-        </FormLabel>
-
+    <Box as="form" display="flex" flexDirection="column" gap={4} onSubmit={handleSubmit} w="100%">
+      <FormControl>
         <Input
-          variant="unstyled"
           type="text"
           value={form.email}
-          fontSize="sm"
           name="email"
+          placeholder="email"
           onChange={handleInputChange}
           disabled={isLoading}
         />
       </FormControl>
 
-      <FormControl border="1px solid" borderRadius="4px" borderColor="gray.300" px={2} py={1}>
-        <FormLabel mb={0} fontSize="xs" color="gray.500" fontWeight="normal" lineHeight="1.2em">
-          Password
-        </FormLabel>
+      <FormControl>
         <Input
-          variant="unstyled"
           type="password"
           value={form.password}
-          fontSize="sm"
+          placeholder="password"
           name="password"
           onChange={handleInputChange}
           disabled={isLoading}
         />
       </FormControl>
 
-      <Flex mb={4} fontSize="xs" color="gray.500" justifyContent="space-between" lineHeight="1.2em">
+      <Flex
+        mb={4}
+        fontSize="xs"
+        justifyContent="space-between"
+        color="secondary.gray.700"
+        lineHeight="1.2em"
+      >
         <Link>Don t have an account?</Link>
         <Link>Forgot Password?</Link>
       </Flex>
@@ -81,7 +78,8 @@ export default function LoginForm({ onSubmit }: Props) {
       <Button
         type="submit"
         w="100%"
-        colorScheme="blue"
+        bgColor="secondary.pink"
+        color="secondary.gray.200"
         borderRadius="4px"
         fontWeight="normal"
         fontSize="sm"

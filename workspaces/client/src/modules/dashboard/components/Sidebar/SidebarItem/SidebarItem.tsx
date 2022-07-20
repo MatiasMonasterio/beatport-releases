@@ -11,23 +11,23 @@ export default function SidebarItem({ to, content, icon }: Props) {
   return (
     <Link
       _activeLink={{
-        bgColor: "gray.200",
-        color: "gray.900",
+        bgColor: "secondary.gray.200",
+        color: "secondary.black.900",
         _after: {
           content: `""`,
           h: "100%",
           display: "block",
           w: "3px",
-          bgColor: "gray.200",
+          bgColor: "secondary.gray.200",
           right: -4,
           position: "absolute",
         },
       }}
       _hover={{
-        bgColor: "gray.200",
-        color: "gray.900",
+        bgColor: "secondary.gray.200",
+        color: "secondary.black.900",
       }}
-      color="gray.200"
+      color="secondary.gray.200"
       alignItems="center"
       as={NavLink}
       borderRadius="lg"

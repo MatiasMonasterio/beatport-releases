@@ -13,14 +13,18 @@ export default function Account() {
 
   return (
     <Menu>
-      <MenuButton bg="gray.900" p={1} borderRadius="full" display={{ base: "none", sm: "flex" }}>
+      <MenuButton
+        bgColor="secondary.black.900"
+        p={1}
+        borderRadius="full"
+        display={{ base: "none", sm: "flex" }}
+      >
         <Avatar borderRadius="full" boxSize={8} src={jwtDecode.avatar} name={jwtDecode.username} />
       </MenuButton>
 
       <MenuList
-        bgColor="gray.800"
-        borderColor="gray.600"
-        color="gray.300"
+        bgColor="secondary.black.800"
+        borderColor="secondary.black.600"
         boxShadow="sm"
         borderRadius="md"
         fontSize="lg"
@@ -31,8 +35,8 @@ export default function Account() {
         <MenuItem
           as={Link}
           to="/account"
-          _focus={{ bgColor: "initial", color: "white" }}
-          _hover={{ bgColor: "initial", color: "white" }}
+          _focus={{ bgColor: "initial", color: "secondary.gray.100" }}
+          _hover={{ bgColor: "initial", color: "secondary.gray.100" }}
           icon={<BiUser />}
         >
           <Text fontSize="md">Profile</Text>
@@ -40,16 +44,16 @@ export default function Account() {
         <MenuItem
           as={Link}
           to="/account/settings"
-          _focus={{ bgColor: "initial", color: "white" }}
-          _hover={{ bgColor: "initial", color: "white" }}
+          _focus={{ bgColor: "initial", color: "secondary.gray.100" }}
+          _hover={{ bgColor: "initial", color: "secondary.gray.100" }}
           icon={<BiSlider />}
         >
           <Text fontSize="md">Settings</Text>
         </MenuItem>
         <MenuItem
           onClick={handleSignOut}
-          _focus={{ bgColor: "initial", color: "white" }}
-          _hover={{ bgColor: "initial", color: "white" }}
+          _focus={{ bgColor: "initial", color: "secondary.gray.100" }}
+          _hover={{ bgColor: "initial", color: "secondary.gray.100" }}
           icon={<BiLogOut />}
         >
           <Text fontSize="md">Sign Out</Text>

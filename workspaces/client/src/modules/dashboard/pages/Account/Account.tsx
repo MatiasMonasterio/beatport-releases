@@ -33,7 +33,7 @@ export default function Account() {
 
   return (
     <VStack spacing={8}>
-      <Heading size="lg" borderBottom="1px solid" borderColor="gray.700" py={2} w="100%">
+      <Heading size="lg" borderBottom="1px solid" borderColor="secondary.black.600" py={2} w="100%">
         Mis datos
       </Heading>
 
@@ -41,11 +41,11 @@ export default function Account() {
         <Avatar size="xl" name={user?.username} src={user?.avatar} />
 
         <VStack alignItems="flex-start">
-          <Heading as="h2" size="md" color="gray.300" fontWeight="medium">
+          <Heading as="h2" size="md" color="secondary.gray.200" fontWeight="medium">
             {user?.username}
           </Heading>
 
-          <Text color="gray.400">Init with Google</Text>
+          <Text>Init with Google</Text>
         </VStack>
       </HStack>
 
@@ -55,30 +55,23 @@ export default function Account() {
           fontWeight="medium"
           size="md"
           borderBottom="1px solid"
-          borderColor="gray.700"
+          borderColor="secondary.black.600"
           mb={4}
         >
           Init session
         </Heading>
 
-        <VStack as="form" color="gray.300" gap={4}>
+        <VStack as="form" gap={4}>
           <FormControl>
             <FormLabel fontWeight="normal" fontSize="sm">
               Your email:
             </FormLabel>
 
             <HStack>
-              <Input
-                bgColor="gray.700"
-                borderColor="gray.600"
-                borderRadius="3px"
-                value={user?.email}
-                color="gray.300"
-                type="text"
-                disabled
-              />
-
-              <Button colorScheme="blackAlpha">Modified</Button>
+              <Input value={user?.email} type="text" disabled />
+              <Button bgColor="secondary.pink" color="secondary.gray.200">
+                Modified
+              </Button>
             </HStack>
           </FormControl>
 
@@ -88,17 +81,10 @@ export default function Account() {
             </FormLabel>
 
             <HStack>
-              <Input
-                bgColor="gray.700"
-                borderColor="gray.600"
-                borderRadius="3px"
-                value={user?.password}
-                color="gray.300"
-                type="password"
-                disabled
-              />
-
-              <Button colorScheme="blackAlpha">Modified</Button>
+              <Input value={user?.password} type="password" disabled />
+              <Button bgColor="secondary.pink" color="secondary.gray.200">
+                Modified
+              </Button>
             </HStack>
           </FormControl>
         </VStack>
@@ -110,13 +96,13 @@ export default function Account() {
           fontWeight="medium"
           size="md"
           borderBottom="1px solid"
-          borderColor="gray.700"
+          borderColor="secondary.black.600"
           mb={4}
         >
           Private Data
         </Heading>
 
-        <VStack as="form" color="gray.300" gap={4}>
+        <VStack as="form" gap={4}>
           <FormControl>
             <FormLabel fontWeight="normal" fontSize="sm">
               Genre:
@@ -124,13 +110,13 @@ export default function Account() {
 
             <RadioGroup value={user?.genre}>
               <Stack direction="row">
-                <Radio value="male" borderColor="gray.700">
+                <Radio value="male" borderColor="secondary.black.600">
                   Male
                 </Radio>
-                <Radio value="female" borderColor="gray.700">
+                <Radio value="female" borderColor="secondary.black.600">
                   Female
                 </Radio>
-                <Radio value="nobinary" borderColor="gray.700">
+                <Radio value="nobinary" borderColor="secondary.black.600">
                   No Binary
                 </Radio>
               </Stack>
@@ -142,14 +128,7 @@ export default function Account() {
               User Name:
             </FormLabel>
 
-            <Input
-              bgColor="gray.700"
-              borderColor="gray.600"
-              borderRadius="3px"
-              value={user?.username}
-              color="gray.300"
-              type="text"
-            />
+            <Input value={user?.username} type="text" />
           </FormControl>
         </VStack>
       </Box>
@@ -160,26 +139,26 @@ export default function Account() {
           fontWeight="medium"
           size="md"
           borderBottom="1px solid"
-          borderColor="gray.700"
+          borderColor="secondary.black.600"
           mb={4}
         >
           Private Data
         </Heading>
 
-        <VStack as="form" color="gray.300" gap={4}>
+        <VStack as="form" gap={4}>
           <FormControl>
             <FormLabel fontWeight="normal" fontSize="sm">
               Date:
             </FormLabel>
 
             <HStack>
-              <Select placeholder="Day" bgColor="gray.700" borderColor="gray.600">
+              <Select placeholder="Day" borderColor="secondary.black.600">
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
                 <option value="option3">Option 3</option>
               </Select>
 
-              <Select placeholder="Month" bgColor="gray.700" borderColor="gray.600">
+              <Select placeholder="Month" borderColor="secondary.black.600">
                 {new Array(12).map((index) => (
                   <option value="option1" key={index}>
                     Option 1
@@ -187,7 +166,7 @@ export default function Account() {
                 ))}
               </Select>
 
-              <Select placeholder="Year" bgColor="gray.700" borderColor="gray.600">
+              <Select placeholder="Year" borderColor="secondary.black.600">
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
                 <option value="option3">Option 3</option>
@@ -200,7 +179,7 @@ export default function Account() {
               Country:
             </FormLabel>
 
-            <Select placeholder="Select option" bgColor="gray.700" borderColor="gray.600">
+            <Select placeholder="Select option" borderColor="secondary.black.600">
               <option value="option1">Option 1</option>
               <option value="option2">Option 2</option>
               <option value="option3">Option 3</option>
