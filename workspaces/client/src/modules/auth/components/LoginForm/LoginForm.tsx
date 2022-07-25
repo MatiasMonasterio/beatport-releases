@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, NavLink } from "react-router-dom";
 
 import { Box, FormControl, Input, Button, Flex, Link, Text } from "@chakra-ui/react";
 import { BiArrowBack } from "react-icons/bi";
@@ -15,9 +15,14 @@ interface FormData {
   password: string;
 }
 
+const emptyForm = {
+  email: "",
+  password: "",
+};
+
 export default function LoginForm({ onSubmit }: Props) {
   const [searchParams] = useSearchParams();
-  const [form, setForm] = useState<FormData>({ email: "", password: "" });
+  const [form, setForm] = useState<FormData>(emptyForm);
 
   const { fetch, isLoading } = useFetch();
 
@@ -71,20 +76,16 @@ export default function LoginForm({ onSubmit }: Props) {
         color="secondary.gray.700"
         lineHeight="1.2em"
       >
-        <Link>Don t have an account?</Link>
-        <Link>Forgot Password?</Link>
+        <Link as={NavLink} to="/auth/register">
+          Don t have an account?
+        </Link>
+
+        <Link as={NavLink} to="/auth/recover">
+          Forgot Password?
+        </Link>
       </Flex>
 
-      <Button
-        type="submit"
-        w="100%"
-        bgColor="secondary.pink"
-        color="secondary.gray.200"
-        borderRadius="4px"
-        fontWeight="normal"
-        fontSize="sm"
-        disabled={isLoading}
-      >
+      <Button type="submit" w="100%" variant="primary" disabled={isLoading}>
         Login
         <Text fontSize="md" as="span" transform="rotate(180deg)" ml={1}>
           <BiArrowBack />
