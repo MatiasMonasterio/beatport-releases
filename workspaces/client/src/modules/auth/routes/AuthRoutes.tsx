@@ -5,6 +5,7 @@ import { AuthLayout } from "@/auth/layouts";
 
 import Login from "@/auth/pages/Login";
 import Register from "@/auth/pages/Register";
+import Recover from "@/auth/pages/Recover";
 
 export default function AuthRoutes() {
   return (
@@ -12,6 +13,7 @@ export default function AuthRoutes() {
       <Route path="/" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="recover" element={<Recover />} />
       </Route>
     </RoutesWithNotFound>
   );
