@@ -45,5 +45,17 @@ export default extendTheme({
         },
       },
     },
+    Button: {
+      variants: {
+        primary: {
+          bgColor: pink,
+          color: gray[200],
+          fontWeight: "normal",
+          fontSize: "sm",
+          _hover: { bgColor: "#cf0358" },
+          _active: { bgColor: "#c30252" },
+        },
+      },
+    },
   },
 });
