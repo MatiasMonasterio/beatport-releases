@@ -1,10 +1,12 @@
 import { Outlet } from "react-router-dom";
 import { Center } from "@chakra-ui/react";
 
+import MotionCenter from "./MotionCenter";
+
 export default function AuthLayout() {
   return (
-    <Center w="100%" h="100vh">
-      <Center
+    <Center w="100%" h="100vh" bgColor={{ base: "secondary.black.800", sm: "inherit" }}>
+      <MotionCenter
         bgColor="secondary.black.800"
         px={8}
         py={10}
@@ -15,7 +17,7 @@ export default function AuthLayout() {
         maxWidth="100%"
       >
         <Outlet />
-      </Center>
+      </MotionCenter>
     </Center>
   );
 }
