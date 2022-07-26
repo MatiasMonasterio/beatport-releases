@@ -9,7 +9,7 @@ import { RegisterForm } from "@/auth/components";
 import { register } from "@/auth/services/auth";
 
 export default function Register() {
-  const { setToken } = useAuthorization();
+  const { login } = useAuthorization();
 
   const registerWithGoogle = () => {
     console.log("register");
@@ -17,7 +17,7 @@ export default function Register() {
 
   const handleRegister = async (credentials: UserCredentials) => {
     const token = await register(credentials);
-    if (token !== "") setToken(token);
+    if (token !== "") login(token);
   };
 
   return (
