@@ -1,72 +1,77 @@
-import React, { useEffect, useState } from "react";
-import { useSearchParams, NavLink } from "react-router-dom";
+import type { UserCredentials } from "@br/core";
 
-import { Box, FormControl, Input, Button, Flex, Link, Text } from "@chakra-ui/react";
+import { useSearchParams, NavLink } from "react-router-dom";
+import { Box, Button, Flex, Link, Text } from "@chakra-ui/react";
+import { FormControl, Input, FormErrorMessage } from "@chakra-ui/react";
 import { BiArrowBack } from "react-icons/bi";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 import { useFetch } from "hooks";
 
 interface Props {
-  onSubmit: (form: { email: string; password: string }) => Promise<void>;
+  onSubmit: (credentials: UserCredentials) => Promise<void>;
 }
 
-interface FormData {
-  email: string;
-  password: string;
-}
-
-const emptyForm = {
-  email: "",
-  password: "",
-};
+const validationSchema = Yup.object({
+  email: Yup.string().email().required(),
+  password: Yup.string().required(),
+});
 
 export default function LoginForm({ onSubmit }: Props) {
   const [searchParams] = useSearchParams();
-  const [form, setForm] = useState<FormData>(emptyForm);
-
   const { fetch, isLoading } = useFetch();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.currentTarget.name]: e.currentTarget.value });
+  const initialValues: UserCredentials = {
+    email: searchParams.get("email") || "",
+    password: searchParams.get("password") || "",
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement | HTMLDivElement>) => {
-    e.preventDefault();
-
-    fetch(async () => {
-      await onSubmit(form);
+  const handleSubmit = async () => {
+    await fetch(async () => {
+      await onSubmit(formik.values);
     });
   };
 
-  useEffect(() => {
-    const email = searchParams.get("email");
-    const password = searchParams.get("password");
-
-    if (email && password) setForm({ email, password });
-  }, []);
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: handleSubmit,
+  });
 
   return (
-    <Box as="form" display="flex" flexDirection="column" gap={4} onSubmit={handleSubmit} w="100%">
-      <FormControl>
+    <Box
+      as="form"
+      display="flex"
+      flexDirection="column"
+      gap={4}
+      onSubmit={(e) => formik.handleSubmit(e as React.FormEvent<HTMLFormElement> | undefined)}
+      w="100%"
+    >
+      <FormControl isInvalid={!!(formik.submitCount && formik.errors.email)}>
         <Input
           type="text"
-          value={form.email}
           name="email"
           placeholder="email"
-          onChange={handleInputChange}
           disabled={isLoading}
+          value={formik.values.email}
+          onChange={formik.handleChange}
         />
+
+        <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!(formik.submitCount && formik.errors.password)}>
         <Input
           type="password"
-          value={form.password}
-          placeholder="password"
           name="password"
-          onChange={handleInputChange}
+          placeholder="password"
           disabled={isLoading}
+          value={formik.values.password}
+          onChange={formik.handleChange}
         />
+
+        <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
       </FormControl>
 
       <Flex

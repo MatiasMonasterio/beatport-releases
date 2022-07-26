@@ -1,69 +1,93 @@
 import type { UserCredentials } from "@br/core";
 
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Box, FormControl, Input, Flex, Button, Link } from "@chakra-ui/react";
+import { Box, FormControl, FormErrorMessage, Input, Flex, Button, Link } from "@chakra-ui/react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 import { useFetch } from "hooks";
 
 interface Props {
-  onSubmit: ({ email, password }: UserCredentials) => Promise<void>;
+  onSubmit: (credentials: UserCredentials) => Promise<void>;
 }
 
-const emptyForm = {
+const validationSchema = Yup.object({
+  email: Yup.string().email().required(),
+  password: Yup.string().required(),
+  confirm_password: Yup.string().required(),
+});
+
+const initialValues = {
   email: "",
   password: "",
   confirm_password: "",
 };
 
 export default function RegisterForm({ onSubmit }: Props) {
-  const [form, setForm] = useState(emptyForm);
   const { fetch, isLoading } = useFetch();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement | HTMLDivElement>) => {
-    e.preventDefault();
-
-    if (form.password !== form.confirm_password) return;
-    await fetch<void>(async () => await onSubmit({ email: form.email, password: form.password }));
+  const handleSubmit = async () => {
+    await fetch<void>(
+      async () =>
+        await onSubmit({
+          email: formik.values.email,
+          password: formik.values.password,
+        })
+    );
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.currentTarget.name]: e.currentTarget.value });
-  };
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: handleSubmit,
+  });
 
   return (
-    <Box as="form" display="flex" flexDirection="column" gap={4} onSubmit={handleSubmit} w="100%">
-      <FormControl>
+    <Box
+      as="form"
+      display="flex"
+      flexDirection="column"
+      gap={4}
+      onSubmit={(e) => formik.handleSubmit(e as React.FormEvent<HTMLFormElement> | undefined)}
+      w="100%"
+    >
+      <FormControl isInvalid={!!(formik.submitCount && formik.errors.email)}>
         <Input
           type="text"
-          value={form.email}
           name="email"
           placeholder="email"
-          onChange={handleInputChange}
           disabled={isLoading}
+          value={formik.values.email}
+          onChange={formik.handleChange}
         />
+
+        <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!(formik.submitCount && formik.errors.password)}>
         <Input
           type="password"
-          value={form.password}
           placeholder="password"
           name="password"
-          onChange={handleInputChange}
           disabled={isLoading}
+          value={formik.values.password}
+          onChange={formik.handleChange}
         />
+
+        <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!(formik.submitCount && formik.errors.confirm_password)}>
         <Input
           type="password"
-          value={form.confirm_password}
           placeholder="confirm password"
           name="confirm_password"
-          onChange={handleInputChange}
           disabled={isLoading}
+          value={formik.values.confirm_password}
+          onChange={formik.handleChange}
         />
+
+        <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
       </FormControl>
 
       <Flex
