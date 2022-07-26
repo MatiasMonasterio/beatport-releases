@@ -5,10 +5,10 @@ import { BiUser, BiSlider, BiLogOut } from "react-icons/bi";
 import { useAuthorization } from "contexts/authorization";
 
 export default function Account() {
-  const { jwtDecode, deleteToken } = useAuthorization();
+  const { user, logout } = useAuthorization();
 
   const handleSignOut = () => {
-    deleteToken();
+    logout();
   };
 
   return (
@@ -19,7 +19,7 @@ export default function Account() {
         borderRadius="full"
         display={{ base: "none", sm: "flex" }}
       >
-        <Avatar borderRadius="full" boxSize={8} src={jwtDecode.avatar} name={jwtDecode.username} />
+        <Avatar borderRadius="full" boxSize={8} src={user.avatar} name={user.username} />
       </MenuButton>
 
       <MenuList

@@ -4,14 +4,14 @@ import { FcGoogle } from "react-icons/fc";
 import { useAuthorization } from "contexts/authorization";
 
 import { LoginForm } from "@/auth/components";
-import { login, loginWithGoogle } from "@/auth/services/auth";
+import { loginWithCredentials, loginWithGoogle } from "@/auth/services/auth";
 
 export default function Login() {
-  const { setToken } = useAuthorization();
+  const { login } = useAuthorization();
 
   const handleSubmit = async (credentials: { email: string; password: string }) => {
-    const token = await login(credentials);
-    if (token !== "") setToken(token);
+    const token = await loginWithCredentials(credentials);
+    if (token !== "") login(token);
   };
 
   return (

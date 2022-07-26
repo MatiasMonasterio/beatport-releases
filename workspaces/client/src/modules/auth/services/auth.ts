@@ -3,7 +3,10 @@ import type { TokenResponse } from "types";
 
 import { api } from "interceptors";
 
-export const login = async ({ email, password }: UserCredentials): Promise<string> => {
+export const loginWithCredentials = async ({
+  email,
+  password,
+}: UserCredentials): Promise<string> => {
   try {
     const response = await api.post<TokenResponse>("/api/users/login", { email, password });
     const { data: token, error } = response.data;
