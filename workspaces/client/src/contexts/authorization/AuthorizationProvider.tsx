@@ -1,61 +1,38 @@
 import type { JwtDecode } from "@br/core";
 
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import decode from "jwt-decode";
 
 import AuthorizationContext from "./AuthorizationContext";
+import useAuthorizationReducer from "./useAuthorizationReducer";
+import { AUTH_KEY } from "./constants";
 
 interface Props {
   children: React.ReactNode;
 }
 
-const LOCALSTORAGE_AUTH_KEY = "auth";
-
 export default function AuthorizationProvider({ children }: Props) {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
-  const [token, setToken] = useState<string>("");
-  const [jwtDecode, setJwtDecode] = useState({ username: "", avatar: "" });
+  const { state, dispatch } = useAuthorizationReducer();
 
-  const handleSetToken = (value: string): void => {
-    if (typeof value === "string" && value !== "") {
-      localStorage.setItem(LOCALSTORAGE_AUTH_KEY, value);
-      navigate("/");
-      setToken(value);
+  const login = (token: string): void => {
+    if (typeof token === "string" && token !== "") {
+      navigate("/", { replace: true });
+      const { username, avatar } = decode<JwtDecode>(token);
+      dispatch({ type: "login", payload: { username, avatar } });
+      localStorage.setItem(AUTH_KEY, token);
     }
   };
 
-  const deleteToken = () => {
-    localStorage.removeItem(LOCALSTORAGE_AUTH_KEY);
-    navigate("/auth/login");
-    setToken("");
+  const logout = (): void => {
+    navigate("/auth/login", { replace: true });
+    dispatch({ type: "logout", payload: {} });
+    localStorage.removeItem(AUTH_KEY);
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem(LOCALSTORAGE_AUTH_KEY);
-
-    if (token) {
-      const { username, avatar } = decode(token) as JwtDecode;
-      setJwtDecode({ username, avatar });
-      setToken(token);
-    } else {
-      if (!pathname.includes("/auth/")) {
-        navigate("/auth/login");
-      }
-    }
-  }, []);
 
   return (
-    <AuthorizationContext.Provider
-      value={{
-        token,
-        jwtDecode,
-        deleteToken,
-        setToken: handleSetToken,
-      }}
-    >
+    <AuthorizationContext.Provider value={{ user: state, login, logout }}>
       {children}
     </AuthorizationContext.Provider>
   );

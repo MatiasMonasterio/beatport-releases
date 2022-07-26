@@ -1,10 +1,4 @@
+import type { AutorizationContext } from "./types";
 import { createContext } from "react";
 
-export interface AutorizationContextProps {
-  token: string;
-  jwtDecode: { username: string; avatar: string };
-  setToken: (value: string) => void;
-  deleteToken: () => void;
-}
-
-export default createContext<AutorizationContextProps>({} as AutorizationContextProps);
+export default createContext<AutorizationContext>({} as AutorizationContext);
