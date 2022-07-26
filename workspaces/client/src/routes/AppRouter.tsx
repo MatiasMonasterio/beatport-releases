@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 
-import { RoutesWithNotFound } from "hocs";
+import { RoutesWithNotFound, PrivateRoutes, PublicRoutes } from "hocs";
 import { AuthorizationProvider } from "contexts/authorization";
 
 const DashboardRoutes = lazy(() => import("@/dashboard/routes"));
@@ -13,8 +13,23 @@ export default function AppRouter() {
       <AuthorizationProvider>
         <Suspense fallback={null}>
           <RoutesWithNotFound>
-            <Route path="/auth/*" element={<AuthRoutes />} />
-            <Route path="/*" element={<DashboardRoutes />} />
+            <Route
+              path="/auth/*"
+              element={
+                <PublicRoutes>
+                  <AuthRoutes />
+                </PublicRoutes>
+              }
+            />
+
+            <Route
+              path="/*"
+              element={
+                <PrivateRoutes>
+                  <DashboardRoutes />
+                </PrivateRoutes>
+              }
+            />
           </RoutesWithNotFound>
         </Suspense>
       </AuthorizationProvider>
