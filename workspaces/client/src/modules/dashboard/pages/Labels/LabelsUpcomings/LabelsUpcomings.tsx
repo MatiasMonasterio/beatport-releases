@@ -1,23 +1,16 @@
-import type { Track } from "@br/core";
-
-import { useState, useEffect } from "react";
 import { Heading, Skeleton } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useHttpRequest } from "hooks";
+import { useGetInitialData } from "hooks";
 
 import { TrackList } from "@/dashboard/components";
 import { getLabelUpcomings } from "@/dashboard/services/labels";
 
 export default function LabelsUpcomings(): JSX.Element {
-  const [upcomings, setUpcomings] = useState<Track[]>([]);
-  const { callRequest, isLoading } = useHttpRequest();
-
-  useEffect(() => {
-    callRequest(getLabelUpcomings).then((upcomings) => {
-      setUpcomings(upcomings);
-    });
-  }, []);
+  const { data: upcomings, isLoading } = useGetInitialData({
+    request: getLabelUpcomings,
+    defaultValue: [],
+  });
 
   return (
     <>

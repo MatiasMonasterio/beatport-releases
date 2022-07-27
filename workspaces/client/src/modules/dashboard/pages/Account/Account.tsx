@@ -1,6 +1,5 @@
 import type { User } from "@br/core";
 
-import { useState, useEffect } from "react";
 import {
   Heading,
   VStack,
@@ -18,18 +17,14 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
-import { useHttpRequest } from "hooks";
+import { useGetInitialData } from "hooks";
 import { getUserInfo } from "@/dashboard/services/user";
 
 export default function Account() {
-  const [user, setUser] = useState<User | null>(null);
-  const { callRequest } = useHttpRequest();
-
-  useEffect(() => {
-    callRequest(getUserInfo).then((user) => {
-      setUser(user);
-    });
-  }, []);
+  const { data: user } = useGetInitialData({
+    request: getUserInfo,
+    defaultValue: {} as User,
+  });
 
   return (
     <VStack spacing={8}>

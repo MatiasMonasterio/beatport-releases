@@ -1,11 +1,10 @@
 import type { Label } from "@br/core";
 
-import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Skeleton, HStack, VStack } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useHttpRequest } from "hooks";
+import { useGetInitialData } from "hooks";
 
 import { TrackList, Follow, PlayButtonPlaylist } from "@/dashboard/components";
 import { useParallax } from "@/dashboard/hooks";
@@ -15,21 +14,15 @@ export default function LabelProfile(): JSX.Element {
   const { id } = useParams<{ id: string }>() as { id: string };
   const { parallaxRef } = useParallax();
 
-  const [label, setLabel] = useState<Label>({} as Label);
-  const { callRequest, isLoading } = useHttpRequest();
+  const { data: label, isLoading } = useGetInitialData({
+    request: async () => await getLabelById(id),
+    defaultValue: {} as Label,
+  });
 
   const handleFollow = async (isFollowing: boolean): Promise<void> => {
     if (isFollowing) await deleteLabelById(id);
     else await addLabelId(id);
   };
-
-  useEffect(() => {
-    setLabel({} as Label);
-
-    callRequest(async () => await getLabelById(id)).then((labelResp) => {
-      setLabel(labelResp);
-    });
-  }, [id]);
 
   return (
     <>

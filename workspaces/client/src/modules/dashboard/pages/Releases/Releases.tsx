@@ -1,23 +1,16 @@
-import type { Track } from "@br/core";
-
-import { useEffect, useState } from "react";
 import { Container, Box, Heading } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useHttpRequest } from "hooks";
+import { useGetInitialData } from "hooks";
 
 import { TrackList } from "@/dashboard/components";
 import { getReleases } from "@/dashboard/services/tracks";
 
 export default function Releases() {
-  const { callRequest, isLoading } = useHttpRequest();
-  const [releases, setReleases] = useState<Track[]>([]);
-
-  useEffect(() => {
-    callRequest(getReleases).then((tracks) => {
-      setReleases(tracks);
-    });
-  }, []);
+  const { data: releases, isLoading } = useGetInitialData({
+    request: getReleases,
+    defaultValue: [],
+  });
 
   return (
     <>

@@ -1,11 +1,10 @@
 import type { Artist } from "@br/core";
 
-import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Skeleton, HStack, VStack } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useHttpRequest } from "hooks";
+import { useGetInitialData } from "hooks";
 
 import { TrackList, Follow, PlayButtonPlaylist } from "@/dashboard/components";
 import { useParallax } from "@/dashboard/hooks";
@@ -15,21 +14,16 @@ export default function ArtistProfile(): JSX.Element {
   const { id } = useParams<{ id: string }>() as { id: string };
   const { parallaxRef } = useParallax();
 
-  const [artist, setArtits] = useState<Artist>({} as Artist);
-  const { callRequest, isLoading } = useHttpRequest();
+  const { data: artist, isLoading } = useGetInitialData({
+    request: async () => await getArtistById(id),
+    defaultValue: {} as Artist,
+    deps: [id],
+  });
 
   const handleFollow = async (isFolling: boolean): Promise<void> => {
     if (isFolling) await deleteArtistsById(id);
     else await addArtistId(id);
   };
-
-  useEffect(() => {
-    setArtits({} as Artist);
-
-    callRequest(async () => await getArtistById(id)).then((response) => {
-      setArtits(response);
-    });
-  }, [id]);
 
   return (
     <>

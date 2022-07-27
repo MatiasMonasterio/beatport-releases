@@ -1,23 +1,16 @@
-import type { Track } from "@br/core";
-
-import { useEffect, useState } from "react";
 import { Container, Heading } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useHttpRequest } from "hooks";
+import { useGetInitialData } from "hooks";
 
 import { TrackList } from "@/dashboard/components";
 import { getFavorites } from "@/dashboard/services/favorites";
 
 export default function Fovorites() {
-  const [favorites, setFavorites] = useState<Track[]>([]);
-  const { callRequest, isLoading } = useHttpRequest();
-
-  useEffect(() => {
-    callRequest(getFavorites).then((tracks) => {
-      setFavorites(tracks);
-    });
-  }, []);
+  const { data: favorites, isLoading } = useGetInitialData({
+    request: getFavorites,
+    defaultValue: [],
+  });
 
   return (
     <>
