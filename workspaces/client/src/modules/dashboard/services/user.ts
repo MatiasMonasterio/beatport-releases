@@ -5,14 +5,9 @@ import type { UserResponse } from "types";
 import { api } from "interceptors";
 
 export const getUserInfo = async (): Promise<User | null> => {
-  try {
-    const response: AxiosResponse = await api.get("/api/users");
-    const { data: user, error }: UserResponse = response.data;
-    if (error) throw new Error(error);
+  const response: AxiosResponse = await api.get("/api/users");
+  const { data: user, error }: UserResponse = response.data;
+  if (error) throw new Error(error);
 
-    return user;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+  return user;
 };
