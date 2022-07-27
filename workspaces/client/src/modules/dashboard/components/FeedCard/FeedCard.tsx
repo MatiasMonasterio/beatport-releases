@@ -1,3 +1,6 @@
+import type { Track } from "@br/core";
+
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
   Heading,
@@ -11,15 +14,31 @@ import {
 } from "@chakra-ui/react";
 import { BiPlay } from "react-icons/bi";
 
+import { useGetInitialData } from "hooks";
+import { usePlayerContext } from "@/dashboard/contexts/player";
+
 interface Props {
   title: string;
-  countTracks: number;
   to: string;
-  isLoading: boolean;
-  onPlay: () => void;
+  request: () => Promise<Track[]>;
 }
 
-export default function FeedCard({ title, countTracks, to, isLoading, onPlay }: Props) {
+export default function FeedCard({ title, to, request }: Props) {
+  const { loadPlaylist } = usePlayerContext();
+
+  const { data: tracks, isLoading } = useGetInitialData({
+    request: request,
+    defaultValue: [],
+  });
+
+  const tracksCountMessage: string = useMemo(() => {
+    return tracks.length > 0 ? `${tracks.length} tracks` : "No tracks";
+  }, [tracks]);
+
+  const handleClick = () => {
+    loadPlaylist({ track: tracks[0], playlist: tracks });
+  };
+
   return (
     <LinkBox
       bgGradient="linear(to-bl, secondary.blue, secondary.pink)"
@@ -38,23 +57,17 @@ export default function FeedCard({ title, countTracks, to, isLoading, onPlay }: 
           </LinkOverlay>
 
           <Text fontSize="sm">
-            {isLoading ? (
-              <Skeleton width="70px" height="0.8rem" mt={2} />
-            ) : countTracks > 0 ? (
-              `${countTracks} tracks`
-            ) : (
-              "No Tracks"
-            )}
+            {isLoading ? <Skeleton width="70px" height="0.8rem" mt={2} /> : tracksCountMessage}
           </Text>
         </Box>
 
-        {countTracks && (
+        {tracks.length && (
           <Button
             borderRadius="full"
             p={0}
             fontSize="2xl"
             color="secondary.black.700"
-            onClick={onPlay}
+            onClick={handleClick}
             opacity={0}
             pointerEvents="none"
             _hover={{ transform: "scale(1.05)" }}

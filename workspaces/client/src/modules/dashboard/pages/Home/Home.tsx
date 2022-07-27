@@ -8,7 +8,6 @@ import { MetaTags } from "components";
 import { useHttpRequest } from "hooks";
 
 import { TrackList, FeedCard, CardList } from "@/dashboard/components";
-import { usePlayerContext } from "@/dashboard/contexts/player";
 import { getArtists, addArtistId } from "@/dashboard/services/artists";
 import { getLabels, addLabelId } from "@/dashboard/services/labels";
 import { getReleases, getUpcomings } from "@/dashboard/services/tracks";
@@ -16,17 +15,10 @@ import { getFavorites } from "@/dashboard/services/favorites";
 
 export default function Home() {
   const [releases, setReleases] = useState<Track[]>([]);
-  const [upcomings, setUpcomings] = useState<Track[]>([]);
-  const [favorites, setFavorites] = useState<Track[]>([]);
   const [artists, setArtists] = useState<Artist[]>([]);
   const [labels, setLabels] = useState<Label[]>([]);
 
   const { callRequest, isLoading } = useHttpRequest();
-  const { loadPlaylist } = usePlayerContext();
-
-  const handlePlayFeed = (playlist: Track[]): void => {
-    loadPlaylist({ track: playlist[0], playlist });
-  };
 
   const handleAddArtist = async (artistId: string) => {
     await addArtistId(artistId);
@@ -40,27 +32,17 @@ export default function Home() {
     callRequest(getReleases).then((tracks) => {
       tracks && setReleases(tracks);
     });
-
-    callRequest(getUpcomings).then((tracks) => {
-      tracks && setUpcomings(tracks);
-    });
   }, []);
 
   useEffect(() => {
     getArtists({ sort: "createdAt", length: 6 }).then((artists) => {
-      artists.length && setArtists(artists);
+      setArtists(artists);
     });
   }, []);
 
   useEffect(() => {
     getLabels({ sort: "createdAt", length: 6 }).then((labels) => {
-      labels.length && setLabels(labels);
-    });
-  }, []);
-
-  useEffect(() => {
-    getFavorites().then((favorites) => {
-      favorites.length && setFavorites(favorites);
+      setLabels(labels);
     });
   }, []);
 
@@ -76,29 +58,9 @@ export default function Home() {
             </Heading>
 
             <Grid gridTemplateColumns="repeat(3, 1fr)" gap={2}>
-              <FeedCard
-                countTracks={favorites.length}
-                isLoading={isLoading}
-                onPlay={() => handlePlayFeed(favorites)}
-                title="Favorites"
-                to="/favorites"
-              />
-
-              <FeedCard
-                countTracks={releases.length}
-                isLoading={isLoading}
-                onPlay={() => handlePlayFeed(releases)}
-                title="Releases"
-                to="/releases"
-              />
-
-              <FeedCard
-                countTracks={upcomings.length}
-                isLoading={isLoading}
-                onPlay={() => handlePlayFeed(upcomings)}
-                title="Upcomings"
-                to="/upcomings"
-              />
+              <FeedCard title="Favorites" to="/favorites" request={getFavorites} />
+              <FeedCard title="Releases" to="/releases" request={getReleases} />
+              <FeedCard title="Upcomings" to="/upcomings" request={getUpcomings} />
             </Grid>
           </Box>
 
