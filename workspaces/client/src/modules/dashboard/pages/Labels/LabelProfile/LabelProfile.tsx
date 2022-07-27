@@ -17,13 +17,10 @@ export default function LabelProfile(): JSX.Element {
 
   const [label, setLabel] = useState<Label>({} as Label);
   const { callRequest, isLoading } = useHttpRequest();
-  const { callRequest: callRequestRuntime, isLoading: isLoadingRuntime } = useHttpRequest();
 
-  const handleFollow = async (): Promise<void> => {
-    if (label.follow) await callRequestRuntime(async () => await deleteLabelById(id));
-    else await callRequestRuntime(async () => await addLabelId(id));
-
-    setLabel(() => ({ ...label, follow: !label.follow }));
+  const handleFollow = async (isFollowing: boolean): Promise<void> => {
+    if (isFollowing) await deleteLabelById(id);
+    else await addLabelId(id);
   };
 
   useEffect(() => {
@@ -65,11 +62,7 @@ export default function LabelProfile(): JSX.Element {
                 <VStack align="flex-start">
                   <HStack alignItems="end">
                     <Heading>{label.name}</Heading>
-                    <Follow
-                      isFollowing={!!label.follow}
-                      isLoading={isLoadingRuntime}
-                      onClick={handleFollow}
-                    />
+                    <Follow isFollowing={!!label.follow} onFollow={handleFollow} />
                   </HStack>
 
                   <Link

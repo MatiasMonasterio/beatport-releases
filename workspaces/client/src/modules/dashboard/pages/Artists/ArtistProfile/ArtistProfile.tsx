@@ -17,13 +17,10 @@ export default function ArtistProfile(): JSX.Element {
 
   const [artist, setArtits] = useState<Artist>({} as Artist);
   const { callRequest, isLoading } = useHttpRequest();
-  const { callRequest: callRequestFollow, isLoading: isLoadingFollow } = useHttpRequest();
 
-  const handleFollow = async (): Promise<void> => {
-    if (artist.follow) await callRequestFollow(async () => await deleteArtistsById(id));
-    else await callRequestFollow(async () => await addArtistId(id));
-
-    setArtits(() => ({ ...artist, follow: !artist.follow }));
+  const handleFollow = async (isFolling: boolean): Promise<void> => {
+    if (isFolling) await deleteArtistsById(id);
+    else await addArtistId(id);
   };
 
   useEffect(() => {
@@ -65,11 +62,7 @@ export default function ArtistProfile(): JSX.Element {
                 <VStack align="flex-start">
                   <HStack alignItems="end">
                     <Heading>{artist.name}</Heading>
-                    <Follow
-                      isFollowing={!!artist.follow}
-                      onClick={handleFollow}
-                      isLoading={isLoadingFollow}
-                    />
+                    <Follow isFollowing={!!artist.follow} onFollow={handleFollow} />
                   </HStack>
 
                   <Link
