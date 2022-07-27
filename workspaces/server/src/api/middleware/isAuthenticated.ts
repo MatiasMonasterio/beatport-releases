@@ -14,7 +14,7 @@ export default async function isAuthenticated(req: Request, res: Response, next:
       const decode = jwt.verify(token, JWT_SECRET) as JwtDecode;
 
       if (!token || !decode.id) {
-        return res.status(401).send({ status: "FAILD", message: "token missin or invalid" });
+        return res.status(403).send({ status: "FAILD", message: "token missin or invalid" });
       }
 
       req.userId = decode.id.toString();
