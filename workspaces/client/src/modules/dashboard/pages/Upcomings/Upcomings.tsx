@@ -4,17 +4,19 @@ import { useState, useEffect } from "react";
 import { Container, Box, Heading } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 import { TrackList } from "@/dashboard/components";
 import { getUpcomings } from "@/dashboard/services/tracks";
 
 export default function Upcomings() {
-  const { fetch, isLoading } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
   const [upcomings, setUpcomings] = useState<Track[]>([]);
 
   useEffect(() => {
-    fetch<Track[]>(getUpcomings).then((upcomings) => upcomings && setUpcomings(upcomings));
+    callRequest(getUpcomings).then((upcomings) => {
+      setUpcomings(upcomings);
+    });
   }, []);
   return (
     <>

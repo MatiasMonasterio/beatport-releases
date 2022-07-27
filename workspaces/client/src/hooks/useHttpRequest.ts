@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useToast } from "@chakra-ui/react";
 
-interface useFetchResponse {
+interface HttpRequesFunction {
   isLoading: boolean;
-  fetch: <T>(request: () => Promise<T>) => Promise<T | undefined>;
+  callRequest: <T>(request: () => Promise<T>) => Promise<T>;
 }
 
-export const useFetch = (): useFetchResponse => {
+export default function useHttpRequest(): HttpRequesFunction {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fetch = async <T>(request: () => Promise<T>): Promise<T | undefined> => {
+  const callRequest = async <T>(request: () => Promise<T>): Promise<T> => {
     try {
       setIsLoading(true);
       const response = await request();
@@ -18,6 +18,8 @@ export const useFetch = (): useFetchResponse => {
 
       return response;
     } catch (error) {
+      setIsLoading(false);
+
       toast({
         title: `${error}`,
         status: "error",
@@ -26,12 +28,12 @@ export const useFetch = (): useFetchResponse => {
         position: "bottom-right",
       });
 
-      return;
+      throw error;
     }
   };
 
   return {
     isLoading,
-    fetch,
+    callRequest,
   };
-};
+}

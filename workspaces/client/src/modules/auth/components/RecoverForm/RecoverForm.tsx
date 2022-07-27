@@ -3,7 +3,7 @@ import { Box, FormControl, FormErrorMessage, Input, Flex, Button, Link } from "@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 const validationSchema = Yup.object({
   email: Yup.string().email().required(),
@@ -18,10 +18,10 @@ interface Props {
 }
 
 export default function RecoverForm({ onSubmit }: Props) {
-  const { fetch, isLoading } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
 
   const handleSubmit = async () => {
-    await fetch(async () => await onSubmit(formik.values.email));
+    await callRequest(async () => await onSubmit(formik.values.email));
   };
 
   const formik = useFormik({

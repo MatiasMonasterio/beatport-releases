@@ -14,7 +14,7 @@ import {
   chakra,
 } from "@chakra-ui/react";
 
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 interface Props {
   type: Type;
@@ -25,7 +25,7 @@ interface Props {
 
 export default function DialogForm({ type, isOpen, onClose, onNewCard }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { fetch, isLoading } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -35,7 +35,7 @@ export default function DialogForm({ type, isOpen, onClose, onNewCard }: Props) 
     };
 
     const id = target.id_value.value;
-    await fetch(async () => await onNewCard(id));
+    await callRequest(async () => await onNewCard(id));
     onClose();
   };
 

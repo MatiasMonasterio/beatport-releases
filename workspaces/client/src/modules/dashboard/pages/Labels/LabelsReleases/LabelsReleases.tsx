@@ -3,7 +3,7 @@ import type { Track } from "@br/core";
 import { useState, useEffect } from "react";
 import { Heading, Skeleton } from "@chakra-ui/react";
 
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 import { MetaTags } from "components";
 
 import { TrackList } from "@/dashboard/components";
@@ -11,11 +11,11 @@ import { getLabelReleases } from "@/dashboard/services/labels";
 
 export default function LabelsReleases(): JSX.Element {
   const [releases, setReleases] = useState<Track[]>([]);
-  const { fetch, isLoading } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
 
   useEffect(() => {
-    fetch<Track[]>(getLabelReleases).then((releases) => {
-      releases && setReleases(releases);
+    callRequest(getLabelReleases).then((releases) => {
+      setReleases(releases);
     });
   }, []);
 

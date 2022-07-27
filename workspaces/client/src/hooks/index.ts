@@ -1,1 +1,1 @@
-export * from "./useFetch";
+export { default as useHttpRequest } from "./useHttpRequest";

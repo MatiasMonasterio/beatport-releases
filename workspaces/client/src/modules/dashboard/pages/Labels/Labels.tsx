@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Flex, Heading, Skeleton } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 import { Search, CardList } from "@/dashboard/components";
 import { useSearch } from "@/dashboard/hooks";
@@ -15,7 +15,7 @@ export default function Labels(): JSX.Element {
   const navigate = useNavigate();
   const [labels, setLabels] = useState<Label[]>([]);
 
-  const { fetch, isLoading } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
   const { results } = useSearch<Label>(labels);
 
   const handleNewLabel = async (labelId: string): Promise<void> => {
@@ -24,8 +24,8 @@ export default function Labels(): JSX.Element {
   };
 
   useEffect(() => {
-    fetch<Label[]>(getLabels).then((labels) => {
-      labels?.length && setLabels(labels);
+    callRequest(getLabels).then((labels) => {
+      setLabels(labels);
     });
   }, []);
 

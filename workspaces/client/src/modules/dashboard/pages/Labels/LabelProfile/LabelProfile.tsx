@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Skeleton, HStack, VStack } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 import { TrackList, Follow, PlayButtonPlaylist } from "@/dashboard/components";
 import { useParallax } from "@/dashboard/hooks";
@@ -16,12 +16,12 @@ export default function LabelProfile(): JSX.Element {
   const { parallaxRef } = useParallax();
 
   const [label, setLabel] = useState<Label>({} as Label);
-  const { fetch, isLoading } = useFetch();
-  const { fetch: fetchRuntime, isLoading: isLoadingRuntime } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
+  const { callRequest: callRequestRuntime, isLoading: isLoadingRuntime } = useHttpRequest();
 
   const handleFollow = async (): Promise<void> => {
-    if (label.follow) await fetchRuntime(async () => await deleteLabelById(id));
-    else await fetchRuntime(async () => await addLabelId(id));
+    if (label.follow) await callRequestRuntime(async () => await deleteLabelById(id));
+    else await callRequestRuntime(async () => await addLabelId(id));
 
     setLabel(() => ({ ...label, follow: !label.follow }));
   };
@@ -29,8 +29,8 @@ export default function LabelProfile(): JSX.Element {
   useEffect(() => {
     setLabel({} as Label);
 
-    fetch<Label | null>(async () => await getLabelById(id)).then((labelResp) => {
-      labelResp && setLabel(labelResp);
+    callRequest(async () => await getLabelById(id)).then((labelResp) => {
+      setLabel(labelResp);
     });
   }, [id]);
 

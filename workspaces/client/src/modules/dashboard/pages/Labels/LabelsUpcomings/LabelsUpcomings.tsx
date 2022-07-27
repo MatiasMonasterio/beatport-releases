@@ -4,18 +4,18 @@ import { useState, useEffect } from "react";
 import { Heading, Skeleton } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 import { TrackList } from "@/dashboard/components";
 import { getLabelUpcomings } from "@/dashboard/services/labels";
 
 export default function LabelsUpcomings(): JSX.Element {
   const [upcomings, setUpcomings] = useState<Track[]>([]);
-  const { fetch, isLoading } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
 
   useEffect(() => {
-    fetch<Track[]>(getLabelUpcomings).then((upcomings) => {
-      upcomings && setUpcomings(upcomings);
+    callRequest(getLabelUpcomings).then((upcomings) => {
+      setUpcomings(upcomings);
     });
   }, []);
 

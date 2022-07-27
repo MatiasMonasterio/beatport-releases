@@ -18,16 +18,16 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 import { getUserInfo } from "@/dashboard/services/user";
 
 export default function Account() {
   const [user, setUser] = useState<User | null>(null);
-  const { fetch } = useFetch();
+  const { callRequest } = useHttpRequest();
 
   useEffect(() => {
-    fetch<User | null>(getUserInfo).then((user) => {
-      if (user) setUser(user);
+    callRequest(getUserInfo).then((user) => {
+      setUser(user);
     });
   }, []);
 

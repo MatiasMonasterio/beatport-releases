@@ -5,7 +5,7 @@ import { Box, FormControl, FormErrorMessage, Input, Flex, Button, Link } from "@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 interface Props {
   onSubmit: (credentials: UserCredentials) => Promise<void>;
@@ -24,10 +24,10 @@ const initialValues = {
 };
 
 export default function RegisterForm({ onSubmit }: Props) {
-  const { fetch, isLoading } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
 
   const handleSubmit = async () => {
-    await fetch<void>(
+    await callRequest(
       async () =>
         await onSubmit({
           email: formik.values.email,

@@ -4,18 +4,18 @@ import { useEffect, useState } from "react";
 import { Container, Heading } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 import { TrackList } from "@/dashboard/components";
 import { getFavorites } from "@/dashboard/services/favorites";
 
 export default function Fovorites() {
   const [favorites, setFavorites] = useState<Track[]>([]);
-  const { fetch, isLoading } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
 
   useEffect(() => {
-    fetch<Track[]>(getFavorites).then((tracks) => {
-      tracks && setFavorites(tracks);
+    callRequest(getFavorites).then((tracks) => {
+      setFavorites(tracks);
     });
   }, []);
 

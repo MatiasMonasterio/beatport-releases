@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Heading, HStack, Skeleton } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 import { Search, CardList } from "@/dashboard/components";
 import { useSearch } from "@/dashboard/hooks";
@@ -16,7 +16,7 @@ export default function Artists() {
   const [artists, setArtists] = useState<Artist[]>([]);
 
   const { results } = useSearch<Artist>(artists);
-  const { fetch, isLoading } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
 
   const handleAddArtist = async (artistId: string) => {
     const newArtist = await addArtistId(artistId);
@@ -24,8 +24,8 @@ export default function Artists() {
   };
 
   useEffect(() => {
-    fetch<Artist[]>(getArtists).then((artists) => {
-      artists?.length && setArtists(artists);
+    callRequest(getArtists).then((artists) => {
+      setArtists(artists);
     });
   }, []);
 

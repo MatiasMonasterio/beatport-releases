@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Skeleton, HStack, VStack } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 import { TrackList, Follow, PlayButtonPlaylist } from "@/dashboard/components";
 import { useParallax } from "@/dashboard/hooks";
@@ -16,12 +16,12 @@ export default function ArtistProfile(): JSX.Element {
   const { parallaxRef } = useParallax();
 
   const [artist, setArtits] = useState<Artist>({} as Artist);
-  const { fetch, isLoading } = useFetch();
-  const { fetch: fetchRuntime, isLoading: isLoadingRuntime } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
+  const { callRequest: callRequestFollow, isLoading: isLoadingFollow } = useHttpRequest();
 
   const handleFollow = async (): Promise<void> => {
-    if (artist.follow) await fetchRuntime(async () => await deleteArtistsById(id));
-    else await fetchRuntime(async () => await addArtistId(id));
+    if (artist.follow) await callRequestFollow(async () => await deleteArtistsById(id));
+    else await callRequestFollow(async () => await addArtistId(id));
 
     setArtits(() => ({ ...artist, follow: !artist.follow }));
   };
@@ -29,8 +29,8 @@ export default function ArtistProfile(): JSX.Element {
   useEffect(() => {
     setArtits({} as Artist);
 
-    fetch<Artist | null>(async () => await getArtistById(id)).then((artistResp) => {
-      artistResp && setArtits(artistResp);
+    callRequest(async () => await getArtistById(id)).then((response) => {
+      setArtits(response);
     });
   }, [id]);
 
@@ -68,7 +68,7 @@ export default function ArtistProfile(): JSX.Element {
                     <Follow
                       isFollowing={!!artist.follow}
                       onClick={handleFollow}
-                      isLoading={isLoadingRuntime}
+                      isLoading={isLoadingFollow}
                     />
                   </HStack>
 

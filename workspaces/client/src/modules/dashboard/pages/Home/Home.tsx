@@ -5,7 +5,7 @@ import { Link as ReactLink } from "react-router-dom";
 import { Container, Heading, VStack, Box, Grid, HStack, Link } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 import { TrackList, FeedCard, CardList } from "@/dashboard/components";
 import { usePlayerContext } from "@/dashboard/contexts/player";
@@ -21,7 +21,7 @@ export default function Home() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [labels, setLabels] = useState<Label[]>([]);
 
-  const { fetch, isLoading } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
   const { loadPlaylist } = usePlayerContext();
 
   const handlePlayFeed = (playlist: Track[]): void => {
@@ -37,11 +37,11 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetch<Track[]>(getReleases).then((tracks) => {
+    callRequest(getReleases).then((tracks) => {
       tracks && setReleases(tracks);
     });
 
-    fetch<Track[]>(getUpcomings).then((tracks) => {
+    callRequest(getUpcomings).then((tracks) => {
       tracks && setUpcomings(tracks);
     });
   }, []);

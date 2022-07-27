@@ -7,7 +7,7 @@ import { BiArrowBack } from "react-icons/bi";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import { useFetch } from "hooks";
+import { useHttpRequest } from "hooks";
 
 interface Props {
   onSubmit: (credentials: UserCredentials) => Promise<void>;
@@ -20,17 +20,15 @@ const validationSchema = Yup.object({
 
 export default function LoginForm({ onSubmit }: Props) {
   const [searchParams] = useSearchParams();
-  const { fetch, isLoading } = useFetch();
+  const { callRequest, isLoading } = useHttpRequest();
 
   const initialValues: UserCredentials = {
     email: searchParams.get("email") || "",
     password: searchParams.get("password") || "",
   };
 
-  const handleSubmit = async () => {
-    await fetch(async () => {
-      await onSubmit(formik.values);
-    });
+  const handleSubmit = () => {
+    callRequest(async () => await onSubmit(formik.values));
   };
 
   const formik = useFormik({
