@@ -1,7 +1,7 @@
 import type { UserCredentials } from "@br/core";
 
 import { NavLink } from "react-router-dom";
-import { Box, FormControl, FormErrorMessage, Input, Flex, Button, Link } from "@chakra-ui/react";
+import { chakra, FormControl, FormErrorMessage, Input, Flex, Button, Link } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -43,13 +43,12 @@ export default function RegisterForm({ onSubmit }: Props) {
   });
 
   return (
-    <Box
-      as="form"
+    <chakra.form
       display="flex"
       flexDirection="column"
-      gap={4}
-      onSubmit={(e) => formik.handleSubmit(e as React.FormEvent<HTMLFormElement> | undefined)}
       w="100%"
+      gap={4}
+      onSubmit={formik.handleSubmit}
     >
       <FormControl isInvalid={!!(formik.submitCount && formik.errors.email)}>
         <Input
@@ -107,6 +106,6 @@ export default function RegisterForm({ onSubmit }: Props) {
       <Button type="submit" variant="primary" w="100%" disabled={isLoading}>
         Register
       </Button>
-    </Box>
+    </chakra.form>
   );
 }

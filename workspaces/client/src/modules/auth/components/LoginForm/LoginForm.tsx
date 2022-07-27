@@ -1,7 +1,7 @@
 import type { UserCredentials } from "@br/core";
 
 import { useSearchParams, NavLink } from "react-router-dom";
-import { Box, Button, Flex, Link, Text } from "@chakra-ui/react";
+import { chakra, Button, Flex, Link, Text } from "@chakra-ui/react";
 import { FormControl, Input, FormErrorMessage } from "@chakra-ui/react";
 import { BiArrowBack } from "react-icons/bi";
 import { useFormik } from "formik";
@@ -38,13 +38,12 @@ export default function LoginForm({ onSubmit }: Props) {
   });
 
   return (
-    <Box
-      as="form"
+    <chakra.form
       display="flex"
       flexDirection="column"
-      gap={4}
-      onSubmit={(e) => formik.handleSubmit(e as React.FormEvent<HTMLFormElement> | undefined)}
       w="100%"
+      gap={4}
+      onSubmit={formik.handleSubmit}
     >
       <FormControl isInvalid={!!(formik.submitCount && formik.errors.email)}>
         <Input
@@ -94,6 +93,6 @@ export default function LoginForm({ onSubmit }: Props) {
           <BiArrowBack />
         </Text>
       </Button>
-    </Box>
+    </chakra.form>
   );
 }
