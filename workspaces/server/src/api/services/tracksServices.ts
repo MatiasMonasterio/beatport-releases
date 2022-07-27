@@ -3,6 +3,8 @@ import type { Track, ApiParams } from "@br/core";
 import dayjs from "dayjs";
 
 import db from "../../database";
+import artistService from "./artistService";
+import labelServices from "./labelServices";
 import { trackAdapter } from "../adapters";
 
 const createNewsTracks = async (tracks: Track[]): Promise<void> => {
@@ -228,6 +230,60 @@ const getLabelsUpcoming = async (userId: number): Promise<Track[]> => {
   return upcomings.map((upcoming) => trackAdapter(upcoming, userId));
 };
 
+const getTracksByArtistId = async (userId: number, artistId: number): Promise<Track[]> => {
+  const artistExist = await db.artistDB.findUnique({
+    where: { id: artistId },
+  });
+
+  if (artistExist) {
+    const tracks = await db.trackDB.findMany({
+      where: {
+        artists: { some: { id: artistId } },
+      },
+      include: {
+        artists: true,
+        remixers: true,
+        label: true,
+        genre: true,
+        favorite: true,
+      },
+      orderBy: [{ released: "desc" }, { label: { name: "desc" } }],
+    });
+
+    return tracks.map((track) => trackAdapter(track, userId));
+  }
+
+  const artist = await artistService.getOneArtist(artistId.toString(), userId);
+  return artist.tracks;
+};
+
+const getTracksByLabelId = async (labelId: number, userId: number): Promise<Track[]> => {
+  const labelExist = await db.labelDB.findUnique({
+    where: { id: labelId },
+  });
+
+  if (labelExist) {
+    const tracks = await db.trackDB.findMany({
+      where: {
+        label: { id: labelId },
+      },
+      include: {
+        artists: true,
+        remixers: true,
+        label: true,
+        genre: true,
+        favorite: true,
+      },
+      orderBy: [{ released: "desc" }, { label: { name: "desc" } }],
+    });
+
+    return tracks.map((track) => trackAdapter(track, userId));
+  }
+
+  const label = await labelServices.getOneLabel(labelId, userId);
+  return label.tracks;
+};
+
 export default {
   createNewsTracks,
   getAllReleases,
@@ -236,4 +292,6 @@ export default {
   getArtistsUpcoming,
   getLabelsReleases,
   getLabelsUpcoming,
+  getTracksByArtistId,
+  getTracksByLabelId,
 };

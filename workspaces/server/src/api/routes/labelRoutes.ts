@@ -12,5 +12,6 @@ router.get("/releases", isAuthenticated, isCached, updateData, trackController.g
 router.get("/upcomings", isAuthenticated, isCached, updateData, trackController.getLabelsUpcoming);
 router.get("/:id", isAuthenticated, isCached, updateData, labelController.getOneLabel);
 router.delete("/:id", isAuthenticated, labelController.deteleOneLabel);
+router.get("/:id/tracks", isAuthenticated, isCached, trackController.getTracksByLabelId);
 
 export default router;

@@ -96,6 +96,36 @@ const getLabelsUpcoming = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
+const getTracksByArtistId = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+
+  try {
+    const tracks = await tracksServices.getTracksByArtistId(+req.userId, +id);
+    res.send({ status: "OK", data: tracks });
+  } catch (error: unknown | ErrorRequest) {
+    const err = error as ErrorRequest;
+
+    res
+      .status(err?.status || 500)
+      .send({ status: "FAILED", data: { error: err?.message || error } });
+  }
+};
+
+const getTracksByLabelId = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+
+  try {
+    const tracks = await tracksServices.getTracksByLabelId(+id, +req.userId);
+    res.send({ status: "OK", data: tracks });
+  } catch (error: unknown | ErrorRequest) {
+    const err = error as ErrorRequest;
+
+    res
+      .status(err?.status || 500)
+      .send({ status: "FAILED", data: { error: err?.message || error } });
+  }
+};
+
 export default {
   getAllReleases,
   getAllUpcomings,
@@ -103,4 +133,6 @@ export default {
   getArtistsUpcoming,
   getLabelsReleases,
   getLabelsUpcoming,
+  getTracksByArtistId,
+  getTracksByLabelId,
 };
