@@ -1,8 +1,6 @@
 import type { Track } from "@br/core";
 
 import { useState, useLayoutEffect } from "react";
-import { Button } from "@chakra-ui/react";
-import { motion, useAnimation } from "framer-motion";
 import { BiHeart } from "react-icons/bi";
 import { FaHeart } from "react-icons/fa";
 
@@ -11,36 +9,23 @@ import { green } from "theme/colors";
 import { newFavoriteTrack, deleteFavoriteById } from "@/dashboard/services/favorites";
 import { usePlayerContext } from "@/dashboard/contexts/player";
 
+import FavoriteMotion from "./FavoriteMotion";
+
 export interface Props {
   track: Track;
   onClick?: () => void;
 }
 
-const animations = {
-  addFavorite: {
-    scale: [2, 0.8, 1],
-  },
-  removeFavorite: {
-    translateX: ["-10x", 0, "10px", 0, "-10px", 0, "10px", 0],
-  },
-};
-
-const MotionButton = motion(Button);
-
 export default function Favorite({ track, onClick }: Props) {
-  const animate = useAnimation();
-
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const { currentTrack, setCurrentTrack } = usePlayerContext();
 
   const addFavorite = async (track: Track): Promise<void> => {
-    animate.start("addFavorite");
     checkCurrentTrack(track.id, true);
     await newFavoriteTrack({ ...track, favorite: true });
   };
 
   const removeFavorite = async (id: number): Promise<void> => {
-    animate.start("removeFavorite");
     checkCurrentTrack(id, false);
     await deleteFavoriteById(id);
   };
@@ -69,10 +54,8 @@ export default function Favorite({ track, onClick }: Props) {
   }, [currentTrack]);
 
   return (
-    <MotionButton
-      variants={animations}
-      animate={animate}
-      transition={{ duration: 0.3 }}
+    <FavoriteMotion
+      isActive={isFavorite}
       variant="link"
       onClick={handleFavorite}
       fontSize={isFavorite ? "sm" : "md"}
@@ -80,6 +63,6 @@ export default function Favorite({ track, onClick }: Props) {
       role="switch"
     >
       {isFavorite ? <FaHeart fill={green} /> : <BiHeart />}
-    </MotionButton>
+    </FavoriteMotion>
   );
 }
