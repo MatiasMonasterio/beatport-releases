@@ -1,11 +1,8 @@
-import type { Track, Artist, Label } from "@br/core";
-
-import { useState, useEffect } from "react";
 import { Link as ReactLink } from "react-router-dom";
 import { Container, Heading, VStack, Box, Grid, HStack, Link } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useHttpRequest } from "hooks";
+import { useGetInitialData } from "hooks";
 
 import { TrackList, FeedCard, CardList } from "@/dashboard/components";
 import { getArtists, addArtistId } from "@/dashboard/services/artists";
@@ -14,11 +11,20 @@ import { getReleases, getUpcomings } from "@/dashboard/services/tracks";
 import { getFavorites } from "@/dashboard/services/favorites";
 
 export default function Home() {
-  const [releases, setReleases] = useState<Track[]>([]);
-  const [artists, setArtists] = useState<Artist[]>([]);
-  const [labels, setLabels] = useState<Label[]>([]);
+  const { data: releases, isLoading: releasesIsLoading } = useGetInitialData({
+    request: async () => await getReleases({ length: 6 }),
+    defaultValue: [],
+  });
 
-  const { callRequest, isLoading } = useHttpRequest();
+  const { data: artists, isLoading: artistIsLoading } = useGetInitialData({
+    request: async () => await getArtists({ sort: "createdAt", length: 6 }),
+    defaultValue: [],
+  });
+
+  const { data: labels, isLoading: labelIsLoading } = useGetInitialData({
+    request: async () => await getLabels({ sort: "createdAt", length: 6 }),
+    defaultValue: [],
+  });
 
   const handleAddArtist = async (artistId: string) => {
     await addArtistId(artistId);
@@ -27,24 +33,6 @@ export default function Home() {
   const handleAddLabel = async (labelId: string) => {
     await addLabelId(labelId);
   };
-
-  useEffect(() => {
-    callRequest(getReleases).then((tracks) => {
-      tracks && setReleases(tracks);
-    });
-  }, []);
-
-  useEffect(() => {
-    getArtists({ sort: "createdAt", length: 6 }).then((artists) => {
-      setArtists(artists);
-    });
-  }, []);
-
-  useEffect(() => {
-    getLabels({ sort: "createdAt", length: 6 }).then((labels) => {
-      setLabels(labels);
-    });
-  }, []);
 
   return (
     <>
@@ -73,10 +61,7 @@ export default function Home() {
               New Releases this week 🔥
             </Heading>
 
-            <TrackList
-              tracks={releases.length ? [...releases].splice(0, 5) : []}
-              isLoading={isLoading}
-            />
+            <TrackList tracks={releases} isLoading={releasesIsLoading} />
           </VStack>
 
           <Box as="section">
@@ -99,7 +84,7 @@ export default function Home() {
               size="sm"
               type="artist"
               datas={artists}
-              isLoading={isLoading}
+              isLoading={artistIsLoading}
               onNew={handleAddArtist}
             />
           </Box>
@@ -124,7 +109,7 @@ export default function Home() {
               size="sm"
               type="label"
               datas={labels}
-              isLoading={isLoading}
+              isLoading={labelIsLoading}
               onNew={handleAddLabel}
             />
           </Box>

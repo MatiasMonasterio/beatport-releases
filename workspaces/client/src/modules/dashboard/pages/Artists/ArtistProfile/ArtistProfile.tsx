@@ -8,7 +8,12 @@ import { useGetInitialData } from "hooks";
 
 import { TrackList, Follow, PlayButtonPlaylist } from "@/dashboard/components";
 import { useParallax } from "@/dashboard/hooks";
-import { getArtistById, deleteArtistsById, addArtistId } from "@/dashboard/services/artists";
+import {
+  getArtistById,
+  deleteArtistsById,
+  addArtistId,
+  getTracksByArtistId,
+} from "@/dashboard/services/artists";
 
 export default function ArtistProfile(): JSX.Element {
   const { id } = useParams<{ id: string }>() as { id: string };
@@ -18,6 +23,11 @@ export default function ArtistProfile(): JSX.Element {
     request: async () => await getArtistById(id),
     defaultValue: {} as Artist,
     deps: [id],
+  });
+
+  const { data: tracks, isLoading: tracksIsLoading } = useGetInitialData({
+    request: async () => await getTracksByArtistId(id),
+    defaultValue: [],
   });
 
   const handleFollow = async (isFolling: boolean): Promise<void> => {
@@ -81,7 +91,7 @@ export default function ArtistProfile(): JSX.Element {
         </Heading>
 
         <Flex direction="column" gap={2}>
-          <TrackList tracks={artist.tracks || []} isLoading={isLoading} />
+          <TrackList tracks={tracks} isLoading={tracksIsLoading} />
         </Flex>
       </Container>
     </>

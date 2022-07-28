@@ -8,7 +8,12 @@ import { useGetInitialData } from "hooks";
 
 import { TrackList, Follow, PlayButtonPlaylist } from "@/dashboard/components";
 import { useParallax } from "@/dashboard/hooks";
-import { getLabelById, addLabelId, deleteLabelById } from "@/dashboard/services/labels";
+import {
+  getLabelById,
+  addLabelId,
+  deleteLabelById,
+  getTracksByLabelId,
+} from "@/dashboard/services/labels";
 
 export default function LabelProfile(): JSX.Element {
   const { id } = useParams<{ id: string }>() as { id: string };
@@ -17,6 +22,11 @@ export default function LabelProfile(): JSX.Element {
   const { data: label, isLoading } = useGetInitialData({
     request: async () => await getLabelById(id),
     defaultValue: {} as Label,
+  });
+
+  const { data: tracks, isLoading: tracksIsLoading } = useGetInitialData({
+    request: async () => await getTracksByLabelId(id),
+    defaultValue: [],
   });
 
   const handleFollow = async (isFollowing: boolean): Promise<void> => {
@@ -79,7 +89,7 @@ export default function LabelProfile(): JSX.Element {
           Last Releases
         </Heading>
 
-        <TrackList tracks={label.tracks || []} isLoading={isLoading} />
+        <TrackList tracks={tracks} isLoading={tracksIsLoading} />
       </Container>
     </>
   );
