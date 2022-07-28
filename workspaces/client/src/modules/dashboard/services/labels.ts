@@ -50,3 +50,11 @@ export const getLabelUpcomings = async (): Promise<Track[]> => {
 
   return tracks;
 };
+
+export const getTracksByLabelId = async (artistId: string): Promise<Track[]> => {
+  const response = await api.get<TracksResponse>(`/api/labels/${artistId}/tracks`);
+  const { data: tracks, error } = response.data;
+  if (error) throw new Error(error);
+
+  return tracks;
+};

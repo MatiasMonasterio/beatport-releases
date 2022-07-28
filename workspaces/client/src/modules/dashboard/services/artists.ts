@@ -51,3 +51,11 @@ export const getArtistUpcomings = async (): Promise<Track[]> => {
 
   return tracks;
 };
+
+export const getTracksByArtistId = async (artistId: string): Promise<Track[]> => {
+  const response = await api.get<TracksResponse>(`/api/artists/${artistId}/tracks`);
+  const { data: tracks, error } = response.data;
+  if (error) throw new Error(error);
+
+  return tracks;
+};
