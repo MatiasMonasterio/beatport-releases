@@ -13,6 +13,8 @@ export default function useGetInitialData<T>({ request, defaultValue, deps }: Ar
 
   useEffect(
     () => {
+      setdata(defaultValue);
+
       callRequest(request).then((response) => {
         setdata(response);
       });
