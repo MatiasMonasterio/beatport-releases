@@ -7,7 +7,7 @@ const mockHandleClick = jest.fn();
 
 const props: Props = {
   isFollowing: false,
-  onClick: mockHandleClick,
+  onFollow: mockHandleClick,
 };
 
 describe("Follow Component", () => {
@@ -40,7 +40,6 @@ describe("Follow Component", () => {
 
   test("must show loading component and disabled button if is loading", () => {
     props.isFollowing = false;
-    props.isLoading = true;
 
     render(<Follow {...props} />);
     const followButton = screen.getByRole<HTMLButtonElement>("button");
@@ -51,7 +50,6 @@ describe("Follow Component", () => {
 
   test("should not show the loading and buttons should be available to click if not loading", () => {
     props.isFollowing = false;
-    props.isLoading = false;
 
     render(<Follow {...props} />);
     const followButton = screen.getByRole<HTMLButtonElement>("button");
