@@ -1,20 +1,19 @@
-import type { Track } from "@br/core";
-import type { AxiosResponse } from "axios";
+import type { Track, ApiParams } from "@br/core";
 import type { TracksResponse } from "types";
 
 import { api } from "interceptors";
 
-export const getReleases = async (): Promise<Track[]> => {
-  const response: AxiosResponse = await api.get("/api/tracks/releases");
-  const { data: tracks, error }: TracksResponse = response.data;
+export const getReleases = async (params?: ApiParams): Promise<Track[]> => {
+  const response = await api.get<TracksResponse>("/api/tracks/releases", { params });
+  const { data: tracks, error } = response.data;
   if (error) throw new Error(error);
 
   return tracks;
 };
 
-export const getUpcomings = async (): Promise<Track[]> => {
-  const response: AxiosResponse = await api.get("/api/tracks/upcomings");
-  const { data: tracks, error }: TracksResponse = response.data;
+export const getUpcomings = async (params?: ApiParams): Promise<Track[]> => {
+  const response = await api.get<TracksResponse>("/api/tracks/upcomings", { params });
+  const { data: tracks, error } = response.data;
   if (error) throw new Error(error);
 
   return tracks;
