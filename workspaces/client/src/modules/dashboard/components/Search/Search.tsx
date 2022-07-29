@@ -1,24 +1,15 @@
-import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import {
-  Box,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  Input,
-  Button,
-} from "@chakra-ui/react";
-import { BiSearch, BiX } from "react-icons/bi";
+import { Box, InputGroup, InputLeftElement, InputRightElement, Input } from "@chakra-ui/react";
+import { BiSearch } from "react-icons/bi";
+
+import { ClearButton } from "./components";
+import { useSearchValue } from "./hooks";
 
 interface Props {
   placeholder: string;
-  value?: string;
-  width?: string;
 }
 
-export default function Search({ value = "", placeholder, width = "300px" }: Props) {
-  const [inputValue, setInputValue] = useState<string>(value);
-  const [searchParams, setSearchParams] = useSearchParams();
+export default function Search({ placeholder }: Props) {
+  const { searchValue, changeSearchValue, clearSearchValue } = useSearchValue();
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement | HTMLDivElement>) => {
     e.preventDefault();
@@ -26,22 +17,8 @@ export default function Search({ value = "", placeholder, width = "300px" }: Pro
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-
-    setInputValue(inputValue);
-    setSearchParams({ search: inputValue });
-
-    !inputValue && setSearchParams({});
+    changeSearchValue(inputValue);
   };
-
-  const handleClearInput = () => {
-    setInputValue("");
-    setSearchParams({});
-  };
-
-  useEffect(() => {
-    const searchValue = searchParams.get("search");
-    searchValue && setInputValue(searchValue);
-  }, []);
 
   return (
     <Box as="form" onSubmit={handleFormSubmit} minW="350px">
@@ -57,17 +34,12 @@ export default function Search({ value = "", placeholder, width = "300px" }: Pro
           onChange={handleInputChange}
           placeholder={placeholder}
           type="text"
-          value={inputValue}
-          width={width}
+          value={searchValue}
         />
 
-        {inputValue && (
-          <InputRightElement>
-            <Button variant="link" onClick={handleClearInput}>
-              <BiX />
-            </Button>
-          </InputRightElement>
-        )}
+        <InputRightElement>
+          {searchValue && <ClearButton onClick={clearSearchValue} />}
+        </InputRightElement>
       </InputGroup>
     </Box>
   );
