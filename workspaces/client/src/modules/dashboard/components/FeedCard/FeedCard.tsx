@@ -1,21 +1,12 @@
 import type { Track } from "@br/core";
 
-import { useMemo } from "react";
+import { useMemo, lazy } from "react";
 import { Link } from "react-router-dom";
-import {
-  Heading,
-  Text,
-  LinkBox,
-  LinkOverlay,
-  HStack,
-  Box,
-  Button,
-  Skeleton,
-} from "@chakra-ui/react";
-import { BiPlay } from "react-icons/bi";
+import { Heading, Text, LinkBox, LinkOverlay, HStack, Box, Skeleton } from "@chakra-ui/react";
 
 import { useGetInitialData } from "hooks";
-import { usePlayerContext } from "@/dashboard/contexts/player";
+
+const PlayButtonPlaylist = lazy(() => import("@/dashboard/components/PlayButtonPlaylist"));
 
 interface Props {
   title: string;
@@ -24,8 +15,6 @@ interface Props {
 }
 
 export default function FeedCard({ title, to, request }: Props) {
-  const { loadPlaylist } = usePlayerContext();
-
   const { data: tracks, isLoading } = useGetInitialData({
     request: request,
     defaultValue: [],
@@ -34,10 +23,6 @@ export default function FeedCard({ title, to, request }: Props) {
   const tracksCountMessage: string = useMemo(() => {
     return tracks.length > 0 ? `${tracks.length} tracks` : "No tracks";
   }, [tracks]);
-
-  const handleClick = () => {
-    loadPlaylist({ track: tracks[0], playlist: tracks });
-  };
 
   return (
     <LinkBox
@@ -62,20 +47,13 @@ export default function FeedCard({ title, to, request }: Props) {
         </Box>
 
         {tracks.length && (
-          <Button
-            borderRadius="full"
-            p={0}
-            fontSize="2xl"
-            color="secondary.black.700"
-            onClick={handleClick}
+          <PlayButtonPlaylist
+            size="sm"
+            playlist={tracks}
             opacity={0}
-            pointerEvents="none"
-            _hover={{ transform: "scale(1.05)" }}
             _groupFocusWithin={{ opacity: 1, pointerEvents: "initial" }}
             _groupHover={{ opacity: 1, pointerEvents: "initial" }}
-          >
-            <BiPlay />
-          </Button>
+          />
         )}
       </HStack>
     </LinkBox>
