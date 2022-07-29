@@ -5,7 +5,6 @@ export { default as Player } from "./Player";
 export { default as SecondNavbar } from "./SecondNavbar";
 export { default as Favorite } from "./Favorite";
 export { default as Follow } from "./Follow";
-export { default as PlayButtonPlaylist } from "./PlayButtonPlaylist";
 export { default as Search } from "./Search";
 export { default as FeedCard } from "./FeedCard";
 export { default as MotionText } from "./MotionText";
@@ -15,4 +14,6 @@ export { default as YoutubeWidget } from "./YoutubeWidget";
 export { default as CardList } from "./CardList";
 export { default as TrackList } from "./TrackList";
 
-// Interceptores y web services
+export { default as PlayButton } from "./PlayButton";
+export { default as PlayButtonWithOpacity } from "./PlayButton/variants/PlayButtonWithOpacity";
+export { default as PlayButtonLg } from "./PlayButton/variants/PlayButtonLg";

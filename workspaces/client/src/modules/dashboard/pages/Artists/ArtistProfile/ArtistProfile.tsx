@@ -6,7 +6,7 @@ import { Heading, Flex, Link, Box, Container, Skeleton, HStack, VStack } from "@
 import { MetaTags } from "components";
 import { useGetInitialData } from "hooks";
 
-import { TrackList, Follow, PlayButtonPlaylist } from "@/dashboard/components";
+import { TrackList, Follow, PlayButtonLg } from "@/dashboard/components";
 import { useParallax } from "@/dashboard/hooks";
 import {
   getArtistById,
@@ -61,7 +61,7 @@ export default function ArtistProfile(): JSX.Element {
               </>
             ) : (
               <HStack gap={2}>
-                <PlayButtonPlaylist playlist={artist.tracks} disabled={!artist.tracks?.length} />
+                <PlayButtonLg playlist={artist.tracks} disabled={!artist.tracks?.length} />
 
                 <VStack align="flex-start">
                   <HStack alignItems="end">
