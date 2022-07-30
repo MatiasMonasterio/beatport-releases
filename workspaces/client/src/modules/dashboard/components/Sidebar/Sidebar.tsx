@@ -1,16 +1,8 @@
 import { NavLink } from "react-router-dom";
-import {
-  Container,
-  UnorderedList,
-  ListItem,
-  Link,
-  Box,
-  VisuallyHidden,
-  Heading,
-} from "@chakra-ui/react";
+import { Container, UnorderedList, Link, Box, VisuallyHidden } from "@chakra-ui/react";
 import { BiHome, BiMusic, BiUser, BiGridAlt, BiHeart, BiPulse } from "react-icons/bi";
 
-import SidebarItem from "./SidebarItem";
+import { SidebarItem, SidebarTitle } from "./components";
 
 export default function Sidebar() {
   return (
@@ -21,41 +13,20 @@ export default function Sidebar() {
       </Link>
 
       <UnorderedList styleType="none" ml={0} spacing={1} mb={4}>
-        <ListItem>
-          <SidebarItem to="/" content="Home" icon={<BiHome />} />
-        </ListItem>
-
-        <ListItem>
-          <SidebarItem to="/releases" content="Releases" icon={<BiMusic />} />
-        </ListItem>
+        <SidebarItem to="/" content="Home" icon={<BiHome />} />
+        <SidebarItem to="/releases" content="Releases" icon={<BiMusic />} />
       </UnorderedList>
 
+      <SidebarTitle>Your Collection</SidebarTitle>
       <UnorderedList styleType="none" ml={0} spacing={1} mb={4}>
-        <Heading fontSize="xs" color="secondary.gray.700" fontWeight="normal" px={2} mb={2}>
-          Your Collection
-        </Heading>
-
-        <ListItem>
-          <SidebarItem to="/favorites" content="Favorites Tracks" icon={<BiHeart />} />
-        </ListItem>
-
-        <ListItem>
-          <SidebarItem to="/artists" content="Artists" icon={<BiUser />} />
-        </ListItem>
-
-        <ListItem>
-          <SidebarItem to="/labels" content="Labels" icon={<BiGridAlt />} />
-        </ListItem>
+        <SidebarItem to="/favorites" content="Favorites Tracks" icon={<BiHeart />} />
+        <SidebarItem to="/artists" content="Artists" icon={<BiUser />} />
+        <SidebarItem to="/labels" content="Labels" icon={<BiGridAlt />} />
       </UnorderedList>
 
+      <SidebarTitle>Discover</SidebarTitle>
       <UnorderedList styleType="none" ml={0} spacing={1} mb={4}>
-        <Heading fontSize="xs" color="secondary.gray.700" fontWeight="normal" px={2} mb={2}>
-          Discover
-        </Heading>
-
-        <ListItem>
-          <SidebarItem to="/upcomings" content="Upcomings" icon={<BiPulse />} />
-        </ListItem>
+        <SidebarItem to="/upcomings" content="Upcomings" icon={<BiPulse />} />
       </UnorderedList>
     </Container>
   );
