@@ -1,6 +1,5 @@
 import { HStack } from "@chakra-ui/react";
-
-import NavLinkItem from "./NavLinkItem";
+import { NavLinkItem } from "./components";
 
 interface Props {
   routes: { path: string; name: string }[];
