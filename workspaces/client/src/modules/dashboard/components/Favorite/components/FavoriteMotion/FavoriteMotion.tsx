@@ -1,12 +1,12 @@
 import type { ButtonProps } from "@chakra-ui/react";
 
-import { useEffect } from "react";
 import { Button } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
 
 interface Props extends ButtonProps {
   children: React.ReactNode;
   isActive: boolean;
+  onClick: () => void;
 }
 
 const animations = {
@@ -20,15 +20,22 @@ const animations = {
 
 const MotionButton = motion(Button);
 
-export default function FavoriteMotion({ children, isActive, ...args }: Props) {
+export default function FavoriteMotion({ children, isActive, onClick, ...args }: Props) {
   const animate = useAnimation();
 
-  useEffect(() => {
-    isActive ? animate.start("addFavorite") : animate.start("removeFavorite");
-  }, [isActive]);
+  const handleClick = () => {
+    !isActive ? animate.start("addFavorite") : animate.start("removeFavorite");
+    onClick();
+  };
 
   return (
-    <MotionButton variants={animations} animate={animate} transition={{ duration: 0.3 }} {...args}>
+    <MotionButton
+      variants={animations}
+      animate={animate}
+      transition={{ duration: 0.3 }}
+      {...args}
+      onClick={handleClick}
+    >
       {children}
     </MotionButton>
   );
