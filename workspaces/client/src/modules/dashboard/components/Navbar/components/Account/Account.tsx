@@ -41,6 +41,7 @@ export default function Account() {
         >
           <Text fontSize="md">Profile</Text>
         </MenuItem>
+
         <MenuItem
           as={Link}
           to="/account/settings"
@@ -50,6 +51,7 @@ export default function Account() {
         >
           <Text fontSize="md">Settings</Text>
         </MenuItem>
+
         <MenuItem
           onClick={handleSignOut}
           _focus={{ bgColor: "initial", color: "secondary.gray.100" }}

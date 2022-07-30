@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link as NavLink } from "react-router-dom";
+
 import {
   Button,
   Box,
@@ -7,11 +7,11 @@ import {
   PopoverTrigger as OrigPopoverTrigger,
   PopoverContent,
   PopoverBody,
-  Text,
   useDisclosure,
-  Link,
 } from "@chakra-ui/react";
 import { BiBell } from "react-icons/bi";
+
+import { NotificationItem } from "./components";
 
 // problems with type in react 18
 // https://github.com/chakra-ui/chakra-ui/issues/5896
@@ -64,38 +64,13 @@ export default function Notification() {
         borderRadius="md"
       >
         <PopoverBody zIndex={102}>
-          <Box role="group">
-            <Text
-              fontSize="xs"
-              color="secondary.gray.700"
-              _groupHover={{ color: "secondary.gray.500" }}
-            >
-              New Releases | Today
-            </Text>
-
-            <Text
-              color="secondary.gray.200"
-              fontSize="md"
-              _groupHover={{ color: "secondary.gray.100" }}
-              lineHeight="1.2em"
-            >
-              5 new releases!
-            </Text>
-
-            <Text as="span">
-              <Link
-                as={NavLink}
-                to="/releases"
-                onClick={onToggle}
-                fontSize="xs"
-                color="primary.green"
-                mr={1}
-              >
-                Go to releases!
-              </Link>
-              🚀
-            </Text>
-          </Box>
+          <NotificationItem
+            title="New Releases | Today"
+            message="5 new releases!"
+            secondMessage="Go to releases!"
+            to="/releases"
+            onClick={onToggle}
+          />
         </PopoverBody>
       </PopoverContent>
     </Popover>
