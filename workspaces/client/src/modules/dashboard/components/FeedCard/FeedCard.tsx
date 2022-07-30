@@ -6,7 +6,10 @@ import { Heading, Text, LinkBox, LinkOverlay, HStack, Box, Skeleton } from "@cha
 
 import { useGetInitialData } from "hooks";
 
-const PlayButtonPlaylist = lazy(() => import("@/dashboard/components/PlayButtonPlaylist"));
+import { tracksCountMessage } from "@/dashboard/utilities";
+const PlayButtonWithOpacity = lazy(
+  () => import("@/dashboard/components/PlayButton/variants/PlayButtonWithOpacity")
+);
 
 interface Props {
   title: string;
@@ -20,8 +23,8 @@ export default function FeedCard({ title, to, request }: Props) {
     defaultValue: [],
   });
 
-  const tracksCountMessage: string = useMemo(() => {
-    return tracks.length > 0 ? `${tracks.length} tracks` : "No tracks";
+  const tracksCountMsg: string = useMemo(() => {
+    return tracksCountMessage(tracks.length);
   }, [tracks]);
 
   return (
@@ -42,19 +45,11 @@ export default function FeedCard({ title, to, request }: Props) {
           </LinkOverlay>
 
           <Text fontSize="sm">
-            {isLoading ? <Skeleton width="70px" height="0.8rem" mt={2} /> : tracksCountMessage}
+            {isLoading ? <Skeleton width="70px" height="0.8rem" mt={2} /> : tracksCountMsg}
           </Text>
         </Box>
 
-        {tracks.length && (
-          <PlayButtonPlaylist
-            size="sm"
-            playlist={tracks}
-            opacity={0}
-            _groupFocusWithin={{ opacity: 1, pointerEvents: "initial" }}
-            _groupHover={{ opacity: 1, pointerEvents: "initial" }}
-          />
-        )}
+        {tracks.length && <PlayButtonWithOpacity playlist={tracks} />}
       </HStack>
     </LinkBox>
   );
