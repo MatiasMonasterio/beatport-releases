@@ -8,12 +8,10 @@ import { track } from "mocks/tracks";
 
 import Favorite from "./Favorite";
 
-const mockOnClick = jest.fn();
 jest.mock("@/dashboard/services/favorites");
 
 const props: Props = {
   track: track,
-  onClick: mockOnClick,
 };
 
 describe("Favorite component", () => {
@@ -48,7 +46,6 @@ describe("Favorite component", () => {
 
     fireEvent.click(favoriteButton);
 
-    expect(mockOnClick).toBeCalledTimes(1);
     expect(newFavoriteTrack).toBeCalledTimes(1);
     expect(newFavoriteTrack).toBeCalledWith({ ...props.track, favorite: true });
     expect(favoriteButton.getAttribute("aria-label")).toBe("Remove Favorite");
@@ -68,7 +65,6 @@ describe("Favorite component", () => {
 
     fireEvent.click(favoriteButton);
 
-    expect(mockOnClick).toBeCalledTimes(1);
     expect(deleteFavoriteById).toBeCalledTimes(1);
     expect(deleteFavoriteById).toBeCalledWith(props.track.id);
     expect(favoriteButton.getAttribute("aria-label")).toBe("Add Favorite");
