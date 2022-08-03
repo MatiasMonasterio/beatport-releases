@@ -44,8 +44,8 @@ export default function FeedCard({ title, to, request }: Props) {
             </Heading>
           </LinkOverlay>
 
-          <Text fontSize="sm">
-            {isLoading ? <Skeleton width="70px" height="0.8rem" mt={2} /> : tracksCountMsg}
+          <Text fontSize="xs">
+            {isLoading ? <Skeleton width="70px" height="0.7rem" mt={2} /> : tracksCountMsg}
           </Text>
         </Box>
 
