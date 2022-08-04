@@ -1,17 +1,11 @@
 import { Container, Box, Heading } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useGetInitialData } from "hooks";
 
 import { TrackList } from "@/dashboard/components";
 import { getUpcomings } from "@/dashboard/services/tracks";
 
 export default function Upcomings() {
-  const { data: upcomings, isLoading } = useGetInitialData({
-    request: getUpcomings,
-    defaultValue: [],
-  });
-
   return (
     <>
       <MetaTags title="Upcomings" />
@@ -22,7 +16,7 @@ export default function Upcomings() {
             Upcomings
           </Heading>
 
-          <TrackList tracks={upcomings} isLoading={isLoading} />
+          <TrackList request={getUpcomings} />
         </Box>
       </Container>
     </>

@@ -1,3 +1,5 @@
+import type { ApiParams } from "@br/core";
+
 import { Link as ReactLink } from "react-router-dom";
 import { Container, Heading, VStack, Box, Grid, HStack, Link } from "@chakra-ui/react";
 
@@ -11,11 +13,6 @@ import { getReleases, getUpcomings } from "@/dashboard/services/tracks";
 import { getFavorites } from "@/dashboard/services/favorites";
 
 export default function Home() {
-  const { data: releases, isLoading: releasesIsLoading } = useGetInitialData({
-    request: async () => await getReleases({ length: 6 }),
-    defaultValue: [],
-  });
-
   const { data: artists, isLoading: artistIsLoading } = useGetInitialData({
     request: async () => await getArtists({ sort: "createdAt", length: 6 }),
     defaultValue: [],
@@ -25,6 +22,10 @@ export default function Home() {
     request: async () => await getLabels({ sort: "createdAt", length: 6 }),
     defaultValue: [],
   });
+
+  const getReleasesRequest = async (params?: ApiParams) => {
+    return await getReleases({ ...params, length: 6 });
+  };
 
   const handleAddArtist = async (artistId: string) => {
     await addArtistId(artistId);
@@ -61,7 +62,7 @@ export default function Home() {
               New Releases this week 🔥
             </Heading>
 
-            <TrackList tracks={releases} isLoading={releasesIsLoading} />
+            <TrackList request={getReleasesRequest} />
           </VStack>
 
           <Box as="section">

@@ -1,17 +1,11 @@
 import { Container, Heading } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useGetInitialData } from "hooks";
 
 import { TrackList } from "@/dashboard/components";
 import { getFavorites } from "@/dashboard/services/favorites";
 
 export default function Fovorites() {
-  const { data: favorites, isLoading } = useGetInitialData({
-    request: getFavorites,
-    defaultValue: [],
-  });
-
   return (
     <>
       <MetaTags title="Favorites" />
@@ -21,7 +15,7 @@ export default function Fovorites() {
           My Favorites Tracks
         </Heading>
 
-        <TrackList tracks={favorites} isLoading={isLoading} favoritesList />
+        <TrackList request={getFavorites} favoritesList />
       </Container>
     </>
   );

@@ -25,11 +25,6 @@ export default function ArtistProfile(): JSX.Element {
     deps: [id],
   });
 
-  const { data: tracks, isLoading: tracksIsLoading } = useGetInitialData({
-    request: async () => await getTracksByArtistId(id),
-    defaultValue: [],
-  });
-
   const handleFollow = async (isFolling: boolean): Promise<void> => {
     if (isFolling) await deleteArtistsById(id);
     else await addArtistId(id);
@@ -91,7 +86,7 @@ export default function ArtistProfile(): JSX.Element {
         </Heading>
 
         <Flex direction="column" gap={2}>
-          <TrackList tracks={tracks} isLoading={tracksIsLoading} />
+          <TrackList request={async () => await getTracksByArtistId(id)} />
         </Flex>
       </Container>
     </>

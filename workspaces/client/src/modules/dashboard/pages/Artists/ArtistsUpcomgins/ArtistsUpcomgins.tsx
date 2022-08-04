@@ -1,31 +1,24 @@
-import { VStack, Skeleton, Heading } from "@chakra-ui/react";
+import { useState } from "react";
+import { VStack, Heading } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useGetInitialData } from "hooks";
 
 import { TrackList } from "@/dashboard/components";
 import { getArtistUpcomings } from "@/dashboard/services/artists";
 
 export default function ArtistsUpcomgins(): JSX.Element {
-  const { data: releases, isLoading } = useGetInitialData({
-    request: getArtistUpcomings,
-    defaultValue: [],
-  });
+  const [resultsLength, setResultsLength] = useState(0);
 
   return (
     <>
       <MetaTags title="Artists Releases" />
 
       <VStack mb={4} align="flex-start">
-        {isLoading && <Skeleton width="110px" h="1.5rem" />}
-
-        {!isLoading && (
-          <Heading as="h2" size="lg" mb={2}>
-            {releases.length} Upcomings
-          </Heading>
-        )}
+        <Heading as="h2" size="lg" mb={2}>
+          {resultsLength} Upcomings
+        </Heading>
       </VStack>
-      <TrackList tracks={releases} isLoading={isLoading} />
+      <TrackList request={getArtistUpcomings} onLoad={setResultsLength} />
     </>
   );
 }

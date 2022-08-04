@@ -24,11 +24,6 @@ export default function LabelProfile(): JSX.Element {
     defaultValue: {} as Label,
   });
 
-  const { data: tracks, isLoading: tracksIsLoading } = useGetInitialData({
-    request: async () => await getTracksByLabelId(id),
-    defaultValue: [],
-  });
-
   const handleFollow = async (isFollowing: boolean): Promise<void> => {
     if (isFollowing) await deleteLabelById(id);
     else await addLabelId(id);
@@ -89,7 +84,7 @@ export default function LabelProfile(): JSX.Element {
           Last Releases
         </Heading>
 
-        <TrackList tracks={tracks} isLoading={tracksIsLoading} />
+        <TrackList request={async () => await getTracksByLabelId(id)} />
       </Container>
     </>
   );

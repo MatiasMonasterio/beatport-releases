@@ -1,30 +1,23 @@
-import { Heading, Skeleton } from "@chakra-ui/react";
+import { useState } from "react";
+import { Heading } from "@chakra-ui/react";
 
 import { MetaTags } from "components";
-import { useGetInitialData } from "hooks";
 
 import { TrackList } from "@/dashboard/components";
 import { getLabelUpcomings } from "@/dashboard/services/labels";
 
 export default function LabelsUpcomings(): JSX.Element {
-  const { data: upcomings, isLoading } = useGetInitialData({
-    request: getLabelUpcomings,
-    defaultValue: [],
-  });
+  const [resultsLength, setResultsLength] = useState(0);
 
   return (
     <>
       <MetaTags title="Labels Upcoming" />
 
-      {isLoading && <Skeleton width="110px" h="1.5rem" mb={4} />}
+      <Heading as="h2" size="lg" mb={4}>
+        {resultsLength} Upcoming
+      </Heading>
 
-      {!isLoading && (
-        <Heading as="h2" size="lg" mb={4}>
-          {upcomings.length} Upcoming
-        </Heading>
-      )}
-
-      <TrackList tracks={upcomings} isLoading={isLoading} />
+      <TrackList request={getLabelUpcomings} onLoad={setResultsLength} />
     </>
   );
 }
