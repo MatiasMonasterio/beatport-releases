@@ -5,7 +5,7 @@ import userService from "../services/userServices";
 
 const getUser = async (req: Request, res: Response) => {
   try {
-    const user = await userService.getUser(+req.userId);
+    const user = await userService.getUser(req.userId);
     res.send({ status: "OK", data: user });
   } catch (error: unknown | ErrorRequest) {
     const err = error as ErrorRequest;

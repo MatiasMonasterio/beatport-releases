@@ -8,8 +8,9 @@ import cache from "../../cache";
 
 const getAllLabels = async (req: Request, res: Response): Promise<void> => {
   const queryParams = req.query;
+
   try {
-    const labels = await labelService.getAllLabels(+req.userId, queryParams);
+    const labels = await labelService.getAllLabels(req.userId, queryParams);
     await cache.set<Label[]>(req.originalUrl, labels);
 
     res.send({ status: "OK", data: labels });
@@ -23,7 +24,7 @@ const getAllLabels = async (req: Request, res: Response): Promise<void> => {
 };
 
 const createNewLabel = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.body;
+  const id = parseInt(req.body.id);
 
   if (!id) {
     res.status(400).send({ status: "FAILED", data: { error: "id is missing or invalid" } });
@@ -31,7 +32,7 @@ const createNewLabel = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-    const labels = await labelService.createNewLabel(+id, +req.userId);
+    const labels = await labelService.createNewLabel(id, req.userId);
     res.status(201).send({ status: "OK", data: labels });
 
     await clearLabelCache();
@@ -45,14 +46,14 @@ const createNewLabel = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getOneLabel = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id);
 
   if (!id) {
     res.status(400).send({ status: "FAILED", data: { error: "id is missing or invalid" } });
   }
 
   try {
-    const label = await labelService.getOneLabel(+id, +req.userId);
+    const label = await labelService.getOneLabel(id, req.userId);
 
     if (!label) {
       res.status(404).send({ status: "FAILED", data: { error: "label not found" } });
@@ -70,12 +71,12 @@ const getOneLabel = async (req: Request, res: Response): Promise<void> => {
 };
 
 const deteleOneLabel = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id);
 
   if (!id) res.status(404).send({ status: "FAILED", data: { error: "id is missing or invalid" } });
 
   try {
-    await labelService.deteleOneLabel(+id, +req.userId);
+    await labelService.deteleOneLabel(id, req.userId);
     res.status(200).send();
 
     await clearLabelCache();

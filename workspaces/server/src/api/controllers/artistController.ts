@@ -10,7 +10,7 @@ const getAllArtists = async (req: Request, res: Response): Promise<void> => {
   const queryParams = req.query;
 
   try {
-    const artists = await artistService.getAllArtists(+req.userId, queryParams);
+    const artists = await artistService.getAllArtists(req.userId, queryParams);
 
     await cache.set<Artist[]>(req.originalUrl, artists);
     res.send({ status: "OK", data: artists });
@@ -24,7 +24,7 @@ const getAllArtists = async (req: Request, res: Response): Promise<void> => {
 };
 
 const createNewArtist = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.body;
+  const id = parseInt(req.body.id);
 
   if (!id) {
     res.status(400).send({ status: "FAILED", data: { error: "id is missing or invalid" } });
@@ -32,7 +32,7 @@ const createNewArtist = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-    const artist = await artistService.createNewArtist(+id, +req.userId);
+    const artist = await artistService.createNewArtist(id, req.userId);
     res.status(201).send({ status: "OK", data: artist });
 
     await clearArtistCache();
@@ -46,14 +46,14 @@ const createNewArtist = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getOneArtist = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id);
 
   if (!id) {
     res.status(400).send({ status: "FAILED", data: { error: "id is missing or invalid" } });
   }
 
   try {
-    const artist = await artistService.getOneArtist(id, +req.userId);
+    const artist = await artistService.getOneArtist(id, req.userId);
 
     if (!artist) {
       res.status(404).send({ status: "FAILED", data: { error: "artist not found" } });
@@ -71,12 +71,12 @@ const getOneArtist = async (req: Request, res: Response): Promise<void> => {
 };
 
 const deteleOneArtist = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id);
 
   if (!id) res.status(404).send({ status: "FAILED", data: { error: "id is missing or invalid" } });
 
   try {
-    await artistService.deteleOneArtist(+id, +req.userId);
+    await artistService.deteleOneArtist(id, req.userId);
     res.status(200).send();
 
     await clearArtistCache();

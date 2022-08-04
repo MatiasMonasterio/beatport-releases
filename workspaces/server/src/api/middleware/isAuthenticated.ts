@@ -17,7 +17,7 @@ export default async function isAuthenticated(req: Request, res: Response, next:
         return res.status(403).send({ status: "FAILD", message: "token missin or invalid" });
       }
 
-      req.userId = decode.id.toString();
+      req.userId = decode.id;
       next();
     }
   } catch (error) {

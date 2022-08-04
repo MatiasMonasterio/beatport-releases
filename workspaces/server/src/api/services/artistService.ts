@@ -11,7 +11,7 @@ const getAllArtists = async (userId: number, params: ApiParams): Promise<Artist[
   const { length, sort, order } = params;
 
   const artists = await db.artistDB.findMany({
-    ...(length && { take: +length }),
+    ...(length && { take: length }),
     where: {
       users: {
         some: { id: userId },
@@ -213,9 +213,9 @@ const createNewArtist = async (id: number, userId: number): Promise<Artist> => {
   return artistAdapter(newArtistDb);
 };
 
-const getOneArtist = async (id: string, userId: number): Promise<Artist> => {
+const getOneArtist = async (id: number, userId: number): Promise<Artist> => {
   const artist = await db.artistDB.findUnique({
-    where: { id: +id },
+    where: { id: id },
     include: {
       users: true,
       tracks: {
@@ -238,7 +238,7 @@ const getOneArtist = async (id: string, userId: number): Promise<Artist> => {
   const artistOnCache = await cache.get<Artist>(`/artist/${id}`);
   if (artistOnCache) return artistOnCache;
 
-  const [artistScreped] = await beatportScrap.artists([{ id: +id }]);
+  const [artistScreped] = await beatportScrap.artists([{ id }]);
   cache.set(`/artist/${id}`, artistScreped);
 
   return artistScreped;

@@ -8,7 +8,7 @@ import { clearFavoriteCache } from "../../utils/clearCache";
 
 const getAllFavorites = async (req: Request, res: Response): Promise<void> => {
   try {
-    const favorites = await favoriteServices.getAllFavorites(+req.userId);
+    const favorites = await favoriteServices.getAllFavorites(req.userId);
     await cache.set<Favorite[]>(req.originalUrl, favorites);
 
     res.send({ status: "OK", data: favorites });
@@ -25,7 +25,7 @@ const createNewFavorite = async (req: Request, res: Response): Promise<void> => 
   const track = req.body;
 
   try {
-    const favorite = await favoriteServices.createNewFavorite(+req.userId, track);
+    const favorite = await favoriteServices.createNewFavorite(req.userId, track);
     await clearFavoriteCache();
     res.send({ status: "OK", data: favorite });
   } catch (error: unknown | ErrorRequest) {
@@ -38,8 +38,10 @@ const createNewFavorite = async (req: Request, res: Response): Promise<void> => 
 };
 
 const deleteOneFavorite = async (req: Request, res: Response): Promise<void> => {
+  const id = parseInt(req.params.id);
+
   try {
-    await favoriteServices.deleteOneFavorite(+req.params.id, +req.userId);
+    await favoriteServices.deleteOneFavorite(id, req.userId);
     await clearFavoriteCache();
     res.status(200).send();
   } catch (error: unknown | ErrorRequest) {

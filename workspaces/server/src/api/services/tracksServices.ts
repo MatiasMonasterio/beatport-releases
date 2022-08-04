@@ -72,7 +72,7 @@ const getAllReleases = async (userId: number, params: ApiParams): Promise<Track[
   const lasMonthDate = dayjs(new Date()).subtract(1, "month").toDate();
 
   const releases = await db.trackDB.findMany({
-    ...(length && { take: +length }),
+    ...(length && { take: length }),
     where: {
       OR: [
         {
@@ -98,8 +98,11 @@ const getAllReleases = async (userId: number, params: ApiParams): Promise<Track[
   return releases.map((release) => trackAdapter(release, userId));
 };
 
-const getAllUpcomings = async (userId: number): Promise<Track[]> => {
+const getAllUpcomings = async (userId: number, params: ApiParams): Promise<Track[]> => {
+  const { length } = params;
+
   const releases = await db.trackDB.findMany({
+    ...(length && { take: length }),
     where: {
       OR: [
         {
@@ -253,7 +256,7 @@ const getTracksByArtistId = async (userId: number, artistId: number): Promise<Tr
     return tracks.map((track) => trackAdapter(track, userId));
   }
 
-  const artist = await artistService.getOneArtist(artistId.toString(), userId);
+  const artist = await artistService.getOneArtist(artistId, userId);
   return artist.tracks;
 };
 

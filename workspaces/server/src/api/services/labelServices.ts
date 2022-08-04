@@ -11,7 +11,7 @@ const getAllLabels = async (userId: number, params: ApiParams): Promise<Label[]>
   const { length, sort, order } = params;
 
   const labels = await db.labelDB.findMany({
-    ...(length && { take: +length }),
+    ...(length && { take: length }),
     where: { users: { some: { id: userId } } },
     include: {
       tracks: {

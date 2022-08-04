@@ -12,7 +12,7 @@ export default async function isAuthenticated(req: Request, res: Response, next:
   try {
     const user = await db.userDB.findFirst({
       where: {
-        id: +userId,
+        id: userId,
         updatedAt: { lt: currentDate },
       },
     });
@@ -23,7 +23,7 @@ export default async function isAuthenticated(req: Request, res: Response, next:
 
     const artists = await db.artistDB.findMany({
       where: {
-        users: { some: { id: +userId } },
+        users: { some: { id: userId } },
         updatedAt: { lt: currentDate },
       },
       select: { id: true },
@@ -31,7 +31,7 @@ export default async function isAuthenticated(req: Request, res: Response, next:
 
     const labels = await db.labelDB.findMany({
       where: {
-        users: { some: { id: +req.userId } },
+        users: { some: { id: req.userId } },
         updatedAt: { lt: currentDate },
       },
       select: { id: true },
@@ -128,7 +128,7 @@ export default async function isAuthenticated(req: Request, res: Response, next:
     ]);
 
     await db.userDB.update({
-      where: { id: +userId },
+      where: { id: userId },
       data: { updatedAt: new Date() },
     });
 
