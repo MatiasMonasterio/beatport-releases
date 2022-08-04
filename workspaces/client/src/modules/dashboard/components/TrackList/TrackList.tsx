@@ -1,47 +1,37 @@
-import type { Track } from "@br/core";
+import type { Track, ApiParams } from "@br/core";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Flex, Box } from "@chakra-ui/react";
 
+import { useGetInitialData } from "hooks";
 import { usePlayerContext } from "@/dashboard/contexts/player";
 
-import TrackRow from "./TrackRow";
-import TrackCardLoader from "./TrackCardLoader";
-import SortDesktop from "./SortDesktop";
-import SortMobile from "./SortMobile";
-
-import { useFilter } from "./useFilter";
-
-interface ITrack extends Track {
-  createdAt?: number;
-}
-
-export enum trackFilter {
-  released = "released",
-  bpm = "bpm",
-  genres = "genres",
-  name = "name",
-  createdAt = "createdAt",
-}
+import { TrackRow, TrackCardLoader, Sort } from "./components";
+import { useParams, useOrderBy } from "./hooks";
 
 export interface Props {
-  tracks: ITrack[];
-  isLoading: boolean;
   favoritesList?: boolean;
+  request: (params?: ApiParams) => Promise<Track[]>;
+  onLoad?: (length: number) => void;
 }
 
-export default function TrackList({ tracks, isLoading, favoritesList }: Props): JSX.Element {
-  const [innerTracks, setInnerTracks] = useState<ITrack[]>([]);
-
+export default function TrackList({ favoritesList, request, onLoad }: Props): JSX.Element {
   const { loadPlaylist } = usePlayerContext();
-  const { filterSelected, isDescFilter, handleSort } = useFilter(innerTracks, setInnerTracks);
+  const { filter, order, handleOrderBy } = useOrderBy();
+  const { params } = useParams({ filter, order });
+
+  const { data: tracks, isLoading } = useGetInitialData({
+    request: () => request(params),
+    defaultValue: [],
+    deps: [params],
+  });
 
   const handlePlayTrack = (track: Track): void => {
-    loadPlaylist({ track, playlist: innerTracks });
+    loadPlaylist({ track, playlist: tracks });
   };
 
   useEffect(() => {
-    setInnerTracks(tracks);
+    onLoad && onLoad(tracks.length);
   }, [tracks]);
 
   return (
@@ -56,34 +46,19 @@ export default function TrackList({ tracks, isLoading, favoritesList }: Props): 
         zIndex={50}
         backgroundColor="secondary.black.900"
       >
-        <SortDesktop
+        <Sort
           favoritesList={favoritesList}
-          filter={filterSelected}
-          isDesc={isDescFilter < 0}
-          sortTitle={() => handleSort(trackFilter.name)}
-          sortBpm={() => handleSort(trackFilter.bpm)}
-          sortGenre={() => handleSort(trackFilter.genres)}
-          sortReleased={() => handleSort(trackFilter.released)}
+          filter={filter}
+          isDesc={order === "desc"}
+          onSortBy={handleOrderBy}
         />
-
-        <Box display={{ base: "block", sm: "none" }}>
-          <SortMobile
-            filter={filterSelected}
-            isDesc={isDescFilter < 0}
-            sortTitle={() => handleSort(trackFilter.name)}
-            sortBpm={() => handleSort(trackFilter.bpm)}
-            sortGenre={() => handleSort(trackFilter.genres)}
-            sortReleased={() => handleSort(trackFilter.released)}
-          />
-        </Box>
       </Box>
 
       <Flex direction="column" gap={2} role="list">
         {isLoading && [1, 2, 3, 4].map((value) => <TrackCardLoader key={value} />)}
 
         {!isLoading &&
-          innerTracks.length > 0 &&
-          innerTracks.map((track) => (
+          tracks.map((track) => (
             <TrackRow
               isFavoriteList={favoritesList}
               track={track}
@@ -92,7 +67,7 @@ export default function TrackList({ tracks, isLoading, favoritesList }: Props): 
             />
           ))}
 
-        {!isLoading && !innerTracks.length && (
+        {!isLoading && !tracks.length && (
           <Box py={5} color="secondary.gray.700">
             No results to show...
           </Box>

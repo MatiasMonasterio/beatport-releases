@@ -1,4 +1,5 @@
-import { trackFilter } from "../TrackList";
+import type { Props } from "../../Sort";
+import { tracksFilter } from "types";
 
 import {
   HStack,
@@ -14,23 +15,7 @@ import { BiSortAlt2 } from "react-icons/bi";
 
 import SortItem from "./SortItem";
 
-interface Props {
-  filter: string;
-  isDesc: boolean;
-  sortTitle: () => void;
-  sortGenre: () => void;
-  sortBpm: () => void;
-  sortReleased: () => void;
-}
-
-export default function SortMobile({
-  isDesc,
-  sortTitle,
-  filter,
-  sortGenre,
-  sortBpm,
-  sortReleased,
-}: Props) {
+export default function SortMobile({ isDesc, filter, onSortBy }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -58,42 +43,42 @@ export default function SortMobile({
           <DrawerBody display="flex" flexDirection="column" gap={5}>
             <SortItem
               onClick={() => {
-                sortTitle();
+                onSortBy(tracksFilter.name);
                 onClose();
               }}
               content="Title"
               isDesc={isDesc}
-              isActive={filter === trackFilter.name}
+              isActive={filter === tracksFilter.name}
             />
 
             <SortItem
               onClick={() => {
-                sortGenre();
+                onSortBy(tracksFilter.genre);
                 onClose();
               }}
               content="Genre"
               isDesc={isDesc}
-              isActive={filter === trackFilter.genres}
+              isActive={filter === tracksFilter.genre}
             />
 
             <SortItem
               onClick={() => {
-                sortBpm();
+                onSortBy(tracksFilter.bpm);
                 onClose();
               }}
               content="Bpm"
               isDesc={isDesc}
-              isActive={filter === trackFilter.bpm}
+              isActive={filter === tracksFilter.bpm}
             />
 
             <SortItem
               onClick={() => {
-                sortReleased();
+                onSortBy(tracksFilter.released);
                 onClose();
               }}
               content="Released"
               isDesc={isDesc}
-              isActive={filter === trackFilter.released}
+              isActive={filter === tracksFilter.released}
             />
           </DrawerBody>
         </DrawerContent>
