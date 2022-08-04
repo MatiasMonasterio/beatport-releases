@@ -1,5 +1,5 @@
 export interface ApiParams {
-  sort?: keyof Artist;
+  sort?: keyof Artist | keyof Track;
   order?: "desc" | "asc";
   length?: number;
 }
