@@ -5,7 +5,7 @@ import { black } from "theme/colors";
 
 import { WidgetProvider } from "@/dashboard/contexts/widget";
 import { PlayerProvider } from "@/dashboard/contexts/player";
-import { Navbar, Sidebar, Player } from "@/dashboard/components";
+import { Navbar, Sidebar, PlayingBar } from "@/dashboard/components";
 import { useNavSolid } from "@/dashboard/hooks";
 
 export default function DashboardLayout() {
@@ -64,7 +64,7 @@ export default function DashboardLayout() {
           </GridItem>
 
           <GridItem gridArea="2 / 1 / 3 / 3" mt="auto">
-            <Player />
+            <PlayingBar />
           </GridItem>
         </Grid>
       </PlayerProvider>
