@@ -4,7 +4,7 @@ import { VStack, Container, HStack, Box, Button } from "@chakra-ui/react";
 import { BiChevronDown } from "react-icons/bi";
 
 import { TrackCardView, Favorite } from "@/dashboard/components";
-import { useAudioControls } from "@/dashboard/hooks";
+import { usePlayerControls } from "@/dashboard/hooks";
 import { usePlayerContext } from "@/dashboard/contexts/player";
 
 import Timeline from "../Timeline";
@@ -20,7 +20,7 @@ interface Props {
 export default function TrackView({ isVisible, onCloseView }: Props) {
   const { isPlaying, currentTrack } = usePlayerContext();
   const { isFirstTrack, isLastTrack, handlePlay, handleNextTrack, handlePrevTrack } =
-    useAudioControls();
+    usePlayerControls();
 
   const handleCloseView = () => {
     onCloseView();

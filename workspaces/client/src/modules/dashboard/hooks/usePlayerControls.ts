@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { usePlayerContext } from "@/dashboard/contexts/player";
 
-export default function useAudioControls() {
+export default function usePlayerControls() {
   const { audioRef, currentTrack, playlist, loadPlaylist } = usePlayerContext();
   const [curretTrackIndex, setCurrentTrackIndex] = useState<number>(0);
 

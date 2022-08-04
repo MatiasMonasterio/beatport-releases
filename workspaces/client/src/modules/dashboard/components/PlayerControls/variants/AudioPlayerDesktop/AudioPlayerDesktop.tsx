@@ -1,14 +1,14 @@
 import { Box, Flex } from "@chakra-ui/react";
 
 import { usePlayerContext } from "@/dashboard/contexts/player";
-import { useAudioControls } from "@/dashboard/hooks";
+import { usePlayerControls } from "@/dashboard/hooks";
 
 import { Timeline, PlayButton, NextTrackButton, PrevTrackButton } from "../../components";
 
 export default function AudioPlayerDesktop() {
   const { isPlaying } = usePlayerContext();
   const { isFirstTrack, isLastTrack, handlePlay, handleNextTrack, handlePrevTrack } =
-    useAudioControls();
+    usePlayerControls();
 
   return (
     <Box display={{ base: "none", sm: "block" }}>

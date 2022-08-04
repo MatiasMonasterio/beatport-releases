@@ -2,7 +2,7 @@ import { useRef, useState, lazy, Suspense } from "react";
 import { Box, Container } from "@chakra-ui/react";
 
 import { usePlayerContext } from "@/dashboard/contexts/player";
-import { useAudioControls } from "@/dashboard/hooks";
+import { usePlayerControls } from "@/dashboard/hooks";
 
 import { PlayButton } from "../../components";
 const TrackView = lazy(() => import("../../components/TrackView"));
@@ -12,7 +12,7 @@ export default function AudioPlayerMobile() {
   const [showView, setShowView] = useState<boolean>(false);
 
   const { isPlaying } = usePlayerContext();
-  const { handlePlay } = useAudioControls();
+  const { handlePlay } = usePlayerControls();
 
   const handleShowPlayer = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === playerContainerRef.current) {

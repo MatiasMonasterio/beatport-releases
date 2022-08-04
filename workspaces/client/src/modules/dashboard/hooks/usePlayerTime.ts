@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
+import { usePlayerContext } from "@/dashboard/contexts/player";
 
-interface usePlayerResponse {
-  duration: number;
-  currentTime: number;
-}
+export default function usePlayerTime() {
+  const { audioRef } = usePlayerContext();
 
-export default function usePlayer(audioRef: React.RefObject<HTMLAudioElement>): usePlayerResponse {
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
 
