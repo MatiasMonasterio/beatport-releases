@@ -1,8 +1,7 @@
 import { Router } from "express";
 
 import { isCached, isAuthenticated, updateData } from "../middleware";
-import artistController from "../controllers/artistController";
-import trackController from "../controllers/trackController";
+import { artistController, trackController } from "../controllers";
 
 const router = Router();
 

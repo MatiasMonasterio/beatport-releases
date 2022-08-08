@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { isCached, isAuthenticated, updateData } from "../middleware";
-import favoriteController from "../controllers/favoriteController";
+import { favoriteController } from "../controllers";
 
 const router = Router();
 
