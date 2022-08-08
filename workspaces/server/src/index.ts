@@ -5,7 +5,7 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 
-import apiRoutes from "./api/routes";
+import apiRoutes from "./api";
 import { connectDatabases } from "./utils";
 import { PORT, CLIENT_URL } from "./config/constants";
 
@@ -19,7 +19,7 @@ app.get("/", (_req, res) => {
   res.send("Beat Releases API");
 });
 
-app.use(apiRoutes);
+app.use("/api", apiRoutes);
 
 app.all("*", (req, _res, next) => {
   next({ status: 404, message: `Can't find ${req.originalUrl} on this server!` });
