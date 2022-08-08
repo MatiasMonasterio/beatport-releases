@@ -2,14 +2,14 @@ import type { Request, Response } from "express";
 import type { Track } from "@br/core";
 import type { ErrorRequest } from "../../types";
 
-import tracksServices from "../services/tracksServices";
 import cache from "../../cache";
+import { trackService } from "../services";
 
 const getAllReleases = async (req: Request, res: Response): Promise<void> => {
   const queryParams = req.query;
 
   try {
-    const tracks = await tracksServices.getAllReleases(req.userId, queryParams);
+    const tracks = await trackService.getAllReleases(req.userId, queryParams);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
@@ -26,7 +26,7 @@ const getAllUpcomings = async (req: Request, res: Response): Promise<void> => {
   const queryParams = req.query;
 
   try {
-    const tracks = await tracksServices.getAllUpcomings(req.userId, queryParams);
+    const tracks = await trackService.getAllUpcomings(req.userId, queryParams);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
@@ -41,7 +41,7 @@ const getAllUpcomings = async (req: Request, res: Response): Promise<void> => {
 
 const getArtistsReleases = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tracks = await tracksServices.getArtistsReleases(req.userId);
+    const tracks = await trackService.getArtistsReleases(req.userId);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
@@ -56,7 +56,7 @@ const getArtistsReleases = async (req: Request, res: Response): Promise<void> =>
 
 const getArtistsUpcoming = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tracks = await tracksServices.getArtistsUpcoming(req.userId);
+    const tracks = await trackService.getArtistsUpcoming(req.userId);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
@@ -71,7 +71,7 @@ const getArtistsUpcoming = async (req: Request, res: Response): Promise<void> =>
 
 const getLabelsReleases = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tracks = await tracksServices.getLabelsReleases(req.userId);
+    const tracks = await trackService.getLabelsReleases(req.userId);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
@@ -86,7 +86,7 @@ const getLabelsReleases = async (req: Request, res: Response): Promise<void> => 
 
 const getLabelsUpcoming = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tracks = await tracksServices.getLabelsUpcoming(req.userId);
+    const tracks = await trackService.getLabelsUpcoming(req.userId);
     await cache.set<Track[]>(req.originalUrl, tracks);
 
     res.send({ status: "OK", data: tracks });
@@ -103,7 +103,7 @@ const getTracksByArtistId = async (req: Request, res: Response): Promise<void> =
   const id = parseInt(req.params.id);
 
   try {
-    const tracks = await tracksServices.getTracksByArtistId(req.userId, id);
+    const tracks = await trackService.getTracksByArtistId(req.userId, id);
     res.send({ status: "OK", data: tracks });
   } catch (error: unknown | ErrorRequest) {
     const err = error as ErrorRequest;
@@ -118,7 +118,7 @@ const getTracksByLabelId = async (req: Request, res: Response): Promise<void> =>
   const id = parseInt(req.params.id);
 
   try {
-    const tracks = await tracksServices.getTracksByLabelId(id, req.userId);
+    const tracks = await trackService.getTracksByLabelId(id, req.userId);
     res.send({ status: "OK", data: tracks });
   } catch (error: unknown | ErrorRequest) {
     const err = error as ErrorRequest;

@@ -2,9 +2,10 @@ import type { Request, Response } from "express";
 import type { Label } from "@br/core";
 import type { ErrorRequest } from "../../types";
 
-import { clearLabelCache } from "../../utils/clearCache";
-import labelService from "../services/labelServices";
 import cache from "../../cache";
+import { clearLabelCache } from "../../utils/clearCache";
+
+import { labelService } from "../services";
 
 const getAllLabels = async (req: Request, res: Response): Promise<void> => {
   const queryParams = req.query;

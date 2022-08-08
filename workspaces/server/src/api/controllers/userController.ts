@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import type { ErrorRequest } from "../../types";
 
-import userService from "../services/userServices";
+import { userService } from "../services";
 
 const getUser = async (req: Request, res: Response) => {
   try {

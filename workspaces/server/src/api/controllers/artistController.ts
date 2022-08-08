@@ -4,7 +4,8 @@ import type { ErrorRequest } from "../../types";
 
 import cache from "../../cache";
 import { clearArtistCache } from "../../utils/clearCache";
-import artistService from "../services/artistService";
+
+import { artistService } from "../services";
 
 const getAllArtists = async (req: Request, res: Response): Promise<void> => {
   const queryParams = req.query;
