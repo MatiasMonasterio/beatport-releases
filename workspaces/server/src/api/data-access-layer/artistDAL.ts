@@ -5,7 +5,7 @@ import db from "../../database";
 
 export default {
   async isConnectedWithUser(id: number, userId: number) {
-    const artist = db.artistDB.findFirst({
+    const artist = await db.artistDB.findFirst({
       where: { id: id, users: { some: { id: userId } } },
       select: { id: true },
     });
@@ -61,6 +61,7 @@ export default {
           },
           orderBy: { released: "desc" },
         },
+        users: true,
       },
     });
   },

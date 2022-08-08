@@ -67,6 +67,7 @@ export default {
             favorite: true,
           },
         },
+        users: true,
       },
     });
   },
