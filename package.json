@@ -15,6 +15,7 @@
   },
   "scripts": {
     "build": "npm run build:server",
+    "start": "npm run start:server",
     "start:server": "npm start --w=server",
     "dev:client": "npm run dev --w=client",
     "dev:server": "npm run dev --w=server",
