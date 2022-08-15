@@ -49,15 +49,17 @@ export default function ArtistProfile(): JSX.Element {
 
         <Flex h="100%" bg="blackAlpha.600" direction="column" justify="end" py={10}>
           <Container maxW="container.xl">
-            {isLoading ? (
-              <>
-                <Skeleton width="250px" height="2.1rem" mb={2} />
-                <Skeleton width="150px" height="0.9rem" />
-              </>
-            ) : (
-              <HStack gap={2}>
-                <PlayButtonLg playlist={artist.tracks} disabled={!artist.tracks?.length} />
+            <HStack gap={2}>
+              <PlayButtonLg playlist={artist.tracks} disabled={!artist.tracks?.length} />
 
+              {isLoading && (
+                <VStack align="flex-start">
+                  <Skeleton width="250px" height="2.1rem" mb={2} />
+                  <Skeleton width="150px" height="0.9rem" />
+                </VStack>
+              )}
+
+              {!isLoading && (
                 <VStack align="flex-start">
                   <HStack alignItems="end">
                     <Heading>{artist.name}</Heading>
@@ -74,8 +76,8 @@ export default function ArtistProfile(): JSX.Element {
                     Go to beatport profile
                   </Link>
                 </VStack>
-              </HStack>
-            )}
+              )}
+            </HStack>
           </Container>
         </Flex>
       </Box>

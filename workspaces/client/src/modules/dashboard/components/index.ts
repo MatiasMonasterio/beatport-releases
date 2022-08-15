@@ -15,6 +15,9 @@ export { default as TrackCardFooter } from "./TrackCard/variants/TrackCardFooter
 export { default as TrackCardRow } from "./TrackCard/variants/TrackCardRow";
 export { default as TrackCardView } from "./TrackCard/variants/TrackCardView";
 
+export { default as TrackRowLoader } from "./Loaders/variants/TrackRowLoader";
+export { default as CardLoader } from "./Loaders/variants/CardLoader";
+
 export { default as CardList } from "./CardList";
 export { default as TrackList } from "./TrackList";
 export { default as PlayingBar } from "./PlayingBar";

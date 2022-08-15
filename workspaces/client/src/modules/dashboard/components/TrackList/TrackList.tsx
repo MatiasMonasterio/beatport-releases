@@ -5,8 +5,9 @@ import { Flex, Box } from "@chakra-ui/react";
 
 import { useGetInitialData } from "hooks";
 import { usePlayerContext } from "@/dashboard/contexts/player";
+import { TrackRowLoader } from "@/dashboard/components";
 
-import { TrackRow, TrackCardLoader, Sort } from "./components";
+import { TrackRow, Sort } from "./components";
 import { useParams, useOrderBy } from "./hooks";
 
 export interface Props {
@@ -55,7 +56,7 @@ export default function TrackList({ favoritesList, request, onLoad }: Props): JS
       </Box>
 
       <Flex direction="column" gap={2} role="list">
-        {isLoading && [1, 2, 3, 4].map((value) => <TrackCardLoader key={value} />)}
+        {isLoading && [1, 2, 3, 4].map((value) => <TrackRowLoader key={value} />)}
 
         {!isLoading &&
           tracks.map((track) => (

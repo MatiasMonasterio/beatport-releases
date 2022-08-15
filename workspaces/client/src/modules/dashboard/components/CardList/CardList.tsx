@@ -2,8 +2,9 @@ import type { Type, CardListData, Size } from "./types";
 
 import { Grid } from "@chakra-ui/react";
 
+import { CardLoader } from "@/dashboard/components";
+
 import Card from "./Card";
-import CardLoader from "./CardLoader";
 import AddCard from "./AddCard";
 
 interface Props {

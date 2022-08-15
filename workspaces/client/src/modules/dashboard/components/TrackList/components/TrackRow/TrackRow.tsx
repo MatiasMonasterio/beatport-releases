@@ -45,7 +45,7 @@ export default function TrackRow({ isFavoriteList, track, onPlay }: Props): JSX.
         <TrackRowItem content={bpm} />
         <TrackRowItem content={isFavoriteList ? dateFromNow(createdAt) : dateFromNow(released)} />
 
-        <GridItem display={{ base: "none", sm: "block" }} alignSelf="center">
+        <GridItem display={{ base: "none", sm: "flex" }} alignSelf="center" justifyContent="center">
           <Favorite track={track} />
         </GridItem>
       </Grid>

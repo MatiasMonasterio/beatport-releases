@@ -48,15 +48,10 @@ export default function LabelProfile(): JSX.Element {
 
         <Flex h="100%" bg="rgba(0,0,0,0.6)" direction="column" justify="end" py={10}>
           <Container maxW="container.xl">
-            {isLoading ? (
-              <>
-                <Skeleton width="250px" height="2.1rem" mb={2} />
-                <Skeleton width="150px" height="0.9rem" />
-              </>
-            ) : (
-              <HStack gap={2}>
-                <PlayButtonLg playlist={label.tracks} disabled={!label.tracks?.length} />
+            <HStack gap={2}>
+              <PlayButtonLg playlist={label.tracks} disabled={!label.tracks?.length} />
 
+              {!isLoading && (
                 <VStack align="flex-start">
                   <HStack alignItems="end">
                     <Heading>{label.name}</Heading>
@@ -73,8 +68,15 @@ export default function LabelProfile(): JSX.Element {
                     Go to beatport profile
                   </Link>
                 </VStack>
-              </HStack>
-            )}
+              )}
+
+              {isLoading && (
+                <VStack alignItems="start">
+                  <Skeleton width="250px" height="2rem" mt={1} mb={3} />
+                  <Skeleton width="150px" height="0.9rem" />
+                </VStack>
+              )}
+            </HStack>
           </Container>
         </Flex>
       </Box>
