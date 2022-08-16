@@ -3,3 +3,4 @@ export { default as favoriteController } from "./favoriteController";
 export { default as labelController } from "./labelController";
 export { default as trackController } from "./trackController";
 export { default as userController } from "./userController";
+export { default as seedController } from "./seedController";
