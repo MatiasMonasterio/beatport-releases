@@ -69,6 +69,15 @@ npm run dev:clinet
 npm run dev:server
 ```
 
+### Generate/restore data
+For development you can generate and restore data to work. This process removes all the values ​​from the database and generates the initial ones.
+
+```
+curl http://localhost:3000/seed 
+```
+
+After running the credentials to access are email `beat-releases@demo.com` and password `develop123`
+
 ## Contributing
 
 Contributions, issues and feature requests are welcome!
