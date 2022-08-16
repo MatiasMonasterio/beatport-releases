@@ -7,6 +7,7 @@ import { LoadingView } from "components";
 
 const DashboardRoutes = lazy(() => import("@/dashboard/routes"));
 const AuthRoutes = lazy(() => import("@/auth/routes"));
+const SeedRoutes = lazy(() => import("@/seed/routes"));
 
 export default function AppRouter() {
   return (
@@ -14,6 +15,8 @@ export default function AppRouter() {
       <AuthorizationProvider>
         <Suspense fallback={<LoadingView />}>
           <RoutesWithNotFound>
+            <Route path="/seed/*" element={<SeedRoutes />} />
+
             <Route
               path="/auth/*"
               element={
