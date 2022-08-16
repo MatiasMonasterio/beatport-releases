@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "cross-env NODE_ENV=development ts-node-dev src/index.ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "lint": "eslint . --ext .ts",
-    "start": "node dist/index.js",
+    "start": "cross-env NODE_ENV=production node dist/index.js",
     "prisma:migrate": "npx prisma migrate dev --schema=./src/database/schema/schema.prisma",
     "prisma:generate": "npx prisma generate --schema=./src/database/schema/schema.prisma",
     "prisma:studio": "npx prisma studio --schema=./src/database/schema/schema.prisma"
@@ -27,6 +27,7 @@
     "bcrypt": "5.0.1",
     "cheerio": "1.0.0-rc.11",
     "cors": "2.8.5",
+    "cross-env": "7.0.3",
     "dotenv": "16.0.1",
     "express": "4.18.1",
     "jsonwebtoken": "8.5.1",
