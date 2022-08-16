@@ -8,7 +8,6 @@ export default function (user: UserDB): User {
     password: user.password,
     name: user.name || "",
     lastname: user.lastname || "",
-    genre: user.genre || "",
     avatar: user.avatar || "",
     createdAt: user.createdAt,
   };
