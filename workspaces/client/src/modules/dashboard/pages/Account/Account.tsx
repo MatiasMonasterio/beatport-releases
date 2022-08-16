@@ -103,7 +103,7 @@ export default function Account() {
               Genre:
             </FormLabel>
 
-            <RadioGroup value={user?.genre}>
+            <RadioGroup value="nobinary">
               <Stack direction="row">
                 <Radio value="male" borderColor="secondary.black.600">
                   Male
