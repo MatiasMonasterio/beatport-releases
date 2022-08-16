@@ -21,7 +21,6 @@ export interface User {
   password: string;
   name: string;
   lastname: string;
-  genre: string;
   avatar: string;
   createdAt: Date;
 }
