@@ -1,7 +1,7 @@
 import redis from "../cache";
 import prisma from "../database";
 
-export const connectDatabases = async (): Promise<void> => {
+export default async function connectDatabases() {
   await redis.connect();
   await prisma.$connect();
-};
+}
