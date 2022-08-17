@@ -13,6 +13,7 @@
     "prisma:studio": "npx prisma studio --schema=./src/database/schema/schema.prisma"
   },
   "devDependencies": {
+    "@types/bcrypt": "5.0.0",
     "@types/cors": "2.8.12",
     "@types/express": "4.17.13",
     "@types/jsonwebtoken": "8.5.8",
@@ -23,7 +24,6 @@
   },
   "dependencies": {
     "@prisma/client": "3.14.0",
-    "@types/bcrypt": "5.0.0",
     "axios": "0.27.2",
     "bcrypt": "5.0.1",
     "cheerio": "1.0.0-rc.11",
