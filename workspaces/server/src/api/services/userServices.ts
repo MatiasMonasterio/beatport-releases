@@ -2,6 +2,7 @@ import type { User, UserCredentials } from "@br/core";
 
 import jwt from "../../utils/jwt";
 import bcrypt from "../../utils/bcrypt";
+import { HttpException } from "../../models";
 
 import { userAdapters } from "../adapters";
 import { userDAL } from "../data-access-layer";
@@ -11,7 +12,7 @@ const createNewUser = async ({ email, password }: UserCredentials): Promise<stri
   password = await bcrypt.hash(password);
 
   const user = await userDAL.getByEmail(email);
-  if (user && user.active) throw { status: 409, message: "User already exist" };
+  if (user && user.active) throw new HttpException(409, "User already exist");
 
   if (user && !user.active) {
     const activeUser = await userDAL.active(email, password);
@@ -34,10 +35,10 @@ const createNewUser = async ({ email, password }: UserCredentials): Promise<stri
 
 const loginUser = async ({ email, password }: UserCredentials): Promise<string> => {
   const user = await userDAL.getByEmail(email);
-  if (!user || !user.active) throw { status: 401, message: "invalid email or password" };
+  if (!user || !user.active) throw new HttpException(401, "Invalid email or password");
 
   const passwordCorrenct = await bcrypt.compare(password, user.password);
-  if (!passwordCorrenct) throw { status: 401, message: "invalid user invalid email or password" };
+  if (!passwordCorrenct) throw new HttpException(401, "Invalid email or password");
 
   return jwt.sign({
     id: user.id,
@@ -52,7 +53,7 @@ const deleOneUser = async (id: number) => {
 
 const getUser = async (id: number): Promise<User> => {
   const user = await userDAL.getById(id);
-  if (!user || !user.active) throw { status: 404, message: "User not found" };
+  if (!user || !user.active) throw new HttpException(404, "User not found");
 
   return userAdapters(user);
 };

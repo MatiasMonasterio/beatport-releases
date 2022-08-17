@@ -1,7 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
+
+import { HttpException } from "../../models";
 import jwt from "../../utils/jwt";
 
-export default async function isAuthenticated(req: Request, res: Response, next: NextFunction) {
+export default async function isAuthenticated(req: Request, _res: Response, next: NextFunction) {
   try {
     const autorization = req.get("authorization");
 
@@ -10,13 +12,18 @@ export default async function isAuthenticated(req: Request, res: Response, next:
       const decode = jwt.verify(token);
 
       if (!token || !decode.id) {
-        return res.status(403).send({ status: "FAILD", message: "token missin or invalid" });
+        throw new Error("Invalid or missin token");
       }
 
       req.userId = decode.id;
-      next();
+      return next();
     }
+
+    throw new Error("Invalid or missin token");
   } catch (error) {
-    return res.status(401).send({ status: "FAILD", message: "token missin or invalid" });
+    const err = error as Error;
+    const errorExpection = new HttpException(403, err.message);
+
+    next(errorExpection);
   }
 }

@@ -8,8 +8,6 @@ const generateData = async (): Promise<void> => {
   const user = { ...userMock, password: passwordEncrypted };
 
   await seedDAL.restartAndLoadData(user, artistsMock, labelsMock);
-
-  return;
 };
 
 export default {

@@ -5,21 +5,16 @@ import dayjs from "dayjs";
 import db from "../../database";
 import { beatportScrap } from "../../utils";
 
-export default async function isAuthenticated(req: Request, res: Response, next: NextFunction) {
+export default async function isAuthenticated(req: Request, _res: Response, next: NextFunction) {
   const userId = req.userId;
   const currentDate = dayjs(new Date()).startOf("day").toDate();
 
   try {
     const user = await db.userDB.findFirst({
-      where: {
-        id: userId,
-        updatedAt: { lt: currentDate },
-      },
+      where: { id: userId, updatedAt: { lt: currentDate } },
     });
 
-    if (!user) {
-      return next();
-    }
+    if (!user) return next();
 
     const artists = await db.artistDB.findMany({
       where: {
@@ -134,6 +129,6 @@ export default async function isAuthenticated(req: Request, res: Response, next:
 
     next();
   } catch (error) {
-    res.status(500).send({ status: "FAILD", message: "update data error" });
+    next(error);
   }
 }

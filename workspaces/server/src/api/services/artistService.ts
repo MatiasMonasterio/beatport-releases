@@ -1,6 +1,7 @@
 import type { Artist, ApiParams } from "@br/core";
 
 import cache from "../../cache";
+import { HttpException } from "../../models";
 import { beatportScrap } from "../../utils";
 
 import { artistAdapter } from "../adapters";
@@ -13,7 +14,7 @@ const getAllArtists = async (userId: number, params: ApiParams): Promise<Artist[
 
 const createNewArtist = async (id: number, userId: number): Promise<Artist> => {
   const artistExist = await artistDAL.isConnectedWithUser(id, userId);
-  if (artistExist) throw { status: 409, message: "Artists already exist" };
+  if (artistExist) throw new HttpException(409, "Artists already exist");
 
   const artist = await artistDAL.getOneById(id);
   if (artist && artist.artwork && artist.updatedAt === new Date()) {
@@ -54,7 +55,7 @@ const getOneArtist = async (id: number, userId: number): Promise<Artist> => {
 
 const deteleOneArtist = async (id: number, userId: number): Promise<void> => {
   const artistExist = await artistDAL.isConnectedWithUser(id, userId);
-  if (!artistExist) throw { status: 404, message: "artists not found" };
+  if (!artistExist) throw new HttpException(404, "Artists not found");
 
   await artistDAL.disconnectWithUser(id, userId);
 };

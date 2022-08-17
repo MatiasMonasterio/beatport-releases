@@ -1,44 +1,32 @@
-import type { Request, Response } from "express";
-import type { ErrorRequest } from "../../types";
+import type { NextFunction, Request, Response } from "express";
 
+import { sendHttpResponse } from "../../utils";
 import { userService } from "../services";
 
-const getUser = async (req: Request, res: Response) => {
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await userService.getUser(req.userId);
-    res.send({ status: "OK", data: user });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: user, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const createNewUser = async (req: Request, res: Response) => {
+const createNewUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = await userService.createNewUser(req.body);
-    res.send({ status: "OK", data: token });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: token, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const loginUser = async (req: Request, res: Response) => {
+const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = await userService.loginUser(req.body);
-    res.send({ status: "OK", data: token });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: token, res });
+  } catch (error) {
+    next(error);
   }
 };
 

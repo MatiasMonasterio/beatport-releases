@@ -1,131 +1,87 @@
-import type { Request, Response } from "express";
-import type { Track } from "@br/core";
-import type { ErrorRequest } from "../../types";
+import type { NextFunction, Request, Response } from "express";
 
-import cache from "../../cache";
+import { sendHttpResponse } from "../../utils";
 import { trackService } from "../services";
 
-const getAllReleases = async (req: Request, res: Response): Promise<void> => {
+const getAllReleases = async (req: Request, res: Response, next: NextFunction) => {
   const queryParams = req.query;
 
   try {
     const tracks = await trackService.getAllReleases(req.userId, queryParams);
-    await cache.set<Track[]>(req.originalUrl, tracks);
-
-    res.send({ status: "OK", data: tracks });
+    sendHttpResponse({ data: tracks, res });
   } catch (error) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    next(error);
   }
 };
 
-const getAllUpcomings = async (req: Request, res: Response): Promise<void> => {
+const getAllUpcomings = async (req: Request, res: Response, next: NextFunction) => {
   const queryParams = req.query;
 
   try {
     const tracks = await trackService.getAllUpcomings(req.userId, queryParams);
-    await cache.set<Track[]>(req.originalUrl, tracks);
-
-    res.send({ status: "OK", data: tracks });
+    sendHttpResponse({ data: tracks, res });
   } catch (error) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    next(error);
   }
 };
 
-const getArtistsReleases = async (req: Request, res: Response): Promise<void> => {
+const getArtistsReleases = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tracks = await trackService.getArtistsReleases(req.userId);
-    await cache.set<Track[]>(req.originalUrl, tracks);
-
-    res.send({ status: "OK", data: tracks });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: tracks, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const getArtistsUpcoming = async (req: Request, res: Response): Promise<void> => {
+const getArtistsUpcoming = async (req: Request, res: Response, next: NextFunction) => {
+  const userId = req.userId;
+
   try {
-    const tracks = await trackService.getArtistsUpcoming(req.userId);
-    await cache.set<Track[]>(req.originalUrl, tracks);
-
-    res.send({ status: "OK", data: tracks });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    const tracks = await trackService.getArtistsUpcoming(userId);
+    sendHttpResponse({ data: tracks, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const getLabelsReleases = async (req: Request, res: Response): Promise<void> => {
+const getLabelsReleases = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tracks = await trackService.getLabelsReleases(req.userId);
-    await cache.set<Track[]>(req.originalUrl, tracks);
-
-    res.send({ status: "OK", data: tracks });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: tracks, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const getLabelsUpcoming = async (req: Request, res: Response): Promise<void> => {
+const getLabelsUpcoming = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tracks = await trackService.getLabelsUpcoming(req.userId);
-    await cache.set<Track[]>(req.originalUrl, tracks);
-
-    res.send({ status: "OK", data: tracks });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: tracks, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const getTracksByArtistId = async (req: Request, res: Response): Promise<void> => {
+const getTracksByArtistId = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
 
   try {
     const tracks = await trackService.getTracksByArtistId(req.userId, id);
-    res.send({ status: "OK", data: tracks });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: tracks, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const getTracksByLabelId = async (req: Request, res: Response): Promise<void> => {
+const getTracksByLabelId = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
 
   try {
     const tracks = await trackService.getTracksByLabelId(id, req.userId);
-    res.send({ status: "OK", data: tracks });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: tracks, res });
+  } catch (error) {
+    next(error);
   }
 };
 

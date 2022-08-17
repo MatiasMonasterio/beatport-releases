@@ -1,56 +1,36 @@
-import type { Request, Response } from "express";
-import type { Favorite } from "@br/core";
-import type { ErrorRequest } from "../../types";
+import type { NextFunction, Request, Response } from "express";
 
-import cache from "../../cache";
-import { clearFavoriteCache } from "../../utils/clearCache";
-
+import { sendHttpResponse } from "../../utils";
 import { favoriteService } from "../services";
 
-const getAllFavorites = async (req: Request, res: Response): Promise<void> => {
+const getAllFavorites = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const favorites = await favoriteService.getAllFavorites(req.userId);
-    await cache.set<Favorite[]>(req.originalUrl, favorites);
-
-    res.send({ status: "OK", data: favorites });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: favorites, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const createNewFavorite = async (req: Request, res: Response): Promise<void> => {
+const createNewFavorite = async (req: Request, res: Response, next: NextFunction) => {
   const track = req.body;
 
   try {
     const favorite = await favoriteService.createNewFavorite(req.userId, track);
-    await clearFavoriteCache();
-    res.send({ status: "OK", data: favorite });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: favorite, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const deleteOneFavorite = async (req: Request, res: Response): Promise<void> => {
+const deleteOneFavorite = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
 
   try {
     await favoriteService.deleteOneFavorite(id, req.userId);
-    await clearFavoriteCache();
-    res.status(200).send();
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ res });
+  } catch (error) {
+    next(error);
   }
 };
 

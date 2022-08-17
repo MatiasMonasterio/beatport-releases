@@ -1,6 +1,7 @@
 import type { Label, ApiParams } from "@br/core";
 
 import cache from "../../cache";
+import { HttpException } from "../../models";
 import { beatportScrap } from "../../utils";
 
 import { labelAdapter } from "../adapters";
@@ -13,7 +14,7 @@ const getAllLabels = async (userId: number, params: ApiParams): Promise<Label[]>
 
 const createNewLabel = async (id: number, userId: number): Promise<Label> => {
   const labelExist = await labelDAL.isConnectedWithUser(id, userId);
-  if (labelExist) throw { status: 409, message: "Label already exist" };
+  if (labelExist) throw new HttpException(409, "Label already exist");
 
   const label = await labelDAL.getOneById(id);
   if (label && label.artwork) {
@@ -54,7 +55,7 @@ const getOneLabel = async (id: number, userId: number): Promise<Label> => {
 
 const deteleOneLabel = async (id: number, userId: number): Promise<void> => {
   const labelExist = await labelDAL.isConnectedWithUser(id, userId);
-  if (!labelExist) throw { status: 404, message: "label not found" };
+  if (!labelExist) throw new HttpException(404, "Label not found");
 
   await labelDAL.connectWithUser(id, userId);
 };

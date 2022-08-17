@@ -1,92 +1,49 @@
-import type { Request, Response } from "express";
-import type { Label } from "@br/core";
-import type { ErrorRequest } from "../../types";
+import type { NextFunction, Request, Response } from "express";
 
-import cache from "../../cache";
-import { clearLabelCache } from "../../utils/clearCache";
-
+import { sendHttpResponse } from "../../utils";
 import { labelService } from "../services";
 
-const getAllLabels = async (req: Request, res: Response): Promise<void> => {
+const getAllLabels = async (req: Request, res: Response, next: NextFunction) => {
   const queryParams = req.query;
 
   try {
     const labels = await labelService.getAllLabels(req.userId, queryParams);
-    await cache.set<Label[]>(req.originalUrl, labels);
-
-    res.send({ status: "OK", data: labels });
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: labels, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const createNewLabel = async (req: Request, res: Response): Promise<void> => {
+const createNewLabel = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.body.id);
-
-  if (!id) {
-    res.status(400).send({ status: "FAILED", data: { error: "id is missing or invalid" } });
-    return;
-  }
 
   try {
     const labels = await labelService.createNewLabel(id, req.userId);
-    res.status(201).send({ status: "OK", data: labels });
-
-    await clearLabelCache();
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ status: 201, data: labels, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const getOneLabel = async (req: Request, res: Response): Promise<void> => {
+const getOneLabel = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
-
-  if (!id) {
-    res.status(400).send({ status: "FAILED", data: { error: "id is missing or invalid" } });
-  }
 
   try {
     const label = await labelService.getOneLabel(id, req.userId);
-
-    if (!label) {
-      res.status(404).send({ status: "FAILED", data: { error: "label not found" } });
-    } else {
-      await cache.set<Label>(req.originalUrl, label);
-      res.send({ status: "OK", data: label });
-    }
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ data: label, res });
+  } catch (error) {
+    next(error);
   }
 };
 
-const deteleOneLabel = async (req: Request, res: Response): Promise<void> => {
+const deteleOneLabel = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id);
-
-  if (!id) res.status(404).send({ status: "FAILED", data: { error: "id is missing or invalid" } });
 
   try {
     await labelService.deteleOneLabel(id, req.userId);
-    res.status(200).send();
-
-    await clearLabelCache();
-  } catch (error: unknown | ErrorRequest) {
-    const err = error as ErrorRequest;
-
-    res
-      .status(err?.status || 500)
-      .send({ status: "FAILED", data: { error: err?.message || error } });
+    sendHttpResponse({ res });
+  } catch (error) {
+    next(error);
   }
 };
 
