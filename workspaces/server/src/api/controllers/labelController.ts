@@ -15,7 +15,7 @@ const getAllLabels = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 const createNewLabel = async (req: Request, res: Response, next: NextFunction) => {
-  const id = parseInt(req.body.id);
+  const id = req.body.id;
 
   try {
     const labels = await labelService.createNewLabel(id, req.userId);
