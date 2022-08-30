@@ -28,6 +28,7 @@ export default function Seed() {
         });
       })
       .finally(() => {
+        localStorage.clear();
         navigate("/auth/login", { replace: true });
       });
   }, []);
