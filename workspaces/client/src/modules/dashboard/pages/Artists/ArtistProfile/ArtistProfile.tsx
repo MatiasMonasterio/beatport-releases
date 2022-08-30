@@ -1,5 +1,6 @@
-import type { Artist } from "@br/core";
+import type { Artist, Track } from "@br/core";
 
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Skeleton, HStack, VStack } from "@chakra-ui/react";
 
@@ -16,6 +17,7 @@ import {
 } from "@/dashboard/services/artists";
 
 export default function ArtistProfile(): JSX.Element {
+  const [artistTracks, setArtistTracks] = useState<Track[]>([]);
   const { id } = useParams<{ id: string }>() as { id: string };
   const { parallaxRef } = useParallax();
 
@@ -50,7 +52,7 @@ export default function ArtistProfile(): JSX.Element {
         <Flex h="100%" bg="blackAlpha.600" direction="column" justify="end" py={10}>
           <Container maxW="container.xl">
             <HStack gap={2}>
-              <PlayButtonLg playlist={artist.tracks} disabled={!artist.tracks?.length} />
+              <PlayButtonLg playlist={artistTracks} disabled={!artistTracks.length} />
 
               {isLoading && (
                 <VStack align="flex-start">
@@ -88,7 +90,7 @@ export default function ArtistProfile(): JSX.Element {
         </Heading>
 
         <Flex direction="column" gap={2}>
-          <TrackList request={async () => await getTracksByArtistId(id)} />
+          <TrackList request={async () => await getTracksByArtistId(id)} onLoad={setArtistTracks} />
         </Flex>
       </Container>
     </>

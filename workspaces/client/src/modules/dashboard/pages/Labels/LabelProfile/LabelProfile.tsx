@@ -1,5 +1,6 @@
-import type { Label } from "@br/core";
+import type { Label, Track } from "@br/core";
 
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Heading, Flex, Link, Box, Container, Skeleton, HStack, VStack } from "@chakra-ui/react";
 
@@ -16,6 +17,7 @@ import {
 } from "@/dashboard/services/labels";
 
 export default function LabelProfile(): JSX.Element {
+  const [labelTracks, setLabelTracks] = useState<Track[]>([]);
   const { id } = useParams<{ id: string }>() as { id: string };
   const { parallaxRef } = useParallax();
 
@@ -49,7 +51,7 @@ export default function LabelProfile(): JSX.Element {
         <Flex h="100%" bg="rgba(0,0,0,0.6)" direction="column" justify="end" py={10}>
           <Container maxW="container.xl">
             <HStack gap={2}>
-              <PlayButtonLg playlist={label.tracks} disabled={!label.tracks?.length} />
+              <PlayButtonLg playlist={labelTracks} disabled={!labelTracks.length} />
 
               {!isLoading && (
                 <VStack align="flex-start">
@@ -86,7 +88,7 @@ export default function LabelProfile(): JSX.Element {
           Last Releases
         </Heading>
 
-        <TrackList request={async () => await getTracksByLabelId(id)} />
+        <TrackList request={async () => await getTracksByLabelId(id)} onLoad={setLabelTracks} />
       </Container>
     </>
   );

@@ -1,3 +1,5 @@
+import type { Track } from "@br/core";
+
 import { useState } from "react";
 import { VStack, Heading } from "@chakra-ui/react";
 
@@ -9,6 +11,10 @@ import { getArtistUpcomings } from "@/dashboard/services/artists";
 export default function ArtistsUpcomgins(): JSX.Element {
   const [resultsLength, setResultsLength] = useState(0);
 
+  const handleTracksLoad = (tracks: Track[]) => {
+    setResultsLength(tracks.length);
+  };
+
   return (
     <>
       <MetaTags title="Artists Releases" />
@@ -18,7 +24,7 @@ export default function ArtistsUpcomgins(): JSX.Element {
           {resultsLength} Upcomings
         </Heading>
       </VStack>
-      <TrackList request={getArtistUpcomings} onLoad={setResultsLength} />
+      <TrackList request={getArtistUpcomings} onLoad={handleTracksLoad} />
     </>
   );
 }
