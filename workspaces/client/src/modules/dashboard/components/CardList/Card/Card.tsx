@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function Card({ data, type, height }: Props) {
-  const { artwork, name, id, tracks } = data;
+  const { artwork, name, id, tracksCount } = data;
   const { ref, onHoverStart, onHoverEnd } = useMotionText();
 
   return (
@@ -55,7 +55,7 @@ export default function Card({ data, type, height }: Props) {
               </Heading>
             </MotionText>
 
-            <Text fontSize="xs">{tracks.length} tracks</Text>
+            <Text fontSize="xs">{tracksCount} tracks</Text>
           </LinkOverlay>
         </Box>
       </VStack>
