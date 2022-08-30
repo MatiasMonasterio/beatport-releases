@@ -13,7 +13,7 @@ import { useParams, useOrderBy } from "./hooks";
 export interface Props {
   favoritesList?: boolean;
   request: (params?: ApiParams) => Promise<Track[]>;
-  onLoad?: (length: number) => void;
+  onLoad?: (tracks: Track[]) => void;
 }
 
 export default function TrackList({ favoritesList, request, onLoad }: Props): JSX.Element {
@@ -32,7 +32,7 @@ export default function TrackList({ favoritesList, request, onLoad }: Props): JS
   };
 
   useEffect(() => {
-    onLoad && onLoad(tracks.length);
+    onLoad && onLoad(tracks);
   }, [tracks]);
 
   return (
