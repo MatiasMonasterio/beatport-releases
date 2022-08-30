@@ -18,7 +18,7 @@ export interface Props {
 }
 
 export default function TrackRow({ isFavoriteList, track, onPlay }: Props): JSX.Element {
-  const { genres, released, bpm } = track;
+  const { genre, released, bpm } = track;
   const { createdAt } = track as ITrack;
 
   const handlePlayTrack = () => {
@@ -41,7 +41,7 @@ export default function TrackRow({ isFavoriteList, track, onPlay }: Props): JSX.
         gap={6}
       >
         <TrackCardRow track={track} onPlay={handlePlayTrack} />
-        <TrackRowItem content={genres[0].name} />
+        <TrackRowItem content={genre.name} />
         <TrackRowItem content={bpm} />
         <TrackRowItem content={isFavoriteList ? dateFromNow(createdAt) : dateFromNow(released)} />
 

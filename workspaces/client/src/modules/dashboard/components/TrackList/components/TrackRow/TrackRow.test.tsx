@@ -43,7 +43,7 @@ describe("TrackCard component", () => {
     screen.getByText(`${mockProps.track.name} ${mockProps.track.mix}`);
     screen.getByText(mockProps.track.artists[0].name);
     screen.getByText(mockProps.track.label.name);
-    screen.getByText(mockProps.track.genres[0].name);
+    screen.getByText(mockProps.track.genre.name);
     screen.getByText(mockProps.track.bpm);
     screen.getByText(dayjs(mockProps.track.released).fromNow());
 
