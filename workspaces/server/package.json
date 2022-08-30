@@ -8,9 +8,9 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "lint": "eslint . --ext .ts",
     "start": "cross-env NODE_ENV=production node dist/index.js",
-    "prisma:migrate": "npx prisma migrate dev --schema=./src/database/schema/schema.prisma",
-    "prisma:generate": "npx prisma generate --schema=./src/database/schema/schema.prisma",
-    "prisma:studio": "npx prisma studio --schema=./src/database/schema/schema.prisma"
+    "prisma:migrate": "npx prisma migrate dev --schema=./src/infra/database/schema/schema.prisma",
+    "prisma:generate": "npx prisma generate --schema=./src/infra/database/schema/schema.prisma",
+    "prisma:studio": "npx prisma studio --schema=./src/infra/database/schema/schema.prisma"
   },
   "devDependencies": {
     "@types/bcrypt": "5.0.0",
