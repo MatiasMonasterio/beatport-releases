@@ -7,7 +7,7 @@ import { api } from "interceptors";
 export const getLabels = async (params?: ApiParams): Promise<Label[]> => {
   const response: AxiosResponse = await api.get("/api/labels", { params });
   const { data: labels, error }: LabelsResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return labels;
 };
@@ -15,7 +15,7 @@ export const getLabels = async (params?: ApiParams): Promise<Label[]> => {
 export const addLabelId = async (id: string): Promise<Label> => {
   const response: AxiosResponse = await api.post("/api/labels", { id });
   const { data: label, error }: LabelResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return label;
 };
@@ -23,14 +23,14 @@ export const addLabelId = async (id: string): Promise<Label> => {
 export const getLabelById = async (id: string): Promise<Label> => {
   const response: AxiosResponse = await api.get(`/api/labels/${id}`);
   const { data: label, error }: LabelResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return label;
 };
 
 export const deleteLabelById = async (id: string): Promise<void> => {
   const { error }: LabelResponse = await api.delete(`/api/labels/${id}`);
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return;
 };
@@ -38,7 +38,7 @@ export const deleteLabelById = async (id: string): Promise<void> => {
 export const getLabelReleases = async (): Promise<Track[]> => {
   const response = await api.get("/api/labels/releases");
   const { data: tracks, error }: TracksResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return tracks;
 };
@@ -46,7 +46,7 @@ export const getLabelReleases = async (): Promise<Track[]> => {
 export const getLabelUpcomings = async (): Promise<Track[]> => {
   const response = await api.get("/api/labels/upcomings");
   const { data: tracks, error }: TracksResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return tracks;
 };
@@ -54,7 +54,7 @@ export const getLabelUpcomings = async (): Promise<Track[]> => {
 export const getTracksByLabelId = async (artistId: string): Promise<Track[]> => {
   const response = await api.get<TracksResponse>(`/api/labels/${artistId}/tracks`);
   const { data: tracks, error } = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return tracks;
 };

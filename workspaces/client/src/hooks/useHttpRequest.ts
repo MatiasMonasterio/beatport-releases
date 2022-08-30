@@ -18,10 +18,11 @@ export default function useHttpRequest(): HttpRequesFunction {
 
       return response;
     } catch (error) {
+      const err = error as Error;
       setIsLoading(false);
 
       toast({
-        title: `${error}`,
+        title: `${err.message}`,
         status: "error",
         isClosable: true,
         variant: "subtle",

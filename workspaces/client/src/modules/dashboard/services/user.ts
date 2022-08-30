@@ -7,7 +7,7 @@ import { api } from "interceptors";
 export const getUserInfo = async (): Promise<User> => {
   const response: AxiosResponse = await api.get("/api/users");
   const { data: user, error }: UserResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return user;
 };

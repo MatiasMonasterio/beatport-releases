@@ -7,7 +7,7 @@ import { api } from "interceptors";
 export const getArtists = async (params?: ApiParams): Promise<Artist[]> => {
   const response: AxiosResponse = await api.get("/api/artists", { params });
   const { data: artists, error }: ArtistsResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return artists;
 };
@@ -15,7 +15,7 @@ export const getArtists = async (params?: ApiParams): Promise<Artist[]> => {
 export const addArtistId = async (id: string): Promise<Artist> => {
   const response: AxiosResponse = await api.post("/api/artists", { id });
   const { data: artist, error }: ArtistResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return artist;
 };
@@ -23,7 +23,7 @@ export const addArtistId = async (id: string): Promise<Artist> => {
 export const getArtistById = async (id: string): Promise<Artist> => {
   const response: AxiosResponse = await api.get(`/api/artists/${id}`);
   const { data: artist, error }: ArtistResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return artist;
 };
@@ -31,7 +31,7 @@ export const getArtistById = async (id: string): Promise<Artist> => {
 export const deleteArtistsById = async (id: string): Promise<void> => {
   const response: AxiosResponse = await api.delete(`/api/artists/${id}`);
   const { error }: ArtistResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return;
 };
@@ -39,7 +39,7 @@ export const deleteArtistsById = async (id: string): Promise<void> => {
 export const getArtistReleases = async (): Promise<Track[]> => {
   const response: AxiosResponse = await api.get("/api/artists/releases");
   const { data: tracks, error }: TracksResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return tracks;
 };
@@ -47,7 +47,7 @@ export const getArtistReleases = async (): Promise<Track[]> => {
 export const getArtistUpcomings = async (): Promise<Track[]> => {
   const response: AxiosResponse = await api.get("/api/artists/upcomings");
   const { data: tracks, error }: TracksResponse = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return tracks;
 };
@@ -55,7 +55,7 @@ export const getArtistUpcomings = async (): Promise<Track[]> => {
 export const getTracksByArtistId = async (artistId: string): Promise<Track[]> => {
   const response = await api.get<TracksResponse>(`/api/artists/${artistId}/tracks`);
   const { data: tracks, error } = response.data;
-  if (error) throw new Error(error);
+  if (error) throw new Error(error.message);
 
   return tracks;
 };
