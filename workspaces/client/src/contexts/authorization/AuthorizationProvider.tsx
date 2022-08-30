@@ -3,6 +3,8 @@ import type { JwtDecode } from "@br/core";
 import { useNavigate } from "react-router-dom";
 import decode from "jwt-decode";
 
+import { logout as authLogout } from "@/auth/services/auth";
+
 import AuthorizationContext from "./AuthorizationContext";
 import useAuthorizationReducer from "./useAuthorizationReducer";
 import { AUTH_KEY } from "./constants";
@@ -25,7 +27,8 @@ export default function AuthorizationProvider({ children }: Props) {
     }
   };
 
-  const logout = (): void => {
+  const logout = async (): Promise<void> => {
+    await authLogout();
     navigate("/auth/login", { replace: true });
     dispatch({ type: "logout", payload: {} });
     localStorage.removeItem(AUTH_KEY);
