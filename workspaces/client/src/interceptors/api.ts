@@ -10,11 +10,19 @@ const beatreleasesApi = axios.create({
 
 beatreleasesApi.interceptors.request.use(
   (request) => {
-    if (request.url?.includes("/auth") || request.headers?.Authorization) {
+    console.log("RUNING");
+
+    console.log(request.url);
+
+    if (
+      ["auth/login", "auth/register"].some((path) => request.url?.includes(path)) ||
+      request.headers?.Authorization
+    ) {
       return request;
     }
 
     const token = localStorage.getItem("auth");
+
     if (token) {
       request.headers = {
         ...request.headers,
@@ -39,7 +47,8 @@ beatreleasesApi.interceptors.response.use(
     //   window.location.href = `/auth/login`;
     // }
 
-    return Promise.reject(error);
+    console.log(error.response.data.error);
+    return Promise.reject(error.response.data.error);
   }
 );
 
