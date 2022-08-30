@@ -1,0 +1,9 @@
+export type TrackId = number;
+export type TrackBpm = number;
+export type TrackReleased = number;
+export type TrackArtwork = string;
+export type TrackKey = string;
+export type TrackMix = string;
+export type TrackName = string;
+export type TrackPreview = string;
+export type TrackFavorite = boolean;
