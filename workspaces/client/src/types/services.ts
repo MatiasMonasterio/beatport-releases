@@ -1,7 +1,7 @@
 import type { Artist, Track, Label, User } from "@br/core";
 
 interface ApiResponse {
-  error?: string;
+  error?: Error;
 }
 
 export interface ArtistResponse extends ApiResponse {
