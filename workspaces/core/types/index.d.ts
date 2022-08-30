@@ -13,6 +13,7 @@ export interface JwtDecode {
   id: number;
   username: string;
   avatar: string;
+  exp: number;
 }
 
 export interface User {
@@ -30,7 +31,6 @@ export interface Artist {
   name: string;
   artwork: string;
   tracksCount: number;
-  tracks: Track[];
   profile?: string;
   follow?: boolean;
   createdAt?: number;
@@ -41,7 +41,7 @@ export interface Label {
   id: number;
   name: string;
   artwork: string;
-  tracks: Track[];
+  tracksCount: number;
   profile?: string;
   follow?: boolean;
   createdAt?: number;
@@ -53,7 +53,7 @@ export interface Track {
   artists: Array<{ id: number; name: string; slug: string }>;
   bpm: number;
   released: number;
-  genres: Array<{ id: number; name: string; slug: string }>;
+  genre: { id: number; name: string; slug: string };
   artwork: string;
   key: string | number;
   label: { id: number; name: string; slug: string };
