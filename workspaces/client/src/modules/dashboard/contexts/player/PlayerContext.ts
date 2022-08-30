@@ -11,7 +11,7 @@ const defaultValue: Track = {
   label: { name: "", id: 0, slug: "" },
   bpm: 0,
   released: 0,
-  genres: [],
+  genre: { name: "", id: 0, slug: "" },
   key: "",
   remixers: [],
 };
