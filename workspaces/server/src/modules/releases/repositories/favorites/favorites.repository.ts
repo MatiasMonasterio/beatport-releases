@@ -24,8 +24,6 @@ const favoriteRepository: FavoritesRepository = {
   },
 
   save: async (track: Track, userId: UserId): Promise<FavoriteRepo | null> => {
-    console.log("VALOR: ", userId);
-
     await db.userDB.update({
       where: { id: userId },
       include: { favorites: true },
@@ -113,8 +111,6 @@ const favoriteRepository: FavoritesRepository = {
   },
 
   isConnectedWithUser: async (id: ArtistId, userId: UserId): Promise<boolean> => {
-    console.log("VALOR: ", userId);
-
     const favorite = await db.favoriteDB.findFirst({
       where: { userId: userId, trackId: id },
       select: { id: true },

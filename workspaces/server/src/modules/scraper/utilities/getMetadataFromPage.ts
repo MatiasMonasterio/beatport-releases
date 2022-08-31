@@ -11,7 +11,6 @@ export default function getMetadataFromPage(page: string): BeatportScraperDTO {
   const $ = cheerio.load(page);
 
   const artwork = $("#pjax-target img").attr("src") || "";
-  console.log(artwork);
   const { data: name } = $(".interior-title h1").get()[0].children[0] as { data: string };
 
   const { data: scriptData } = $("script#data-objects").get()[0].children[0] as { data: string };
