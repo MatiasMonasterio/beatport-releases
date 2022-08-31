@@ -6,6 +6,7 @@ import { scraperService } from "../../../scraper";
 
 import { TrackDTO } from "../../dto";
 import { tracksRepository, artistRepository, labelsRepository } from "../../repositories";
+import { tempService } from "../../services";
 import { trackMapper } from "../../mappers";
 
 const tracksService: TracksService = {
@@ -41,10 +42,14 @@ const tracksService: TracksService = {
 
   getTracksByArtistId: async (userId: UserId, artistId: ArtistId): Promise<TrackDTO[]> => {
     const artistExist = await artistRepository.isConnectedWithUser(artistId, userId);
-
     if (artistExist) {
       const tracks = await tracksRepository.getAllTracksByArtistId(artistId);
       return tracks.map((track) => trackMapper.persistanceToDTO(track, userId));
+    }
+
+    const artistOnCache = await tempService.getArtist(artistId);
+    if (artistOnCache) {
+      return artistOnCache.tracks.map((track) => trackMapper.scraperToDTO(track));
     }
 
     const artist = await scraperService.getOneArtistById(artistId);
@@ -53,10 +58,14 @@ const tracksService: TracksService = {
 
   getTracksByLabelId: async (labelId: LabelId, userId: UserId): Promise<TrackDTO[]> => {
     const labelExist = await labelsRepository.isConnectedWithUser(labelId, userId);
-
     if (labelExist) {
       const tracks = await tracksRepository.getAllTracksByLabelId(labelId);
       return tracks.map((track) => trackMapper.persistanceToDTO(track, userId));
+    }
+
+    const labelOnCache = await tempService.getLabel(labelId);
+    if (labelOnCache) {
+      return labelOnCache.tracks.map((track) => trackMapper.scraperToDTO(track));
     }
 
     const label = await scraperService.getOneLabelById(labelId);
