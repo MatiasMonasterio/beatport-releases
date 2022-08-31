@@ -10,10 +10,6 @@ const beatreleasesApi = axios.create({
 
 beatreleasesApi.interceptors.request.use(
   (request) => {
-    console.log("RUNING");
-
-    console.log(request.url);
-
     if (
       ["auth/login", "auth/register"].some((path) => request.url?.includes(path)) ||
       request.headers?.Authorization
@@ -47,7 +43,6 @@ beatreleasesApi.interceptors.response.use(
     //   window.location.href = `/auth/login`;
     // }
 
-    console.log(error.response.data.error);
     return Promise.reject(error.response.data.error);
   }
 );

@@ -42,13 +42,7 @@ export default function AudioPlayerMobile() {
           height="100%"
           ref={playerContainerRef}
         >
-          <PlayButton
-            isPlaying={isPlaying}
-            onClick={() => {
-              console.log("dale");
-              handlePlay();
-            }}
-          />
+          <PlayButton isPlaying={isPlaying} onClick={() => handlePlay()} />
         </Container>
       </Box>
 
