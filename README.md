@@ -33,21 +33,7 @@ curl http://localhost:8081
 ```
 
 ### Environment Variables
-Create an `.env` file in the root project from `client` workspace and provide the following values:
-
-```bash
-VITE_API_URL="http://localhost:3001"
-```
-
-Create an `.env` file in the root project from `server` workspace and provide the following values:
-
-```bash
-PORT=3001
-CLIENT_URL="http://localhost:3000"
-REDIS_URL="redis://127.0.0.1:6379"
-DATABASE_URL="postgresql://develop:develop@127.0.0.1:5432/develop"
-JWT_SECRET="somevalue"
-```
+This project works with three `.env` files on client, server and root. You can copy `.env.example` and use the default environment settings
 
 ### Run locally
 You need Node v16.15.0 and npm v8.5.5 Set versions manua with nvm:

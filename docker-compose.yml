@@ -8,9 +8,9 @@ services:
       - "5432:5432"
     environment:
       - DATABASE_HOST=127.0.0.1
-      - POSTGRES_USER=develop
-      - POSTGRES_PASSWORD=develop
-      - POSTGRESS_DB=develop
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRESS_DB=${POSTGRESS_DB}
     volumes:
       - pg-data:/var/lib/postgresql/data
   
@@ -18,8 +18,8 @@ services:
     image: dpage/pgadmin4
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
-      PGADMIN_DEFAULT_PASSWORD: "admin"
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "8080:80"
     depends_on:
@@ -32,8 +32,8 @@ services:
     restart: always
     environment: 
       - REDIS_HOSTS=local:redis:6379
-      - HTTP_USER=develop
-      - HTTP_PASSWORD=develop
+      - HTTP_USER=${HTTP_USER}
+      - HTTP_PASSWORD=${HTTP_PASSWORD}
     ports:
       - 8081:8081
     depends_on:
