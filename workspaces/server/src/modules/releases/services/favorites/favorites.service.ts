@@ -24,11 +24,11 @@ const favoritesService: FavoritesServices = {
     return favoriteMapper.persistenceToDTO(newFavorite);
   },
 
-  deleteOneFavorite: async (id: TrackId, userId: UserId): Promise<void> => {
-    const favoriteExist = await favoritesRepository.isConnectedWithUser(id, userId);
+  deleteOneFavorite: async (trackId: TrackId, userId: UserId): Promise<void> => {
+    const favoriteExist = await favoritesRepository.isConnectedWithUser(trackId, userId);
     if (!favoriteExist) throw new HttpException(404, "Favorite not found");
 
-    await favoritesRepository.delete(id);
+    await favoritesRepository.delete(trackId, userId);
   },
 };
 

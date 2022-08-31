@@ -1,5 +1,5 @@
 import type { Track } from "@br/core";
-import type { UserId, ArtistId } from "../../../../core/domain";
+import type { UserId, ArtistId, TrackId } from "../../../../core/domain";
 import type { FavoriteRepo } from "../../interfaces";
 import type { FavoritesRepository } from "./favorites.repository.d";
 
@@ -108,8 +108,8 @@ const favoriteRepository: FavoritesRepository = {
     });
   },
 
-  delete: async (id: ArtistId): Promise<void> => {
-    await db.favoriteDB.delete({ where: { id: id } });
+  delete: async (trackId: TrackId, userId: UserId): Promise<void> => {
+    await db.favoriteDB.deleteMany({ where: { AND: { userId: userId, trackId: trackId } } });
   },
 
   isConnectedWithUser: async (id: ArtistId, userId: UserId): Promise<boolean> => {
