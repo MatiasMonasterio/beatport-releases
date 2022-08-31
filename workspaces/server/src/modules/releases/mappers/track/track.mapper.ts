@@ -19,7 +19,7 @@ const trackMapper: TrackMapper = {
       remixers: track.remixers,
       name: track.name,
       preview: track.preview,
-      favorite: !!track.users?.some((user) => user.id === userId),
+      favorite: !!track.favorite.some((favorite) => favorite.userId === userId),
     };
   },
 

@@ -1,4 +1,4 @@
-import { TrackDB } from "@prisma/client";
+import { TrackDB, ArtistDB, LabelDB, FavoriteDB, GenreDB } from "@prisma/client";
 
 export interface TrackRepo extends TrackDB {
   artists: ArtistDB[];
@@ -6,5 +6,4 @@ export interface TrackRepo extends TrackDB {
   remixers: ArtistDB[];
   favorite: FavoriteDB[];
   genre: GenreDB | null;
-  users?: UserDB[];
 }
