@@ -1,6 +1,6 @@
 import type { Config } from "jest";
 
-import path from "path";
+import * as path from "path";
 import { jestAlias } from "./scripts/alias";
 
 const config: Config = {
