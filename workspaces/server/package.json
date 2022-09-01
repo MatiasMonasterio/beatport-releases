@@ -5,8 +5,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "cross-env NODE_ENV=development ts-node-dev src/index.ts",
-    "lint:fix": "eslint . --ext .ts --fix",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint . --ext .js,.ts",
+    "lint:fix": "npm run lint -- --fix",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "prisma:migrate": "npx prisma migrate dev --schema=./src/infra/database/schema/schema.prisma",
     "prisma:generate": "npx prisma generate --schema=./src/infra/database/schema/schema.prisma",
