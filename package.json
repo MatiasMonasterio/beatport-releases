@@ -25,10 +25,13 @@
     "prisma:studio": "npm run prisma:studio --w=server",
     "prisma:generate": "npm run prisma:generate --w=server",
     "commit": "sui-mono commit",
-    "lint": "eslint ./workspaces",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "npm run lint --fix",
+    "lint:client": "npm run lint --w=client",
+    "lint:server": "npm run lint --w=server",
     "test": "jest",
-    "test:client": "jest --selectProjects client --watchAll"
+    "test:client": "jest --selectProjects client",
+    "test:server": "jest --selectProjects server --passWithNoTests"
   },
   "devDependencies": {
     "@s-ui/mono": "2.27.0",
