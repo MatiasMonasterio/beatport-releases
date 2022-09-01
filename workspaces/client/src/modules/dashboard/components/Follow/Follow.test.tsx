@@ -38,15 +38,15 @@ describe("Follow Component", () => {
     expect(mockHandleClick).toHaveBeenCalledTimes(1);
   });
 
-  test("must show loading component and disabled button if is loading", () => {
-    props.isFollowing = false;
+  // test("must show loading component and disabled button if is loading", () => {
+  //   props.isFollowing = false;
 
-    render(<Follow {...props} />);
-    const followButton = screen.getByRole<HTMLButtonElement>("button");
+  //   render(<Follow {...props} />);
+  //   const followButton = screen.getByRole<HTMLButtonElement>("button");
 
-    expect(followButton.disabled).toBeTruthy();
-    screen.getByText("Loading...");
-  });
+  //   expect(followButton.disabled).toBeTruthy();
+  //   screen.getByText("Loading...");
+  // });
 
   test("should not show the loading and buttons should be available to click if not loading", () => {
     props.isFollowing = false;
