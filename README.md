@@ -1,8 +1,20 @@
 <div align="center">
   <a target="_blank" target="https://beatport-releases.vercel.app/auth/login?">
-    <img alt="Beat Releases Cover" title="Beat Releases App" src="https://user-images.githubusercontent.com/56691632/179067761-9a3be155-17b6-4ae2-b3dd-1d51aa5f1548.png" />
+    <img alt="Beat Releases Cover" title="Beat Releases App" src="https://beatport-releases.vercel.app/images/banner.png" />
   </a>
 </div>
+
+<br>
+<div align="center">
+  
+  ![Build](https://github.com/MatiasMonasterio/beatport-releases/actions/workflows/server-pipeline.yml/badge.svg)
+  ![Build](https://github.com/MatiasMonasterio/beatport-releases/actions/workflows/client-pipeline.yml/badge.svg)
+  
+</div>
+
+
+## Live Demo
+You can access a [demo](https://beatport-releases.vercel.app/auth/login?email=beatreleases@demo.com&password=12345678) and test the application
 
 ## Get Started
 ### Prerequisites
@@ -13,30 +25,20 @@ You need to be using:
 - Node Version Manager - [Dowload & Install NVM](https://github.com/nvm-sh/nvm)
 - Docker Compose - [Dowload & Install Docker](https://docs.docker.com/compose/)
 
+### Environment Variables
+This project works with three `.env` files on client, server and root. You can copy `.env.example` and use the default environment settings
+
 ### Docker Compose
 This project is ready to work with docker-compose to initalize the needed stack during development process.
-To start working, run the following commands:
+To start working, run the following commands
 
 ```bash
 docker-compose build
 docker-compose up
 ```
 
-#### Working docker compose environment
-
-```bash
-## Access to PgAdmin
-curl http://localhost:8080 
-
-## Access to Redis Commander
-curl http://localhost:8081 
-```
-
-### Environment Variables
-This project works with three `.env` files on client, server and root. You can copy `.env.example` and use the default environment settings
-
 ### Run locally
-You need Node v16.15.0 and npm v8.5.5 Set versions manua with nvm:
+You need Node v16.15.0 and npm v8.5.5 Set versions with nvm
 ```bash
 nvm use
 ```
@@ -55,14 +57,14 @@ npm run dev:clinet
 npm run dev:server
 ```
 
-### Generate/restore data
-For development you can generate and restore data to work. This process removes all the values ​​from the database and generates the initial ones.
+### Generate / Restore data
+For development you can generate and restore data to work. This process removes all the values ​​from the database and generates the initial ones
 
 ```
 curl http://localhost:3000/seed 
 ```
 
-After running the credentials to access are email `beat-releases@demo.com` and password `develop123`
+After generating the data, you will be redirected to login with the default login credentials.
 
 ## Contributing
 
