@@ -20,6 +20,8 @@ const favoriteRepository: FavoritesRepository = {
           },
         },
       },
+      // todo: add params filter
+      orderBy: [{ createdAt: "desc" }],
     });
   },
 
