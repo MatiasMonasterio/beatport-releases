@@ -31,7 +31,9 @@
     "lint:server": "npm run lint --w=server",
     "test": "jest",
     "test:client": "jest --selectProjects client",
-    "test:server": "jest --selectProjects server --passWithNoTests"
+    "test:server": "jest --selectProjects server --passWithNoTests",
+    "test:client:watch": "npm run test:client -- --watchAll",
+    "test:server:watch": "npm run test:server -- -- watchAll"
   },
   "devDependencies": {
     "@s-ui/mono": "2.27.0",
