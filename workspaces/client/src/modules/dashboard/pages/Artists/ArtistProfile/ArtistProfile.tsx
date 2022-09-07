@@ -52,7 +52,7 @@ export default function ArtistProfile(): JSX.Element {
         <Flex h="100%" bg="blackAlpha.600" direction="column" justify="end" py={10}>
           <Container maxW="container.xl">
             <HStack gap={2}>
-              <PlayButtonLg playlist={artistTracks} disabled={!artistTracks.length} />
+              <PlayButtonLg playlist={artistTracks} />
 
               {isLoading && (
                 <VStack align="flex-start">

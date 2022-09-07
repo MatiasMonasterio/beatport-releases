@@ -1,11 +1,10 @@
 import type { PlayButtonProps } from "@/dashboard/components/PlayButton/PlayButton";
 import { PlayButton } from "@/dashboard/components";
 
-export default function PlayButtonWithOpacity({ playlist, disabled }: PlayButtonProps) {
+export default function PlayButtonWithOpacity({ playlist }: PlayButtonProps) {
   return (
     <PlayButton
       playlist={playlist}
-      disabled={disabled}
       opacity={0}
       p={0}
       fontSize="2xl"

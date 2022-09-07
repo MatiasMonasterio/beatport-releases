@@ -8,12 +8,11 @@ import { usePlayerContext } from "@/dashboard/contexts/player";
 
 export interface PlayButtonProps {
   playlist: Track[];
-  disabled?: boolean;
 }
 
-interface Props extends PlayButtonProps, ButtonProps {}
+export interface Props extends PlayButtonProps, ButtonProps {}
 
-export default function PlayButton({ playlist, disabled, ...args }: Props) {
+export default function PlayButton({ playlist, ...args }: Props) {
   const { loadPlaylist } = usePlayerContext();
 
   const handlePlay = () => {
@@ -24,7 +23,7 @@ export default function PlayButton({ playlist, disabled, ...args }: Props) {
   };
 
   return (
-    <Button variant="play" disabled={disabled} onClick={handlePlay} {...args}>
+    <Button variant="play" onClick={handlePlay} {...args} disabled={!playlist.length}>
       <BiPlay />
     </Button>
   );

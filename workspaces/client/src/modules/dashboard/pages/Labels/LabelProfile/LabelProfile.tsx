@@ -51,7 +51,7 @@ export default function LabelProfile(): JSX.Element {
         <Flex h="100%" bg="rgba(0,0,0,0.6)" direction="column" justify="end" py={10}>
           <Container maxW="container.xl">
             <HStack gap={2}>
-              <PlayButtonLg playlist={labelTracks} disabled={!labelTracks.length} />
+              <PlayButtonLg playlist={labelTracks} />
 
               {!isLoading && (
                 <VStack align="flex-start">
