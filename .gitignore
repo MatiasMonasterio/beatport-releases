@@ -32,3 +32,6 @@ tsconfig.tsbuildinfo
 # sqlite
 *.db
 .vercel
+
+# testing
+coverage
