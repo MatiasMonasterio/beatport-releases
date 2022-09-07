@@ -13,9 +13,9 @@ export default function Follow({ isFollowing, onFollow }: Props): JSX.Element {
   const { callRequest, isLoading } = useHttpRequest();
 
   const handleClick = () => {
-    callRequest(async () => onFollow(isFollowingState)).then(() => {
-      setIsFollowingState(!isFollowingState);
-    });
+    callRequest(async () => await onFollow(isFollowingState))
+      .then(() => setIsFollowingState((isFollow) => !isFollow))
+      .catch(() => ({}));
   };
 
   return (
