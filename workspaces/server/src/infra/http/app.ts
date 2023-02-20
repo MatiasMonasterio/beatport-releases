@@ -8,11 +8,11 @@ import cors from "cors";
 import { apiV1Router } from "./api";
 import { routeNotFound, handleHttpError } from "./middlewares";
 import { connectDatabases } from "../../utilities";
-import { PORT, CLIENT_URL } from "../../config/env";
+import { PORT, CLIENT_URL, NODE_ENV } from "../../config/env";
 
 const app = express();
 
-app.use(cors({ origin: CLIENT_URL }));
+app.use(cors(NODE_ENV === "production" ? { origin: CLIENT_URL } : {}));
 app.use(express.json());
 app.use(morgan("dev"));
 
