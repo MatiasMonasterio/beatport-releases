@@ -15,4 +15,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src/modules"),
     },
   },
+  preview: {
+    host: true,
+    port: 3000,
+  },
 });
