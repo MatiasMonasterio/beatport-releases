@@ -16,11 +16,12 @@
   "scripts": {
     "build": "npm run build:server",
     "start": "npm run start:server",
+    "start:client": "npm run preview --w=client",
     "start:server": "npm start --w=server",
     "dev:client": "npm run dev --w=client",
     "dev:server": "npm run dev --w=server",
     "build:client": "npm run build --w=client",
-    "build:server": "npm run prisma:generate && npm run prisma:migrate && npm run build --w=server",
+    "build:server": "npm run build --w=server",
     "prisma:migrate": "npm run prisma:migrate --w=server",
     "prisma:studio": "npm run prisma:studio --w=server",
     "prisma:generate": "npm run prisma:generate --w=server",
