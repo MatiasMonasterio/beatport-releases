@@ -1,0 +1,17 @@
+**/*.env
+
+/dist
+/node_modules
+/backup
+/coverage
+
+.github
+.vercel
+.vscode
+.git
+.gitignore
+.env
+.env.example
+docker-compose.yml
+README.md
+vercel.json
