@@ -1,20 +1,19 @@
 <div align="center">
-  <a target="_blank" target="https://beatport-releases.vercel.app/auth/login?">
-    <img alt="Beat Releases Cover" title="Beat Releases App" src="https://beatport-releases.vercel.app/images/banner.png" />
+  <a target="_blank" target="http://ec2-44-200-129-126.compute-1.amazonaws.com/auth/login?">
+    <img alt="Beat Releases Cover" title="Beat Releases App" src="http://ec2-44-200-129-126.compute-1.amazonaws.com/images/banner.png" />
   </a>
 </div>
 
 <br>
 <div align="center">
   
-  ![Build](https://github.com/MatiasMonasterio/beatport-releases/actions/workflows/server-pipeline.yml/badge.svg)
-  ![Build](https://github.com/MatiasMonasterio/beatport-releases/actions/workflows/client-pipeline.yml/badge.svg)
+[![Production Deploy Pipeline](https://github.com/MatiasMonasterio/beatport-releases/actions/workflows/production-pipeline.yml/badge.svg)](https://github.com/MatiasMonasterio/beatport-releases/actions/workflows/production-pipeline.yml)
   
 </div>
 
 
 ## Live Demo
-You can access a [demo](https://beatport-releases.vercel.app/auth/login?email=beatreleases@demo.com&password=12345678) and test the application
+You can access a [demo](http://ec2-44-200-129-126.compute-1.amazonaws.com/auth/login?email=beatreleases@demo.com&password=12345678) and test the application
 
 ## Get Started
 ### Prerequisites
