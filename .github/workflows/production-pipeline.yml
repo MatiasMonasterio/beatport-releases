@@ -1,4 +1,4 @@
-name: Production Deploy
+name: Production Deploy Pipeline
 
 on:
   push:
@@ -67,10 +67,11 @@ jobs:
 
   deploy:
     needs: [lint, test]
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
         with: 
           fetch-depth: 0
-      - name: Create Image
-        run : docker build --tag beat-releases .
+      - name: Recreate Docker container
+        working-directory: ../../../../beat-releases
+        run : docker compose up -d --force-recreate
