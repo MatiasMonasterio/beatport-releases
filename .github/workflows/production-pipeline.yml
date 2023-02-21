@@ -1,0 +1,76 @@
+name: Production Deploy
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "workspaces/**"
+  pull_request:
+    branches: [master]
+    paths:
+      - "workspaces/**"
+    types: [opened, synchronize]
+
+jobs:
+  avoid_reduncy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Redundant Builds
+        uses: styfle/cancel-workflow-action@0.10.0
+        with:
+          access_token: ${{ github.token }}
+
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.15.0
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+
+  lint:
+    needs: [install]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.15.0
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Linter
+        run: npm run lint:client
+
+  test:
+    needs: [install]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.15.0
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Test
+        run: npm run test:client
+
+  deploy:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
+      - name: Create Image
+        run : docker build --tag beat-releases .
