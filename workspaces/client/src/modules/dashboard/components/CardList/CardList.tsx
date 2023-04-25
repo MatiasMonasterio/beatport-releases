@@ -12,7 +12,8 @@ interface Props {
   datas: CardListData;
   size: Size;
   type: Type;
-  onNew: (id: string) => Promise<void>;
+  newCard?: boolean;
+  onNew?: (id: string) => Promise<void>;
 }
 
 const SIZE_VALUES = {
@@ -20,7 +21,11 @@ const SIZE_VALUES = {
   md: 200,
 };
 
-export default function CardList({ datas, size, type, isLoading, onNew }: Props) {
+export default function CardList({ datas, size, type, isLoading, newCard = true, onNew }: Props) {
+  const handleNewCard = (id: string) => {
+    onNew && onNew(id);
+  };
+
   return (
     <Grid
       templateColumns={{
@@ -30,7 +35,9 @@ export default function CardList({ datas, size, type, isLoading, onNew }: Props)
       overflow="hidden"
       gap={size === "sm" ? 2 : 3}
     >
-      {!isLoading && <AddCard height={SIZE_VALUES[size]} type={type} onNewCard={onNew} />}
+      {!isLoading && newCard && (
+        <AddCard height={SIZE_VALUES[size]} type={type} onNewCard={handleNewCard} />
+      )}
 
       {datas.map((data) => (
         <Card data={data} type={type} height={SIZE_VALUES[size]} key={data.id} />
