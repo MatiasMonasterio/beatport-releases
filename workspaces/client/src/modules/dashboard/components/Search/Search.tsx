@@ -1,18 +1,21 @@
+import type { InputProps } from "@chakra-ui/react";
 import { Box, InputGroup, InputLeftElement, InputRightElement, Input } from "@chakra-ui/react";
 import { BiSearch } from "react-icons/bi";
 
 import { ClearButton } from "./components";
 import { useSearchValue } from "./hooks";
 
-interface Props {
+interface Props extends InputProps {
   placeholder: string;
+  onSearch?: (searchValue: string) => void;
 }
 
-export default function Search({ placeholder }: Props) {
+export default function Search({ placeholder, onSearch, ...args }: Props) {
   const { searchValue, changeSearchValue, clearSearchValue } = useSearchValue();
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement | HTMLDivElement>) => {
     e.preventDefault();
+    onSearch && onSearch(searchValue);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +38,7 @@ export default function Search({ placeholder }: Props) {
           placeholder={placeholder}
           type="text"
           value={searchValue}
+          {...args}
         />
 
         <InputRightElement>
