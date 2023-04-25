@@ -1,4 +1,6 @@
-import { Box, Container, HStack } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
+import { Box, Container, HStack, Flex } from "@chakra-ui/react";
+import { Search } from "@/dashboard/components";
 import { Account, GoBackButton, GoNextButton, Notification } from "./components";
 
 interface Props {
@@ -6,6 +8,12 @@ interface Props {
 }
 
 export default function Navbar({ isSolid }: Props) {
+  const location = useLocation();
+
+  const handleSearch = (searchValue: string) => {
+    console.log({ searchValue });
+  };
+
   return (
     <Box position="sticky" top={0} zIndex={100}>
       <Box
@@ -21,17 +29,29 @@ export default function Navbar({ isSolid }: Props) {
         boxShadow={isSolid ? "0 0 25px rgba(0,0,0,0.2)" : "none"}
       >
         <Container maxW="container.xl">
-          <HStack justifyContent="space-between">
+          <Flex w="100%">
             <HStack>
               <GoBackButton />
               <GoNextButton />
             </HStack>
 
-            <HStack>
+            {location.pathname === "/search" && (
+              <Box ml={5}>
+                <Search
+                  placeholder="Qué te interesa escuchar?"
+                  bg="gray.100"
+                  color="gray.900"
+                  queryParamName="q"
+                  onSearch={handleSearch}
+                />
+              </Box>
+            )}
+
+            <HStack ml="auto">
               <Notification />
               <Account />
             </HStack>
-          </HStack>
+          </Flex>
         </Container>
       </Box>
     </Box>
