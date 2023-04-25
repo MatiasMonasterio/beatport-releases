@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { Container, UnorderedList, Link, Box, VisuallyHidden } from "@chakra-ui/react";
-import { BiHome, BiMusic, BiUser, BiGridAlt, BiHeart, BiPulse } from "react-icons/bi";
+import { BiHome, BiMusic, BiUser, BiGridAlt, BiHeart, BiPulse, BiSearch } from "react-icons/bi";
 
 import { SidebarItem, SidebarTitle } from "./components";
 
@@ -15,6 +15,7 @@ export default function Sidebar() {
       <UnorderedList styleType="none" ml={0} spacing={1} mb={4}>
         <SidebarItem to="/" content="Home" icon={<BiHome />} />
         <SidebarItem to="/releases" content="Releases" icon={<BiMusic />} />
+        <SidebarItem to="/search" content="Search" icon={<BiSearch />} />
       </UnorderedList>
 
       <SidebarTitle>Your Collection</SidebarTitle>
