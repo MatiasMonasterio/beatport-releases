@@ -5,6 +5,7 @@ import { DashboardLayout, ArtistsLayout, LabelsLayout, AccountLayout } from "@/d
 
 import Home from "@/dashboard/pages/Home";
 import Releases from "@/dashboard/pages/Releases";
+import Search from "@/dashboard/pages/Search";
 import Upcomings from "@/dashboard/pages/Upcomings";
 import Favorites from "@/dashboard/pages/Favorites";
 
@@ -27,6 +28,7 @@ export default function DashboardRoutes() {
       <Route path="/" element={<DashboardLayout />}>
         <Route index element={<Home />} />
         <Route path="releases" element={<Releases />} />
+        <Route path="search" element={<Search />} />
         <Route path="upcomings" element={<Upcomings />} />
         <Route path="favorites" element={<Favorites />} />
 
